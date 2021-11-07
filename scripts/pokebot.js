@@ -75,7 +75,7 @@ const TX_URL_PREFIX = {
 
 const NATIVE_SYMBOL = {
   'bscmain': 'BNB',
-  'bscmain': 'AVAX',
+  'avaxmain': 'AVAX',
 };
 
 const HTTP_PROVIDER_URLS = {
