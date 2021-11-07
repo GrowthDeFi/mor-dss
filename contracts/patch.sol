@@ -11,11 +11,17 @@ import { GemJoin } from "./dss/join.sol";
 import { GemJoin5 } from "./dss-gem-joins/join-5.sol";
 import { IlkRegistry } from "./ilk-registry/IlkRegistry.sol";
 
+// Deploy Patch contract
+// DSRole.setRootUser(DEPLOYER);
+// tag = PATCH.soul();
+// fax = 0xc0406226;
+// eta = Math.floor(Date.now() / 1000) + 60;
+// DSPause.plot(PATCH, tag, fax, eta)
+// DSPause.exec(PATCH, tag, fax, eta)
 contract Patch
 {
 	address constant DEPLOYER = 0x0B640b3E91420B495a33d11Ee96AFb19bE2Db693;
-	address constant MCD_PAUSE_PROXY = 0x309bdB8C09Ab92dBEC88001A51Bf54E74b346C10;
-	address constant MCD_VAT = 0x7C4925D62d24A826F8d945130E620fdC510d0f68;
+	address constant MCD_VAT = 0x713C28b2Ef6F89750BDf97f7Bbf307f6F949b3fF;
 	address constant MCD_SPOT = 0x7C4925D62d24A826F8d945130E620fdC510d0f68;
 	address constant MCD_END = 0x67D8cda3131890a0603379B03cd1B8Ed39753DA6;
 	address constant VAL_PSM_STKUSDC = 0x68697fF7Ec17F528E3E4862A1dbE6d7D9cBBd5C6;
@@ -31,6 +37,13 @@ contract Patch
 	address constant ILK_REGISTRY = 0x03A90f53DeEac9104Ef699DB8Ca6Cc1EFfc7a0DC;
 	address constant CHANGELOG = 0xd1a85349D73BaA4fFA6737474fdce9347B887cB2;
 
+	function soul() external view returns (bytes32 _tag)
+	{
+		address _usr = address(this);
+		assembly { _tag := extcodehash(_usr) }
+	}
+
+	// executed in the contact of the MCD_PAUSE_PROXY
 	function run() external
 	{
 		fixVAL_PSM_STKUSDC();
@@ -63,8 +76,6 @@ contract Patch
 		UniV2TwapOracle(NEW_VAL_JOE).kiss(VAL_TDJAVAXJOE);
 		UniV2TwapOracle(NEW_VAL_JOE).kiss(VAL_TDJUSDCJOE);
 		UniV2TwapOracle(NEW_VAL_JOE).kiss(VAL_TDJUSDTJOE);
-		UniV2TwapOracle(NEW_VAL_JOE).rely(MCD_PAUSE_PROXY);
-		if (address(this) != MCD_PAUSE_PROXY) UniV2TwapOracle(NEW_VAL_JOE).deny(address(this));
 
 		// update references
 		XSushiOracle(VAL_XJOE).link(NEW_VAL_JOE);
@@ -96,8 +107,6 @@ contract Patch
 
 		address NEW_MCD_JOIN_STKJtoken_A = address(new GemJoin5(_vat, _ilk, _gem));
 		Vat(MCD_VAT).rely(NEW_MCD_JOIN_STKJtoken_A);
-		GemJoin5(NEW_MCD_JOIN_STKJtoken_A).rely(MCD_PAUSE_PROXY);
-		if (address(this) != MCD_PAUSE_PROXY) GemJoin5(NEW_MCD_JOIN_STKJtoken_A).deny(address(this));
 
 		IlkRegistry(ILK_REGISTRY).add(NEW_MCD_JOIN_STKJtoken_A);
 
