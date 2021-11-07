@@ -1184,7 +1184,7 @@ module.exports = async (deployer, network, [account]) => {
 
   // SET ORACLE PRICES VISIBLE BY DEPLOYER
 
-  console.log('Configuring ILK OSM...');
+  console.log('Configuring Deployer into Oracle Whitelist...');
   for (const token_name in config_tokens) {
     const token_config = config_tokens[token_name];
     const token_import = token_config.import || {};
