@@ -202,7 +202,7 @@ const PIP_LIST = {
     'USDT': { address: '0x6Ee2E2d648698357Cc518D1D5E8170586dca5348', type: 'chainlink' },
     'LINK': { address: '0x326Db2b9640e51077fD9B70767855f5c2128e91A', type: 'chainlink' },
     'MIM': { address: '0x1B87083Af792cB8355C4c954c491255482992E79', type: 'chainlink' },
-    'JOE': { address: '0x1a06452B84456728Ee4054AE6157d3feDF56C295', type: 'twap' },
+    'JOE': { address: '0x0BD5C50422bdB47668fD393c4aE15dcBb5F0f25b', type: 'twap' },
 
     'XJOE': { address: '0xF49390eE384C5df2e82ac99909a6236051a4E82B', type: 'xsushi' },
     'JAVAX': { address: '0x8BBcd7E4da4395E391Fbfc2A11775debe3ca0D58', type: 'comp' },
