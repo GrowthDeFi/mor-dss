@@ -24,10 +24,16 @@ contract UniV2TwapOracle is DSNote, PipLike {
         _;
     }
 
+    // --- Math ---
+    function mul(uint x, uint y) internal pure returns (uint z) {
+        require(y == 0 || (z = x * y) / y == x);
+    }
+
     address public immutable src;     // Price source (LP)
     address public immutable token;   // Token from the pair (the other must be PSM-pegged coin, like BUSD)
     uint256 public immutable cap;     // Price cap
     uint256 public immutable unit;    // Price unit
+    uint256 public immutable factor;  // Price multiplier
 
     address public stwap;             // Short window TWAP implementation
     address public ltwap;             // Large window TWAP implementation
@@ -51,6 +57,7 @@ contract UniV2TwapOracle is DSNote, PipLike {
         token = _token;
         cap = _cap > 0 ? _cap : uint256(-1);
         unit = 10 ** uint256(_dec);
+        factor = 10 ** (18 - uint256(_dec));
     }
 
     function link(uint256 _id, address _twap) external note auth {
@@ -75,7 +82,7 @@ contract UniV2TwapOracle is DSNote, PipLike {
         uint256 price = sprice < lprice ? sprice : lprice;
         if (price > cap) price = cap;
         require(price > 0, "UniV2TwapOracle/invalid-price-feed");
-        return bytes32(price);
+        return bytes32(mul(price, factor));
     }
 
     function peek() external view override toll returns (bytes32,bool) {
@@ -83,7 +90,7 @@ contract UniV2TwapOracle is DSNote, PipLike {
         uint256 lprice = OracleLike(ltwap).consultAveragePrice(src, token, unit);
         uint256 price = sprice < lprice ? sprice : lprice;
         if (price > cap) price = cap;
-        return (bytes32(price), price > 0);
+        return (bytes32(mul(price, factor)), price > 0);
     }
 
     function kiss(address a) external note auth {

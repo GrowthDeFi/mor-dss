@@ -1237,8 +1237,7 @@ module.exports = async (deployer, network, [account]) => {
       }
       if (token_pipDeploy.type === 'value') {
         const token = await artifact_at(DSToken, T_[token_name]);
-        const dec = Number(await token.decimals());
-        const price = units(token_pipDeploy.price, dec);
+        const price = units(token_pipDeploy.price, 18);
         console.log('@pip.price', token_pipDeploy.price, price);
         const dsValue = await artifact_at(DSValue, VAL_[token_name]);
         await dsValue.poke('0x' + web3.utils.numberToHex(String(price)).substring(2).padStart(64, '0'));

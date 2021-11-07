@@ -383,7 +383,7 @@
         "gem": "0x4cea7726Eea4a0B342f8422D003Df735eAfDB195"
       },
       "joinDeploy": {
-        "src": "GemJoin",
+        "src": "GemJoin5",
         "extraParams": []
       },
       "pipDeploy": {
@@ -423,7 +423,7 @@
         "gem": "0x4291474e88E2fEE6eC5B8c28F4Ed2075cEf5B803"
       },
       "joinDeploy": {
-        "src": "GemJoin",
+        "src": "GemJoin5",
         "extraParams": []
       },
       "pipDeploy": {
@@ -463,7 +463,7 @@
         "gem": "0x59Da30Dd4C55F0b756710DB290ed4A1686D13dba"
       },
       "joinDeploy": {
-        "src": "GemJoin",
+        "src": "GemJoin5",
         "extraParams": []
       },
       "pipDeploy": {
@@ -503,7 +503,7 @@
         "gem": "0x1766798c6B7f0d6eA40d5B8B2215BF97fFB2AE85"
       },
       "joinDeploy": {
-        "src": "GemJoin",
+        "src": "GemJoin5",
         "extraParams": []
       },
       "pipDeploy": {
