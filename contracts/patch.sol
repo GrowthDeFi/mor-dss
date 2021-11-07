@@ -88,7 +88,7 @@ contract Patch
 		if (UNIV2LPOracle(VAL_TDJUSDTJOE).orb0() == VAL_JOE) UNIV2LPOracle(VAL_TDJUSDTJOE).link(0, NEW_VAL_JOE);
 		else
 		if (UNIV2LPOracle(VAL_TDJUSDTJOE).orb1() == VAL_JOE) UNIV2LPOracle(VAL_TDJUSDTJOE).link(1, NEW_VAL_JOE);
-		
+
 		ChainLog(CHANGELOG).setAddress("PIP_JOE", NEW_VAL_JOE);
 
 		emit ReplaceAddress(VAL_JOE, NEW_VAL_JOE);
