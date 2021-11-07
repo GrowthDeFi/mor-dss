@@ -46,7 +46,7 @@ contract DssPsm {
     uint256 public tin;         // toll in [wad]
     uint256 public tout;        // toll out [wad]
 
-    mapping (address => bool) donors; // addresses that inject gem for no dai
+    mapping (address => bool) public donors; // addresses that inject gem for no dai
 
     // --- Events ---
     event Rely(address indexed usr);
