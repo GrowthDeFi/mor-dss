@@ -13,8 +13,8 @@ import { IlkRegistry } from "./ilk-registry/IlkRegistry.sol";
 
 // Deploy Patch contract
 // DSRole.setRootUser(DEPLOYER);
-// tag = PATCH.soul();
-// fax = 0xc0406226;
+// tag = PATCH.soul(); // 0xa38ca46b144ae33993b6144595428e760a61cee1d0ff13ff4654a822e55d8ffd
+// fax = 0xc0406226; // run()
 // eta = Math.floor(Date.now() / 1000) + 60;
 // DSPause.plot(PATCH, tag, fax, eta)
 // DSPause.exec(PATCH, tag, fax, eta)
