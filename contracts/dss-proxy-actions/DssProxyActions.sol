@@ -38,7 +38,7 @@ abstract contract DSVault is DSToken {
     function totalReserve() external view virtual returns (uint256 _totalReserve);
     function deposit(uint256 _amount, uint256 _minShares, bool _execGulp) external virtual;
     function withdraw(uint256 _shares, uint256 _minAmount, bool _execGulp) external virtual;
-	function gulp() external virtual;
+    function gulp() external virtual;
 }
 
 interface HopeLike {
