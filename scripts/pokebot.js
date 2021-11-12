@@ -511,10 +511,13 @@ async function pokeAll(network, lines = []) {
   }
 }
 
+const TIMEFRAME = {
+  'bscmain': 4 * 60 * 60 * 1000, // 4 hours
+  'avaxmain': 1 * 60 * 60 * 1000, // 1 hour
+};
+
 async function main(args) {
   const network = args[2] || 'bscmain';
-
-  const TIMEFRAME = 4 * 60 * 60 * 1000; // 4 hours
 
   readLastPoke(network);
 
@@ -532,7 +535,7 @@ async function main(args) {
   });
 
   for (;;) {
-    const when = lastPoke + TIMEFRAME;
+    const when = lastPoke + TIMEFRAME[network];
     const delay = Math.max(when - Date.now(), 0);
     console.log('WAITING ' + Math.floor(delay / 1000) + 's');
     await sleep(delay);
