@@ -36,9 +36,9 @@ import { GemJoin4 } from "../dss-gem-joins/join-4.sol";
 
 abstract contract DSVault is DSToken {
     function totalReserve() external view virtual returns (uint256 _totalReserve);
-    function deposit(uint256 _amount, uint256 _minShares) external virtual;
+    function deposit(uint256 _amount) external virtual;
     function deposit(uint256 _amount, uint256 _minShares, bool _execGulp) external virtual;
-    function withdraw(uint256 _shares, uint256 _minAmount) external virtual;
+    function withdraw(uint256 _shares) external virtual;
     function withdraw(uint256 _shares, uint256 _minAmount, bool _execGulp) external virtual;
     function gulp() external virtual;
 }
@@ -80,7 +80,7 @@ contract Common {
     function _depositVault(address gem, uint256 amt) internal
     {
         if (DSVault(gem).decimals() == 8) {
-            DSVault(gem).deposit(amt, 1);
+            DSVault(gem).deposit(amt);
         } else {
             DSVault(gem).deposit(amt, 1, false);
         }
@@ -89,7 +89,7 @@ contract Common {
     function _withdrawVault(address gem, uint256 amt) internal
     {
         if (DSVault(gem).decimals() == 8) {
-            DSVault(gem).withdraw(amt, 1);
+            DSVault(gem).withdraw(amt);
         } else {
             DSVault(gem).withdraw(amt, 1, true);
         }
