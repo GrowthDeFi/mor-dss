@@ -559,7 +559,7 @@
           "autoLineGap": "10000000",
           "autoLineTtl": "43200",
           "dust": "100",
-          "duty": "-25",
+          "duty": "-20",
           "clipDeploy": {
             "chop": "15",
             "hole": "100000000",
@@ -599,7 +599,7 @@
           "autoLineGap": "10000000",
           "autoLineTtl": "43200",
           "dust": "100",
-          "duty": "-10",
+          "duty": "-6",
           "clipDeploy": {
             "chop": "15",
             "hole": "100000000",
@@ -639,7 +639,7 @@
           "autoLineGap": "10000000",
           "autoLineTtl": "43200",
           "dust": "100",
-          "duty": "-10",
+          "duty": "-6",
           "clipDeploy": {
             "chop": "15",
             "hole": "100000000",
@@ -679,7 +679,7 @@
           "autoLineGap": "2000000",
           "autoLineTtl": "43200",
           "dust": "100",
-          "duty": "-12",
+          "duty": "-8",
           "clipDeploy": {
             "chop": "15",
             "hole": "100000000",
@@ -719,7 +719,7 @@
           "autoLineGap": "20000000",
           "autoLineTtl": "43200",
           "dust": "100",
-          "duty": "-14",
+          "duty": "-8",
           "clipDeploy": {
             "chop": "15",
             "hole": "100000000",
@@ -759,7 +759,7 @@
           "autoLineGap": "10000000",
           "autoLineTtl": "43200",
           "dust": "100",
-          "duty": "-12",
+          "duty": "-8",
           "clipDeploy": {
             "chop": "15",
             "hole": "100000000",
@@ -799,7 +799,7 @@
           "autoLineGap": "5000000",
           "autoLineTtl": "43200",
           "dust": "100",
-          "duty": "-12",
+          "duty": "-5",
           "clipDeploy": {
             "chop": "15",
             "hole": "100000000",
@@ -839,7 +839,7 @@
           "autoLineGap": "5000000",
           "autoLineTtl": "43200",
           "dust": "100",
-          "duty": "-20",
+          "duty": "-8",
           "clipDeploy": {
             "chop": "15",
             "hole": "100000000",
