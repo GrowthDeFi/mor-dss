@@ -36,7 +36,9 @@ import { GemJoin4 } from "../dss-gem-joins/join-4.sol";
 
 abstract contract DSVault is DSToken {
     function totalReserve() external view virtual returns (uint256 _totalReserve);
+    function deposit(uint256 _amount, uint256 _minShares) external virtual;
     function deposit(uint256 _amount, uint256 _minShares, bool _execGulp) external virtual;
+    function withdraw(uint256 _shares, uint256 _minAmount) external virtual;
     function withdraw(uint256 _shares, uint256 _minAmount, bool _execGulp) external virtual;
     function gulp() external virtual;
 }
@@ -73,6 +75,24 @@ contract Common {
         dai.approve(apt, wad);
         // Joins DAI into the vat
         DaiJoin(apt).join(urn, wad);
+    }
+
+    function _depositVault(address gem, uint256 amt) internal
+    {
+        if (DSVault(gem).decimals() == 8) {
+            DSVault(gem).deposit(amt, 1);
+        } else {
+            DSVault(gem).deposit(amt, 1, false);
+        }
+    }
+
+    function _withdrawVault(address gem, uint256 amt) internal
+    {
+        if (DSVault(gem).decimals() == 8) {
+            DSVault(gem).withdraw(amt, 1);
+        } else {
+            DSVault(gem).withdraw(amt, 1, true);
+        }
     }
 }
 
@@ -191,7 +211,7 @@ contract DssProxyActions is Common {
                 uint256 resAmt = _add(_mul(amt, reserve), supply - 1) / supply;
                 DSToken(res).transferFrom(msg.sender, address(this), resAmt);
                 DSToken(res).approve(address(gem), resAmt);
-                DSVault(address(gem)).deposit(resAmt, 1, false);
+                _depositVault(address(gem), resAmt);
             }
             // Approves adapter to take the token amount
             gem.approve(apt, amt);
@@ -424,7 +444,7 @@ contract DssProxyActions is Common {
             GemJoin(gemJoin).exit(msg.sender, amt);
         } else {
             GemJoin(gemJoin).exit(address(this), amt);
-            DSVault(address(GemJoin(gemJoin).gem())).withdraw(amt, 1, true);
+            _withdrawVault(address(GemJoin(gemJoin).gem()), amt);
             DSToken(res).transfer(msg.sender, DSToken(res).balanceOf(address(this)));
         }
     }
@@ -461,7 +481,7 @@ contract DssProxyActions is Common {
             GemJoin(gemJoin).exit(msg.sender, amt);
         } else {
             GemJoin(gemJoin).exit(address(this), amt);
-            DSVault(address(GemJoin(gemJoin).gem())).withdraw(amt, 1, true);
+            _withdrawVault(address(GemJoin(gemJoin).gem()), amt);
             DSToken(res).transfer(msg.sender, DSToken(res).balanceOf(address(this)));
         }
     }
@@ -759,7 +779,7 @@ contract DssProxyActions is Common {
             GemJoin(gemJoin).exit(msg.sender, amtC);
         } else {
             GemJoin(gemJoin).exit(address(this), amtC);
-            DSVault(address(GemJoin(gemJoin).gem())).withdraw(amtC, 1, true);
+            _withdrawVault(address(GemJoin(gemJoin).gem()), amtC);
             DSToken(res).transfer(msg.sender, DSToken(res).balanceOf(address(this)));
         }
     }
@@ -794,7 +814,7 @@ contract DssProxyActions is Common {
             GemJoin(gemJoin).exit(msg.sender, amtC);
         } else {
             GemJoin(gemJoin).exit(address(this), amtC);
-            DSVault(address(GemJoin(gemJoin).gem())).withdraw(amtC, 1, true);
+            _withdrawVault(address(GemJoin(gemJoin).gem()), amtC);
             DSToken(res).transfer(msg.sender, DSToken(res).balanceOf(address(this)));
         }
     }
@@ -858,7 +878,7 @@ contract DssProxyActionsEnd is Common {
             GemJoin(gemJoin).exit(msg.sender, amt);
         } else {
             GemJoin(gemJoin).exit(address(this), amt);
-            DSVault(address(GemJoin(gemJoin).gem())).withdraw(amt, 1, true);
+            _withdrawVault(address(GemJoin(gemJoin).gem()), amt);
             DSToken(res).transfer(msg.sender, DSToken(res).balanceOf(address(this)));
         }
     }
@@ -907,7 +927,7 @@ contract DssProxyActionsEnd is Common {
             GemJoin(gemJoin).exit(msg.sender, amt);
         } else {
             GemJoin(gemJoin).exit(address(this), amt);
-            DSVault(address(GemJoin(gemJoin).gem())).withdraw(amt, 1, true);
+            _withdrawVault(address(GemJoin(gemJoin).gem()), amt);
             DSToken(res).transfer(msg.sender, DSToken(res).balanceOf(address(this)));
         }
     }
