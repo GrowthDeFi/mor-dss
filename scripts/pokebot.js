@@ -511,6 +511,15 @@ async function pokeAll(network, lines = []) {
   }
 }
 
+async function reportError(e, type, detail, lines, prefix = '') {
+  const message = e instanceof Error ? e.message : String(e);
+  if (message === 'Could not find block') return;
+  if (message.includes('message: \'ESOCKETTIMEDOUT\'')) return;
+  if (message.includes('message: \'header not found\'')) return;
+  if (message.includes('message: \'cannot query unfinalized data\'')) return;
+  await sendTelegramMessage(prefix + '<i>GulpBot (' + escapeHTML(detail) + ') ' + escapeHTML(type) + ' (' + escapeHTML(message) + ')</i>');
+}
+
 const TIMEFRAME = {
   'bscmain': 4 * 60 * 60 * 1000, // 4 hours
   'avaxmain': 1 * 60 * 60 * 1000, // 1 hour
@@ -527,9 +536,7 @@ async function main(args) {
   interrupt(async (e) => {
     if (!interrupted) {
       interrupted = true;
-      console.error('error', e, e instanceof Error ? e.stack : undefined);
-      const message = e instanceof Error ? e.message : String(e);
-      await sendTelegramMessage('<i>PokeBot (' + network + ') Interrupted (' + escapeHTML(message) + ')</i>');
+      await reportError(e, 'Interrupted', network);
       exit();
     }
   });
@@ -549,13 +556,10 @@ async function main(args) {
       lines.push('<a href="' + accountUrl + '">PokeBot</a>');
       lines.push('<code>' + balance + ' ' + NATIVE_SYMBOL[network] + '</code>');
       await pokeAll(network, lines);
-    } catch (e) {
-      console.error('ERROR', e, e instanceof Error ? e.stack : undefined);
-      const message = e instanceof Error ? e.message : String(e);
-      lines.push('<i>PokeBot (' + network + ') Failure (' + escapeHTML(message) + ')</i>');
-      continue;
-    } finally {
       await sendTelegramMessage(lines.join('\n'));
+    } catch (e) {
+      await reportError(e, 'Failure', network, lines.join('\n'));
+      continue;
     }
 
     lastPoke = Date.now();
