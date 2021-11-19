@@ -513,6 +513,7 @@ async function pokeAll(network, lines = []) {
 
 async function reportError(e, type, detail, lines, prefix = '') {
   const message = e instanceof Error ? e.message : String(e);
+  if (message === 'header not found') return;
   if (message === 'Could not find block') return;
   if (message.includes('message: \'ESOCKETTIMEDOUT\'')) return;
   if (message.includes('message: \'header not found\'')) return;
