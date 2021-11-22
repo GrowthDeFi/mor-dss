@@ -5,7 +5,7 @@ import { DssAction } from "../dss-exec-lib/DssAction.sol";
 import { DssExec } from "../dss-exec-lib/DssExec.sol";
 import { DssExecLib } from "../dss-exec-lib/DssExecLib.sol";
 
-contract DssSpellAction is DssAction
+contract DssSpellAction_bscmain_2021_10_14 is DssAction
 {
 	// Provides a descriptive tag for bot consumption
 	// This should be modified weekly to provide a summary of the actions
@@ -19,10 +19,10 @@ contract DssSpellAction is DssAction
 	}
 }
 
-contract DssSpell is DssExec
+contract DssSpell_bscmain_2021_10_14 is DssExec
 {
 	constructor(address log)
-		DssExec(log, block.timestamp + 30 days, address(new DssSpellAction())) public
+		DssExec(log, block.timestamp + 30 days, address(new DssSpellAction_bscmain_2021_10_14())) public
 	{
 	}
 }
