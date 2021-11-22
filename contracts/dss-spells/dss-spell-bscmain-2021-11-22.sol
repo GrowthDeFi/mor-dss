@@ -78,6 +78,7 @@ contract DssSpellAction_bscmain_2021_11_22 is DssAction
 
 contract DssSpell_bscmain_2021_11_22 is DssExec
 {
+	// valid for 30 days
 	constructor(address log)
 		DssExec(log, block.timestamp + 30 days, address(new DssSpellAction_bscmain_2021_11_22())) public
 	{
