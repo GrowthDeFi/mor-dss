@@ -24,6 +24,22 @@ const CONFIG = {
   '97': 'testnet',    // bsctest
   '137': 'maticmain', // maticmain
   '80001': 'testnet', // matictest
+  '43114': 'avaxmain',// avaxmain
+  '43113': 'testnet', // avaxtest
+};
+
+const MULTISIG_CONFIG = {
+  '1': '0x2F80922CF7350e06F4924766Cb7EEEC783c1C8ce',     // mainnet
+  '3': '0x2F80922CF7350e06F4924766Cb7EEEC783c1C8ce',     // ropsten
+  '4': '0x2F80922CF7350e06F4924766Cb7EEEC783c1C8ce',     // rinkeby
+  '42': '0x2F80922CF7350e06F4924766Cb7EEEC783c1C8ce',    // kovan
+  '5': '0x2F80922CF7350e06F4924766Cb7EEEC783c1C8ce',     // goerli
+  '56': '0x392681Eaf8AD9BC65e74BE37Afe7503D92802b7d',    // bscmain
+  '97': '0x2F80922CF7350e06F4924766Cb7EEEC783c1C8ce',    // bsctest
+  '137': '0x2F80922CF7350e06F4924766Cb7EEEC783c1C8ce',   // maticmain
+  '80001': '0x2F80922CF7350e06F4924766Cb7EEEC783c1C8ce', // matictest
+  '43114': '0x1d64CeAF2cDBC9b6d41eB0f2f7CDA8F04c47d1Ac', // avaxmain
+  '43113': '0x2F80922CF7350e06F4924766Cb7EEEC783c1C8ce', // avaxtest
 };
 
 module.exports = async (deployer, network, [account]) => {
@@ -112,11 +128,13 @@ module.exports = async (deployer, network, [account]) => {
   const web3 = DssDeploy.interfaceAdapter.web3;
   const initialBalance = await web3.eth.getBalance(DEPLOYER);
 
-  const chainId = await web3.eth.net.getId();
+  const chainId = await web3.eth.getChainId();
 
   const config = require('./config/' + CONFIG[chainId] + '.json');
   const config_import = config.import || {};
   const config_tokens = config.tokens || {};
+
+  const MULTISIG = MULTISIG_CONFIG[chainId];
 
   // MULTICALL
 
@@ -493,6 +511,8 @@ module.exports = async (deployer, network, [account]) => {
   const Median = artifacts.require('Median');
   const LinkOracle = artifacts.require('LinkOracle');
   const UNIV2LPOracle = artifacts.require('UNIV2LPOracle');
+  const CompOracle = artifacts.require('CompOracle');
+  const XSushiOracle = artifacts.require('XSushiOracle');
   const VaultOracle = artifacts.require('VaultOracle');
   const UniV2TwapOracle = artifacts.require('UniV2TwapOracle');
   const UniswapV2PairLike = artifacts.require('UniswapV2PairLike');
@@ -523,6 +543,24 @@ module.exports = async (deployer, network, [account]) => {
         const orb = VAL_[token_pipDeploy.reserve];
         const vaultOracle = await artifact_deploy(VaultOracle, src, res, orb);
         VAL_[token_name] = vaultOracle.address;
+        console.log('VAL_' + token_name.replace('-', '_') + '=' + VAL_[token_name]);
+      }
+      if (token_pipDeploy.type === 'xsushi') {
+        console.log('Publishing XSushi Oracle...');
+        const src = T_[token_name];
+        const res = T_[token_pipDeploy.reserve];
+        const orb = VAL_[token_pipDeploy.reserve];
+        const xsushiOracle = await artifact_deploy(XSushiOracle, src, res, orb);
+        VAL_[token_name] = xsushiOracle.address;
+        console.log('VAL_' + token_name.replace('-', '_') + '=' + VAL_[token_name]);
+      }
+      if (token_pipDeploy.type === 'comp') {
+        console.log('Publishing Comp Oracle...');
+        const src = T_[token_name];
+        const res = T_[token_pipDeploy.reserve];
+        const orb = VAL_[token_pipDeploy.reserve];
+        const compOracle = await artifact_deploy(CompOracle, src, res, orb);
+        VAL_[token_name] = compOracle.address;
         console.log('VAL_' + token_name.replace('-', '_') + '=' + VAL_[token_name]);
       }
       if (token_pipDeploy.type === 'univ2lp') {
@@ -772,8 +810,10 @@ module.exports = async (deployer, network, [account]) => {
         const ilk_name = web3.utils.asciiToHex(token_name + '-' + ilk);
         const tin = units(ilk_psmDeploy.tin, 18);
         const tout = units(ilk_psmDeploy.tout, 18);
+        const donors = ilk_psmDeploy.donors || [];
         console.log('@psm.tin', ilk_psmDeploy.tin, tin);
         console.log('@psm.tout', ilk_psmDeploy.tout, tout);
+        console.log('@psm.donors', ilk_psmDeploy.donors, donors);
 
         console.log('Deploying Dss Psm...');
         const DssPsm = artifacts.require('DssPsm');
@@ -782,6 +822,9 @@ module.exports = async (deployer, network, [account]) => {
         console.log('MCD_' + token_name.replace('-', '_') + '_' + ilk + '=' + MCD_PSM_[token_name][ilk]);
         await dssPsm.file(web3.utils.asciiToHex('tin'), tin);
         await dssPsm.file(web3.utils.asciiToHex('tout'), tout);
+        for (const donor of donors) {
+          await dssPsm.donor(donor, true);
+        }
         await dssPsm.rely(MCD_PAUSE_PROXY);
         await dssPsm.deny(DEPLOYER);
 
@@ -834,6 +877,7 @@ module.exports = async (deployer, network, [account]) => {
       }
     }
   }
+  await dssDeploy.setOwner(MCD_PAUSE_PROXY);
 
   // GOV ACTIONS
 
@@ -1138,6 +1182,46 @@ module.exports = async (deployer, network, [account]) => {
     await file(MCD_FLASH, 'toll', flash_toll);
   }
 
+  // SET ORACLE PRICES VISIBLE BY DEPLOYER
+
+  console.log('Configuring Deployer into Oracle Whitelist...');
+  for (const token_name in config_tokens) {
+    const token_config = config_tokens[token_name];
+    const token_import = token_config.import || {};
+    const token_pipDeploy = token_config.pipDeploy || {};
+
+    if (token_import.pip === undefined) {
+      if (token_pipDeploy.type === 'twap') {
+        const univ2twapOracle = await artifact_at(UniV2TwapOracle, VAL_[token_name]);
+        await univ2twapOracle.methods['kiss(address)'](DEPLOYER);
+      }
+      if (token_pipDeploy.type === 'vault') {
+        const vaultOracle = await artifact_at(VaultOracle, VAL_[token_name]);
+        await vaultOracle.methods['kiss(address)'](DEPLOYER);
+      }
+      if (token_pipDeploy.type === 'xsushi') {
+        const xsushiOracle = await artifact_at(XSushiOracle, VAL_[token_name]);
+        await xsushiOracle.methods['kiss(address)'](DEPLOYER);
+      }
+      if (token_pipDeploy.type === 'comp') {
+        const compOracle = await artifact_at(CompOracle, VAL_[token_name]);
+        await compOracle.methods['kiss(address)'](DEPLOYER);
+      }
+      if (token_pipDeploy.type === 'univ2lp') {
+        const univ2lpOracle = await artifact_at(UNIV2LPOracle, VAL_[token_name]);
+        await univ2lpOracle.methods['kiss(address)'](DEPLOYER);
+      }
+      if (token_pipDeploy.type === 'chainlink') {
+        const linkOracle = await artifact_at(LinkOracle, VAL_[token_name]);
+        await linkOracle.methods['kiss(address)'](DEPLOYER);
+      }
+      if (token_pipDeploy.type === 'median') {
+        const median = await artifact_at(Median, VAL_[token_name]);
+        await median.methods['kiss(address)'](DEPLOYER);
+      }
+    }
+  }
+
   // SET ILKS PRICE
 
   console.log('Configuring ILK Prices...');
@@ -1153,8 +1237,7 @@ module.exports = async (deployer, network, [account]) => {
       }
       if (token_pipDeploy.type === 'value') {
         const token = await artifact_at(DSToken, T_[token_name]);
-        const dec = Number(await token.decimals());
-        const price = units(token_pipDeploy.price, dec);
+        const price = units(token_pipDeploy.price, 18);
         console.log('@pip.price', token_pipDeploy.price, price);
         const dsValue = await artifact_at(DSValue, VAL_[token_name]);
         await dsValue.poke('0x' + web3.utils.numberToHex(String(price)).substring(2).padStart(64, '0'));
@@ -1190,6 +1273,14 @@ module.exports = async (deployer, network, [account]) => {
           }
         }
         if (token_pipDeploy.type === 'vault') {
+          const osmReserve = await artifact_at(OSM, VAL_[token_pipDeploy.reserve]);
+          await osmReserve.methods['kiss(address)'](PIP_[token_name]);
+        }
+        if (token_pipDeploy.type === 'xsushi') {
+          const osmReserve = await artifact_at(OSM, VAL_[token_pipDeploy.reserve]);
+          await osmReserve.methods['kiss(address)'](PIP_[token_name]);
+        }
+        if (token_pipDeploy.type === 'comp') {
           const osmReserve = await artifact_at(OSM, VAL_[token_pipDeploy.reserve]);
           await osmReserve.methods['kiss(address)'](PIP_[token_name]);
         }
@@ -1607,6 +1698,14 @@ module.exports = async (deployer, network, [account]) => {
           const vaultOracle = await artifact_at(VaultOracle, VAL_[token_name]);
           await vaultOracle.methods['kiss(address)'](PIP_[token_name]);
         }
+        if (token_pipDeploy.type === 'xsushi') {
+          const xsushiOracle = await artifact_at(XSushiOracle, VAL_[token_name]);
+          await xsushiOracle.methods['kiss(address)'](PIP_[token_name]);
+        }
+        if (token_pipDeploy.type === 'comp') {
+          const compOracle = await artifact_at(CompOracle, VAL_[token_name]);
+          await compOracle.methods['kiss(address)'](PIP_[token_name]);
+        }
         if (token_pipDeploy.type === 'univ2lp') {
           const univ2lpOracle = await artifact_at(UNIV2LPOracle, VAL_[token_name]);
           await univ2lpOracle.methods['kiss(address)'](PIP_[token_name]);
@@ -1723,6 +1822,16 @@ module.exports = async (deployer, network, [account]) => {
         const vaultOracle = await artifact_at(VaultOracle, VAL_[token_name]);
         await vaultOracle.rely(MCD_PAUSE_PROXY);
         await vaultOracle.deny(DEPLOYER);
+      }
+      if (token_pipDeploy.type === 'xsushi') {
+        const xsushiOracle = await artifact_at(XSushiOracle, VAL_[token_name]);
+        await xsushiOracle.rely(MCD_PAUSE_PROXY);
+        await xsushiOracle.deny(DEPLOYER);
+      }
+      if (token_pipDeploy.type === 'comp') {
+        const compOracle = await artifact_at(CompOracle, VAL_[token_name]);
+        await compOracle.rely(MCD_PAUSE_PROXY);
+        await compOracle.deny(DEPLOYER);
       }
       if (token_pipDeploy.type === 'univ2lp') {
         const univ2lpOracle = await artifact_at(UNIV2LPOracle, VAL_[token_name]);
@@ -1861,6 +1970,13 @@ module.exports = async (deployer, network, [account]) => {
   if (Number(config.pauseDelay) >= 0) {
     await setAuthorityAndDelay(MCD_ADM, units(config.pauseDelay, 0));
   }
+
+  // TRANSFER DEPLOYER ADMIN RIGHTS TO MULTISIG
+
+  await dsRoles.setRootUser(MULTISIG, true);
+  await dsRoles.setRootUser(DEPLOYER, false);
+  await dsRoles.setOwner(MULTISIG);
+  await proxyDeployer.setOwner(MULTISIG);
 
   const finalBalance = await web3.eth.getBalance(DEPLOYER);
   console.log('TOTAL COST:', BigInt(initialBalance) - BigInt(finalBalance));

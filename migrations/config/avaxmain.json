@@ -1,0 +1,942 @@
+{
+  "description": "Avalanche Mainnet deployment",
+  "pauseDelay": "0",
+  "vat_line": "10000000000",
+  "vow_wait": "0",
+  "vow_bump": "10000",
+  "vow_dump": "0.01",
+  "vow_sump": "0.1",
+  "vow_hump": "10000000",
+  "cat_box": "100000000",
+  "dog_hole": "100000000",
+  "jug_base": "0",
+  "pot_dsr": "0",
+  "end_wait": "3600",
+  "esm_min": "30000",
+  "flap_beg": "5",
+  "flap_ttl": "3600",
+  "flap_tau": "18000",
+  "flop_beg": "5",
+  "flop_pad": "0",
+  "flop_ttl": "10800",
+  "flop_tau": "172800",
+  "flash_max": "100000000",
+  "flash_toll": "0.1",
+  "import": {
+    "gov": "0x72699ba15CC734F8db874fa9652c8DE12093F187",
+    "faucet": "0x0000000000000000000000000000000000000000"
+  },
+  "tokens": {
+    "AVAX": {
+      "import": {
+        "gem": "0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7"
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "chainlink",
+        "src": "0x0A77230d17318075983913bC2145DB16C7366156"
+      }
+    },
+    "WETH": {
+      "import": {
+        "gem": "0x49D5c2BdFfac6CE2BFdB6640F4F80f226bc10bAB"
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "chainlink",
+        "src": "0x976B3D034E162d8bD72D6b9C989d545b839003b0"
+      }
+    },
+    "WBTC": {
+      "import": {
+        "gem": "0x50b7545627a5162F82A992c33b87aDc75187B218"
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "chainlink",
+        "src": "0x2779D32d5166BAaa2B2b658333bA7e6Ec0C65743"
+      }
+    },
+    "DAI": {
+      "import": {
+        "gem": "0xd586E7F844cEa2F87f50152665BCbc2C279D8d70"
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "chainlink",
+        "src": "0x51D7180edA2260cc4F6e4EebB82FEF5c3c2B8300"
+      }
+    },
+    "USDC": {
+      "import": {
+        "gem": "0xA7D7079b0FEaD91F3e65f86E8915Cb59c1a4C664"
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "chainlink",
+        "src": "0xF096872672F44d6EBA71458D74fe67F9a77a23B9"
+      }
+    },
+    "USDT": {
+      "import": {
+        "gem": "0xc7198437980c041c805A1EDcbA50c1Ce5db95118"
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "chainlink",
+        "src": "0xEBE676ee90Fe1112671f19b6B7459bC678B67e8a"
+      }
+    },
+    "LINK": {
+      "import": {
+        "gem": "0x5947BB275c521040051D82396192181b413227A3"
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "chainlink",
+        "src": "0x49ccd9ca821EfEab2b98c60dC60F518E765EDe9a"
+      }
+    },
+    "MIM": {
+      "import": {
+        "gem": "0x130966628846BFd36ff31a822705796e8cb8C18D"
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "chainlink",
+        "src": "0x54EdAB30a7134A16a54218AE64C73e1DAf48a8Fb"
+      }
+    },
+    "JOE": {
+      "import": {
+        "gem": "0x6e84a6216eA6dACC71eE8E6b0a5B7322EEbC0fDd"
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "twap",
+        "stwap": "0xB307521B7e740afbC2993a9023430Df8F4915f58",
+        "ltwap": "0xA561fa603bf0B43Cb0d0911EeccC8B6777d3401B",
+        "src": "0x67926d973cd8ee876ad210faaf7dffa99e414acf",
+        "cap": "0"
+      }
+    },
+    "XJOE": {
+      "import": {
+        "gem": "0x57319d41F71E81F3c65F2a47CA4e001EbAFd4F33"
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "xsushi",
+        "reserve": "JOE"
+      }
+    },
+    "JAVAX": {
+      "import": {
+        "gem": "0xC22F01ddc8010Ee05574028528614634684EC29e"
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "comp",
+        "reserve": "AVAX"
+      }
+    },
+    "JWETH": {
+      "import": {
+        "gem": "0x929f5caB61DFEc79a5431a7734a68D714C4633fa"
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "comp",
+        "reserve": "WETH"
+      }
+    },
+    "JWBTC": {
+      "import": {
+        "gem": "0x3fE38b7b610C0ACD10296fEf69d9b18eB7a9eB1F"
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "comp",
+        "reserve": "WBTC"
+      }
+    },
+    "JLINK": {
+      "import": {
+        "gem": "0x585E7bC75089eD111b656faA7aeb1104F5b96c15"
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "comp",
+        "reserve": "LINK"
+      }
+    },
+    "TDJAVAXJOE": {
+      "import": {
+        "gem": "0x454E67025631C065d3cFAD6d71E6892f74487a15"
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "univ2lp",
+        "token0": "JOE",
+        "token1": "AVAX",
+        "hop": "3600"
+      }
+    },
+    "TDJAVAXWETH": {
+      "import": {
+        "gem": "0xFE15c2695F1F920da45C30AAE47d11dE51007AF9"
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "univ2lp",
+        "token0": "WETH",
+        "token1": "AVAX",
+        "hop": "3600"
+      }
+    },
+    "TDJAVAXWBTC": {
+      "import": {
+        "gem": "0xd5a37dC5C9A396A03dd1136Fc76A1a02B1c88Ffa"
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "univ2lp",
+        "token0": "WBTC",
+        "token1": "AVAX",
+        "hop": "3600"
+      }
+    },
+    "TDJAVAXDAI": {
+      "import": {
+        "gem": "0x87Dee1cC9FFd464B79e058ba20387c1984aed86a"
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "univ2lp",
+        "token0": "AVAX",
+        "token1": "DAI",
+        "hop": "3600"
+      }
+    },
+    "TDJAVAXUSDC": {
+      "import": {
+        "gem": "0xA389f9430876455C36478DeEa9769B7Ca4E3DDB1"
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "univ2lp",
+        "token0": "USDC",
+        "token1": "AVAX",
+        "hop": "3600"
+      }
+    },
+    "TDJAVAXUSDT": {
+      "import": {
+        "gem": "0xeD8CBD9F0cE3C6986b22002F03c6475CEb7a6256"
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "univ2lp",
+        "token0": "AVAX",
+        "token1": "USDT",
+        "hop": "3600"
+      }
+    },
+    "TDJAVAXLINK": {
+      "import": {
+        "gem": "0x6F3a0C89f611Ef5dC9d96650324ac633D02265D3"
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "univ2lp",
+        "token0": "LINK",
+        "token1": "AVAX",
+        "hop": "3600"
+      }
+    },
+    "TDJAVAXMIM": {
+      "import": {
+        "gem": "0x781655d802670bbA3c89aeBaaEa59D3182fD755D"
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "univ2lp",
+        "token0": "MIM",
+        "token1": "AVAX",
+        "hop": "3600"
+      }
+    },
+    "TDJUSDCJOE": {
+      "import": {
+        "gem": "0x67926d973cD8eE876aD210fAaf7DFfA99E414aCf"
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "univ2lp",
+        "token0": "JOE",
+        "token1": "USDC",
+        "hop": "3600"
+      }
+    },
+    "TDJUSDTJOE": {
+      "import": {
+        "gem": "0x1643de2efB8e35374D796297a9f95f64C082a8ce"
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "univ2lp",
+        "token0": "JOE",
+        "token1": "USDT",
+        "hop": "3600"
+      }
+    },
+    "PSM-STKUSDC": {
+      "import": {
+        "gem": "0xdC4D358B34619e4fE7feb28bE301B2FBe4F3aFf9"
+      },
+      "joinDeploy": {
+        "src": "AuthGemJoin5",
+        "extraParams": []
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "value",
+        "price": "1"
+      },
+      "ilks": {
+        "A": {
+          "mat": "100",
+          "line": "10000000000",
+          "autoLine": "0",
+          "autoLineGap": "0",
+          "autoLineTtl": "0",
+          "dust": "0",
+          "duty": "0",
+          "psmDeploy": {
+            "tin": "0.001",
+            "tout": "0.01",
+            "donors": [
+              "0xdC4D358B34619e4fE7feb28bE301B2FBe4F3aFf9",
+              "0x67E5830CCef2Dc38aebEf4eC7D06baD5b5957D44"
+            ]
+          },
+          "clipDeploy": {
+            "chop": "13",
+            "hole": "0",
+            "chip": "0.1",
+            "tip": "300",
+            "buf": "105",
+            "tail": "13200",
+            "cusp": "90",
+            "calc": {
+              "type": "StairstepExponentialDecrease",
+              "step": "120",
+              "cut": "99"
+            },
+            "cm_tolerance": "95"
+          }
+        }
+      }
+    },
+    "STKXJOE": {
+      "import": {
+        "gem": "0x2E53F47a807F0c45c61C899e62504336B0b5dBDf"
+      },
+      "joinDeploy": {
+        "src": "GemJoin",
+        "extraParams": []
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "vault",
+        "reserve": "XJOE"
+      },
+      "ilks": {
+        "A": {
+          "mat": "150",
+          "line": "0",
+          "autoLine": "50000000",
+          "autoLineGap": "10000000",
+          "autoLineTtl": "43200",
+          "dust": "100",
+          "duty": "-8",
+          "clipDeploy": {
+            "chop": "15",
+            "hole": "30000000",
+            "chip": "0",
+            "tip": "5",
+            "buf": "130",
+            "tail": "16800",
+            "cusp": "40",
+            "calc": {
+              "type": "StairstepExponentialDecrease",
+              "step": "180",
+              "cut": "99"
+            },
+            "cm_tolerance": "50"
+          }
+        }
+      }
+    },
+    "STKJAVAX": {
+      "import": {
+        "gem": "0x4cea7726Eea4a0B342f8422D003Df735eAfDB195"
+      },
+      "joinDeploy": {
+        "src": "GemJoin5",
+        "extraParams": []
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "vault",
+        "reserve": "JAVAX"
+      },
+      "ilks": {
+        "A": {
+          "mat": "150",
+          "line": "0",
+          "autoLine": "200000000",
+          "autoLineGap": "50000000",
+          "autoLineTtl": "43200",
+          "dust": "100",
+          "duty": "0",
+          "clipDeploy": {
+            "chop": "15",
+            "hole": "100000000",
+            "chip": "0",
+            "tip": "5",
+            "buf": "130",
+            "tail": "16800",
+            "cusp": "40",
+            "calc": {
+              "type": "StairstepExponentialDecrease",
+              "step": "180",
+              "cut": "99"
+            },
+            "cm_tolerance": "50"
+          }
+        }
+      }
+    },
+    "STKJWETH": {
+      "import": {
+        "gem": "0x4291474e88E2fEE6eC5B8c28F4Ed2075cEf5B803"
+      },
+      "joinDeploy": {
+        "src": "GemJoin5",
+        "extraParams": []
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "vault",
+        "reserve": "JWETH"
+      },
+      "ilks": {
+        "A": {
+          "mat": "150",
+          "line": "0",
+          "autoLine": "10000000",
+          "autoLineGap": "5000000",
+          "autoLineTtl": "43200",
+          "dust": "100",
+          "duty": "0",
+          "clipDeploy": {
+            "chop": "15",
+            "hole": "100000000",
+            "chip": "0",
+            "tip": "5",
+            "buf": "130",
+            "tail": "16800",
+            "cusp": "40",
+            "calc": {
+              "type": "StairstepExponentialDecrease",
+              "step": "180",
+              "cut": "99"
+            },
+            "cm_tolerance": "50"
+          }
+        }
+      }
+    },
+    "STKJWBTC": {
+      "import": {
+        "gem": "0x59Da30Dd4C55F0b756710DB290ed4A1686D13dba"
+      },
+      "joinDeploy": {
+        "src": "GemJoin5",
+        "extraParams": []
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "vault",
+        "reserve": "JWBTC"
+      },
+      "ilks": {
+        "A": {
+          "mat": "150",
+          "line": "0",
+          "autoLine": "10000000",
+          "autoLineGap": "5000000",
+          "autoLineTtl": "43200",
+          "dust": "100",
+          "duty": "0",
+          "clipDeploy": {
+            "chop": "15",
+            "hole": "100000000",
+            "chip": "0",
+            "tip": "5",
+            "buf": "130",
+            "tail": "16800",
+            "cusp": "40",
+            "calc": {
+              "type": "StairstepExponentialDecrease",
+              "step": "180",
+              "cut": "99"
+            },
+            "cm_tolerance": "50"
+          }
+        }
+      }
+    },
+    "STKJLINK": {
+      "import": {
+        "gem": "0x1766798c6B7f0d6eA40d5B8B2215BF97fFB2AE85"
+      },
+      "joinDeploy": {
+        "src": "GemJoin5",
+        "extraParams": []
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "vault",
+        "reserve": "JLINK"
+      },
+      "ilks": {
+        "A": {
+          "mat": "150",
+          "line": "0",
+          "autoLine": "5000000",
+          "autoLineGap": "5000000",
+          "autoLineTtl": "43200",
+          "dust": "100",
+          "duty": "0",
+          "clipDeploy": {
+            "chop": "15",
+            "hole": "100000000",
+            "chip": "0",
+            "tip": "5",
+            "buf": "130",
+            "tail": "16800",
+            "cusp": "40",
+            "calc": {
+              "type": "StairstepExponentialDecrease",
+              "step": "180",
+              "cut": "99"
+            },
+            "cm_tolerance": "50"
+          }
+        }
+      }
+    },
+    "STKTDJAVAXJOE": {
+      "import": {
+        "gem": "0x04abDB55DCd0167BFcE8FA0fA125F102c4734C62"
+      },
+      "joinDeploy": {
+        "src": "GemJoin",
+        "extraParams": []
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "vault",
+        "reserve": "TDJAVAXJOE"
+      },
+      "ilks": {
+        "A": {
+          "mat": "150",
+          "line": "0",
+          "autoLine": "50000000",
+          "autoLineGap": "10000000",
+          "autoLineTtl": "43200",
+          "dust": "100",
+          "duty": "-20",
+          "clipDeploy": {
+            "chop": "15",
+            "hole": "100000000",
+            "chip": "0",
+            "tip": "5",
+            "buf": "130",
+            "tail": "16800",
+            "cusp": "40",
+            "calc": {
+              "type": "StairstepExponentialDecrease",
+              "step": "180",
+              "cut": "99"
+            },
+            "cm_tolerance": "50"
+          }
+        }
+      }
+    },
+    "STKTDJAVAXWETH": {
+      "import": {
+        "gem": "0xE70aA236f2c2dABC346e193F606986Bb843bA3d9"
+      },
+      "joinDeploy": {
+        "src": "GemJoin",
+        "extraParams": []
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "vault",
+        "reserve": "TDJAVAXWETH"
+      },
+      "ilks": {
+        "A": {
+          "mat": "150",
+          "line": "0",
+          "autoLine": "50000000",
+          "autoLineGap": "10000000",
+          "autoLineTtl": "43200",
+          "dust": "100",
+          "duty": "-6",
+          "clipDeploy": {
+            "chop": "15",
+            "hole": "100000000",
+            "chip": "0",
+            "tip": "5",
+            "buf": "130",
+            "tail": "16800",
+            "cusp": "40",
+            "calc": {
+              "type": "StairstepExponentialDecrease",
+              "step": "180",
+              "cut": "99"
+            },
+            "cm_tolerance": "50"
+          }
+        }
+      }
+    },
+    "STKTDJAVAXWBTC": {
+      "import": {
+        "gem": "0xeB8e1c316694742E7042882be1ac55ebbD2bCEbB"
+      },
+      "joinDeploy": {
+        "src": "GemJoin",
+        "extraParams": []
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "vault",
+        "reserve": "TDJAVAXWBTC"
+      },
+      "ilks": {
+        "A": {
+          "mat": "150",
+          "line": "0",
+          "autoLine": "50000000",
+          "autoLineGap": "10000000",
+          "autoLineTtl": "43200",
+          "dust": "100",
+          "duty": "-6",
+          "clipDeploy": {
+            "chop": "15",
+            "hole": "100000000",
+            "chip": "0",
+            "tip": "5",
+            "buf": "130",
+            "tail": "16800",
+            "cusp": "40",
+            "calc": {
+              "type": "StairstepExponentialDecrease",
+              "step": "180",
+              "cut": "99"
+            },
+            "cm_tolerance": "50"
+          }
+        }
+      }
+    },
+    "STKTDJAVAXDAI": {
+      "import": {
+        "gem": "0xe46a3E475dd4D18A7D2A009b7FA1B113f2bd2903"
+      },
+      "joinDeploy": {
+        "src": "GemJoin",
+        "extraParams": []
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "vault",
+        "reserve": "TDJAVAXDAI"
+      },
+      "ilks": {
+        "A": {
+          "mat": "140",
+          "line": "0",
+          "autoLine": "10000000",
+          "autoLineGap": "2000000",
+          "autoLineTtl": "43200",
+          "dust": "100",
+          "duty": "-8",
+          "clipDeploy": {
+            "chop": "15",
+            "hole": "100000000",
+            "chip": "0",
+            "tip": "5",
+            "buf": "130",
+            "tail": "16800",
+            "cusp": "40",
+            "calc": {
+              "type": "StairstepExponentialDecrease",
+              "step": "180",
+              "cut": "99"
+            },
+            "cm_tolerance": "50"
+          }
+        }
+      }
+    },
+    "STKTDJAVAXUSDC": {
+      "import": {
+        "gem": "0xed98897f99F0Bb8732afF727f3DBD01bA95D25b4"
+      },
+      "joinDeploy": {
+        "src": "GemJoin",
+        "extraParams": []
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "vault",
+        "reserve": "TDJAVAXUSDC"
+      },
+      "ilks": {
+        "A": {
+          "mat": "140",
+          "line": "0",
+          "autoLine": "100000000",
+          "autoLineGap": "20000000",
+          "autoLineTtl": "43200",
+          "dust": "100",
+          "duty": "-8",
+          "clipDeploy": {
+            "chop": "15",
+            "hole": "100000000",
+            "chip": "0",
+            "tip": "5",
+            "buf": "130",
+            "tail": "16800",
+            "cusp": "40",
+            "calc": {
+              "type": "StairstepExponentialDecrease",
+              "step": "180",
+              "cut": "99"
+            },
+            "cm_tolerance": "50"
+          }
+        }
+      }
+    },
+    "STKTDJAVAXUSDT": {
+      "import": {
+        "gem": "0x38fBF8e6ADbfa44072688BeBd921Fdc6b4b6f328"
+      },
+      "joinDeploy": {
+        "src": "GemJoin",
+        "extraParams": []
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "vault",
+        "reserve": "TDJAVAXUSDT"
+      },
+      "ilks": {
+        "A": {
+          "mat": "140",
+          "line": "0",
+          "autoLine": "50000000",
+          "autoLineGap": "10000000",
+          "autoLineTtl": "43200",
+          "dust": "100",
+          "duty": "-8",
+          "clipDeploy": {
+            "chop": "15",
+            "hole": "100000000",
+            "chip": "0",
+            "tip": "5",
+            "buf": "130",
+            "tail": "16800",
+            "cusp": "40",
+            "calc": {
+              "type": "StairstepExponentialDecrease",
+              "step": "180",
+              "cut": "99"
+            },
+            "cm_tolerance": "50"
+          }
+        }
+      }
+    },
+    "STKTDJAVAXLINK": {
+      "import": {
+        "gem": "0x235B1E29dc44bA33d0A6518a62A998bCFd8D62e9"
+      },
+      "joinDeploy": {
+        "src": "GemJoin",
+        "extraParams": []
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "vault",
+        "reserve": "TDJAVAXLINK"
+      },
+      "ilks": {
+        "A": {
+          "mat": "150",
+          "line": "0",
+          "autoLine": "10000000",
+          "autoLineGap": "5000000",
+          "autoLineTtl": "43200",
+          "dust": "100",
+          "duty": "-5",
+          "clipDeploy": {
+            "chop": "15",
+            "hole": "100000000",
+            "chip": "0",
+            "tip": "5",
+            "buf": "130",
+            "tail": "16800",
+            "cusp": "40",
+            "calc": {
+              "type": "StairstepExponentialDecrease",
+              "step": "180",
+              "cut": "99"
+            },
+            "cm_tolerance": "50"
+          }
+        }
+      }
+    },
+    "STKTDJAVAXMIM": {
+      "import": {
+        "gem": "0xAFe0d419658dEbEF3f8eDc23b011877770594360"
+      },
+      "joinDeploy": {
+        "src": "GemJoin",
+        "extraParams": []
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "vault",
+        "reserve": "TDJAVAXMIM"
+      },
+      "ilks": {
+        "A": {
+          "mat": "140",
+          "line": "0",
+          "autoLine": "10000000",
+          "autoLineGap": "5000000",
+          "autoLineTtl": "43200",
+          "dust": "100",
+          "duty": "-8",
+          "clipDeploy": {
+            "chop": "15",
+            "hole": "100000000",
+            "chip": "0",
+            "tip": "5",
+            "buf": "130",
+            "tail": "16800",
+            "cusp": "40",
+            "calc": {
+              "type": "StairstepExponentialDecrease",
+              "step": "180",
+              "cut": "99"
+            },
+            "cm_tolerance": "50"
+          }
+        }
+      }
+    },
+    "STKTDJUSDCJOE": {
+      "import": {
+        "gem": "0x0A0E72c79b5559B9266deD694bccf91d7C60c300"
+      },
+      "joinDeploy": {
+        "src": "GemJoin",
+        "extraParams": []
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "vault",
+        "reserve": "TDJUSDCJOE"
+      },
+      "ilks": {
+        "A": {
+          "mat": "140",
+          "line": "0",
+          "autoLine": "5000000",
+          "autoLineGap": "2000000",
+          "autoLineTtl": "43200",
+          "dust": "100",
+          "duty": "-30",
+          "clipDeploy": {
+            "chop": "15",
+            "hole": "100000000",
+            "chip": "0",
+            "tip": "5",
+            "buf": "130",
+            "tail": "16800",
+            "cusp": "40",
+            "calc": {
+              "type": "StairstepExponentialDecrease",
+              "step": "180",
+              "cut": "99"
+            },
+            "cm_tolerance": "50"
+          }
+        }
+      }
+    },
+    "STKTDJUSDTJOE": {
+      "import": {
+        "gem": "0x731010369d41147523e6ae65aD3dB4Dea1Eb13ff"
+      },
+      "joinDeploy": {
+        "src": "GemJoin",
+        "extraParams": []
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "vault",
+        "reserve": "TDJUSDTJOE"
+      },
+      "ilks": {
+        "A": {
+          "mat": "140",
+          "line": "0",
+          "autoLine": "3000000",
+          "autoLineGap": "2000000",
+          "autoLineTtl": "43200",
+          "dust": "100",
+          "duty": "-30",
+          "clipDeploy": {
+            "chop": "15",
+            "hole": "100000000",
+            "chip": "0",
+            "tip": "5",
+            "buf": "130",
+            "tail": "16800",
+            "cusp": "40",
+            "calc": {
+              "type": "StairstepExponentialDecrease",
+              "step": "180",
+              "cut": "99"
+            },
+            "cm_tolerance": "50"
+          }
+        }
+      }
+    }
+  }
+}
