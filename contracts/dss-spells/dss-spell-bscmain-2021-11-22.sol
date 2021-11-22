@@ -9,18 +9,16 @@ import { DSPause } from "../ds-pause/pause.sol";
 
 contract DssSpellAction_bscmain_2021_11_22 is DssAction
 {
-	// Provides a descriptive tag for bot consumption
-	// This should be modified weekly to provide a summary of the actions
-	// Hash: seth keccak -- "$(wget https://raw.githubusercontent.com/GrowthDeFi/community/master/governance/votes/Executive%20vote%20-%20October%2014%2C%202021.md -q -O - 2>/dev/null)"
+	// Hash: seth keccak -- "$(wget https://raw.githubusercontent.com/GrowthDeFi/community/master/governance/votes/Executive%20vote%20-%20November%2022%2C%202021.md -q -O - 2>/dev/null)"
 	string public constant override description =
-		"2021-11-22 GrowthDeFi Executive Spell | Hash: 0x3fb16482f0c9e06b5c151f11f9d8d81d2623140648a6608de90d190e8358947d";
+		"2021-11-22 GrowthDeFi Executive Spell | Hash: 0x0000000000000000000000000000000000000000000000000000000000000000";
 
 	address constant MULTISIG = 0x392681Eaf8AD9BC65e74BE37Afe7503D92802b7d; // GrowthDeFi multisig on BSC
 
 	function actions() public override
 	{
 		// Bumps changelog version
-		DssExecLib.setChangelogVersion("1.0.0");
+		DssExecLib.setChangelogVersion("1.0.1");
 
 		// ----- ADJUSTMENTS TO ILKS -----
 
