@@ -13,6 +13,7 @@ contract DssSpellAction_bscmain_2021_10_14 is DssAction
 
 	function actions() public override
 	{
+		// Set changelog version
 		DssExecLib.setChangelogVersion("1.0.0");
 	}
 }
