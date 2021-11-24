@@ -99,6 +99,11 @@ const HTTP_PROVIDER_URLS = {
   ],
 };
 
+const LIMIT_GASPRICE = {
+  'bscmain': '5000000000',
+  'avaxmain': '100000000000',
+};
+
 const web3Cache = {};
 
 function getWeb3(privateKey, network) {
@@ -372,7 +377,7 @@ async function zph(privateKey, network, address) {
   }
 }
 
-async function spot_poke(privateKey, network, name, nonce) {
+async function spot_poke(privateKey, network, name, nonce, urgent = false) {
   const web3 = getWeb3(privateKey, network);
   const abi = SPOTTER_ABI;
   const address = MCD_SPOT;
@@ -382,7 +387,11 @@ async function spot_poke(privateKey, network, name, nonce) {
   try {
     const estimatedGas = await contract.methods.poke(web3.utils.asciiToHex(name)).estimateGas({ from, nonce });
     const gas = 2 * estimatedGas;
-    await contract.methods.poke(web3.utils.asciiToHex(name)).send({ from, nonce, gas })
+    const gasPrice = await web3.eth.getGasPrice();
+    if (!urgent && BigInt(gasPrice) > BigInt(LIMIT_GASPRICE[network])) {
+      throw new Error('Gas price beyond the set limit');
+    }
+    await contract.methods.poke(web3.utils.asciiToHex(name)).send({ from, nonce, gas, gasPrice })
       .on('transactionHash', (hash) => {
         txId = hash;
       });
@@ -393,7 +402,7 @@ async function spot_poke(privateKey, network, name, nonce) {
   return txId;
 }
 
-async function poke(privateKey, network, address, nonce) {
+async function poke(privateKey, network, address, nonce, urgent = false) {
   const web3 = getWeb3(privateKey, network);
   const abi = UNIV2LPORACLE_ABI;
   const contract = new web3.eth.Contract(abi, address);
@@ -402,7 +411,11 @@ async function poke(privateKey, network, address, nonce) {
   try {
     const estimatedGas = await contract.methods.poke().estimateGas({ from, nonce });
     const gas = 2 * estimatedGas;
-    await contract.methods.poke().send({ from, nonce, gas })
+    const gasPrice = await web3.eth.getGasPrice();
+    if (!urgent && BigInt(gasPrice) > BigInt(LIMIT_GASPRICE[network])) {
+      throw new Error('Gas price beyond the set limit');
+    }
+    await contract.methods.poke().send({ from, nonce, gas, gasPrice })
       .on('transactionHash', (hash) => {
         txId = hash;
       });
@@ -423,7 +436,7 @@ function writeLastPoke(network) {
   try { fs.writeFileSync('pokebot-' + network + '.json', JSON.stringify(lastPoke, undefined, 2)); } catch (e) { }
 }
 
-async function pokeAll(network, lines = []) {
+async function pokeAll(network, lines = [], urgent = false) {
   const pips = {};
 
   function log(name, type, address, tx) {
@@ -447,7 +460,7 @@ async function pokeAll(network, lines = []) {
           const address = pips[name].address;
           const nonce = await getNonce(privateKey, network);
           console.log('Poking ' + name + ' at nonce ' + nonce + '...');
-          const tx = await poke(privateKey, network, address, nonce);
+          const tx = await poke(privateKey, network, address, nonce, urgent);
           do { await sleep(3 * 1000); } while (await getNonce(privateKey, network) <= nonce);
           log(name, 'twap', address, tx);
         }
@@ -456,7 +469,7 @@ async function pokeAll(network, lines = []) {
           const address = pips[name].address;
           const nonce = await getNonce(privateKey, network);
           console.log('Poking ' + name + ' at nonce ' + nonce + '...');
-          const tx = await poke(privateKey, network, address, nonce);
+          const tx = await poke(privateKey, network, address, nonce, urgent);
           do { await sleep(3 * 1000); } while (await getNonce(privateKey, network) <= nonce);
           log(name, 'twap', address, tx);
         }
@@ -465,13 +478,13 @@ async function pokeAll(network, lines = []) {
           const address = pips[name].address;
           const nonce = await getNonce(privateKey, network);
           console.log('Poking ' + name + ' at nonce ' + nonce + '...');
-          const tx = await poke(privateKey, network, address, nonce);
+          const tx = await poke(privateKey, network, address, nonce, urgent);
           do { await sleep(3 * 1000); } while (await getNonce(privateKey, network) <= nonce);
           log(name, 'twap', address, tx);
         }
         const nonce = await getNonce(privateKey, network);
         console.log('Poking ' + name + ' at nonce ' + nonce + '...');
-        const tx = await poke(privateKey, network, address, nonce);
+        const tx = await poke(privateKey, network, address, nonce, urgent);
         do { await sleep(3 * 1000); } while (await getNonce(privateKey, network) <= nonce);
         log(name, type, address, tx);
         const timestamp = Number(await zph(privateKey, network, address));
@@ -503,7 +516,7 @@ async function pokeAll(network, lines = []) {
       if (Number(deviation) >= 0.03) { // 3%
         const nonce = await getNonce(privateKey, network);
         console.log('Poking ' + name + ' at nonce ' + nonce + '...');
-        const tx = await spot_poke(privateKey, network, name, nonce);
+        const tx = await spot_poke(privateKey, network, name, nonce, urgent);
         do { await sleep(3 * 1000); } while (await getNonce(privateKey, network) <= nonce);
         log(name, 'spot', MCD_SPOT, tx);
       }
@@ -513,8 +526,12 @@ async function pokeAll(network, lines = []) {
 
 async function reportError(e, type, detail, prefix = '') {
   const message = typeof e === 'object' && e !== null && 'message' in e ? e.message : String(e);
+  if (message.includes('502 Bad Gateway')) return;
+  if (message.includes('Unknown Error')) return;
+  if (message.includes('ETIMEDOUT')) return;
   if (message.includes('ESOCKETTIMEDOUT')) return;
   if (message.includes('header not found')) return;
+  if (message.includes('handle request error')) return;
   if (message.includes('Too Many Requests')) return;
   if (message.includes('Could not find block')) return;
   if (message.includes('cannot query unfinalized data')) return;
@@ -524,6 +541,11 @@ async function reportError(e, type, detail, prefix = '') {
 const TIMEFRAME = {
   'bscmain': 4 * 60 * 60 * 1000, // 4 hours
   'avaxmain': 1 * 60 * 60 * 1000, // 1 hour
+};
+
+const MAXIMUM_TIMEFRAME = {
+  'bscmain': 4 * 60 * 60 * 1000, // 4 hours
+  'avaxmain': 4 * 60 * 60 * 1000, // 4 hours
 };
 
 async function main(args) {
@@ -543,8 +565,10 @@ async function main(args) {
   });
 
   for (;;) {
+    const now = Date.now();
     const when = lastPoke + TIMEFRAME[network];
-    const delay = Math.max(when - Date.now(), 0);
+    const tolerance = lastPoke + MAXIMUM_TIMEFRAME[network];
+    const delay = Math.max(when - now, 0);
     console.log('WAITING ' + Math.floor(delay / 1000) + 's');
     await sleep(delay);
 
@@ -556,10 +580,10 @@ async function main(args) {
       const balance = Number(coins(value, 18)).toFixed(4);
       lines.push('<a href="' + accountUrl + '">PokeBot</a>');
       lines.push('<code>' + balance + ' ' + NATIVE_SYMBOL[network] + '</code>');
-      await pokeAll(network, lines);
+      await pokeAll(network, lines, now >= tolerance);
       await sendTelegramMessage(lines.join('\n'));
     } catch (e) {
-      await reportError(e, 'Failure', network, lines.join('\n'));
+      await reportError(e, 'Failure', network, lines.join('\n') + '\n');
       continue;
     }
 
