@@ -20,6 +20,7 @@
 pragma solidity ^0.6.12;
 
 import { DssAction } from "./DssAction.sol";
+import { DssExecLib } from "./DssExecLib.sol";
 import { DSPause } from "../ds-pause/pause.sol";
 import { ChainLog } from "../dss-chain-log/ChainLog.sol";
 
@@ -52,7 +53,9 @@ contract DssExec {
     // @param _description  A string description of the spell
     // @param _expiration   The timestamp this spell will expire. (Ex. now + 30 days)
     // @param _spellAction  The address of the spell action
-    constructor(address _log, uint256 _expiration, address _spellAction) public {
+    constructor(uint256 _expiration, address _spellAction) public {
+	address _log = DssExecLib.log();
+
         log         = ChainLog(_log);
         pause       = DSPause(ChainLog(_log).getAddress("MCD_PAUSE"));
         expiration  = _expiration;
