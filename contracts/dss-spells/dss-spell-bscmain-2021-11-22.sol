@@ -11,7 +11,7 @@ contract DssSpellAction_bscmain_2021_11_22 is DssAction
 {
 	// Hash: seth keccak -- "$(wget https://raw.githubusercontent.com/GrowthDeFi/community/master/governance/votes/Executive%20vote%20-%20November%2022%2C%202021.md -q -O - 2>/dev/null)"
 	string public constant override description =
-		"2021-11-22 GrowthDeFi Executive Spell | Hash: 0x0000000000000000000000000000000000000000000000000000000000000000";
+		"2021-11-22 GrowthDeFi Executive Spell | Hash: 0xbbdae1151ff37098672690dc404abd7ff344a39f1e26b471759dccbe1726fd5b";
 
 	address constant MULTISIG = 0x392681Eaf8AD9BC65e74BE37Afe7503D92802b7d; // GrowthDeFi multisig on BSC
 

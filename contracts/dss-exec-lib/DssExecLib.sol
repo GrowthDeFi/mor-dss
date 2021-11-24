@@ -213,7 +213,7 @@ library DssExecLib {
         return ChainlogLike(log()).getAddress(_key);
     }
 
-    function log() internal pure returns (address) {
+    function log() public pure returns (address) {
       uint256 _chainId;
       assembly { _chainId := chainid() }
       if (_chainId == 56) return LOG_BSCMAIN;
