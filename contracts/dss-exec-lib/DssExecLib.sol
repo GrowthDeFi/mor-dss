@@ -133,7 +133,8 @@ library DssExecLib {
     /*****************/
     /*** Constants ***/
     /*****************/
-    address constant public LOG = 0xdA0Ab1e0017DEbCd72Be8599041a2aa3bA7e740F;
+    address constant public LOG = 0xc1E1d478296F3b0F2CA9Cc88F620de0b791aBf27; // bscmain
+    // address constant public LOG = 0xd1a85349D73BaA4fFA6737474fdce9347B887cB2; // avaxmain
 
     uint256 constant internal WAD      = 10 ** 18;
     uint256 constant internal RAY      = 10 ** 27;
