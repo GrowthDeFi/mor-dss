@@ -133,8 +133,8 @@ library DssExecLib {
     /*****************/
     /*** Constants ***/
     /*****************/
-    address constant public LOG = 0xc1E1d478296F3b0F2CA9Cc88F620de0b791aBf27; // bscmain
-    // address constant public LOG = 0xd1a85349D73BaA4fFA6737474fdce9347B887cB2; // avaxmain
+    address constant public LOG_BSCMAIN = 0xc1E1d478296F3b0F2CA9Cc88F620de0b791aBf27; // bscmain
+    address constant public LOG_AVAXMAIN = 0xd1a85349D73BaA4fFA6737474fdce9347B887cB2; // avaxmain
 
     uint256 constant internal WAD      = 10 ** 18;
     uint256 constant internal RAY      = 10 ** 27;
@@ -149,26 +149,26 @@ library DssExecLib {
     /**********************/
     /*** Math Functions ***/
     /**********************/
-    function add(uint256 x, uint256 y) internal pure returns (uint256 z) {
+    function _add(uint256 x, uint256 y) internal pure returns (uint256 z) {
         require((z = x + y) >= x);
     }
-    function sub(uint256 x, uint256 y) internal pure returns (uint256 z) {
+    function _sub(uint256 x, uint256 y) internal pure returns (uint256 z) {
         require((z = x - y) <= x);
     }
-    function mul(uint256 x, uint256 y) internal pure returns (uint256 z) {
+    function _mul(uint256 x, uint256 y) internal pure returns (uint256 z) {
         require(y == 0 || (z = x * y) / y == x);
     }
     function wmul(uint256 x, uint256 y) internal pure returns (uint256 z) {
-        z = add(mul(x, y), WAD / 2) / WAD;
+        z = _add(_mul(x, y), WAD / 2) / WAD;
     }
     function rmul(uint256 x, uint256 y) internal pure returns (uint256 z) {
-        z = add(mul(x, y), RAY / 2) / RAY;
+        z = _add(_mul(x, y), RAY / 2) / RAY;
     }
     function wdiv(uint256 x, uint256 y) internal pure returns (uint256 z) {
-        z = add(mul(x, WAD), y / 2) / y;
+        z = _add(_mul(x, WAD), y / 2) / y;
     }
     function rdiv(uint256 x, uint256 y) internal pure returns (uint256 z) {
-        z = add(mul(x, RAY), y / 2) / y;
+        z = _add(_mul(x, RAY), y / 2) / y;
     }
 
     /****************************/
@@ -210,7 +210,15 @@ library DssExecLib {
     }
 
     function getChangelogAddress(bytes32 _key) public view returns (address) {
-        return ChainlogLike(LOG).getAddress(_key);
+        return ChainlogLike(log()).getAddress(_key);
+    }
+
+    function log() public pure returns (address) {
+      uint256 _chainId;
+      assembly { _chainId := chainid() }
+      if (_chainId == 56) return LOG_BSCMAIN;
+      if (_chainId == 43114) return LOG_AVAXMAIN;
+      require(false, "unsupported network");
     }
 
     /****************************/
@@ -222,7 +230,7 @@ library DssExecLib {
         @param _val The address associated with the _key
     */
     function setChangelogAddress(bytes32 _key, address _val) public {
-        ChainlogLike(LOG).setAddress(_key, _val);
+        ChainlogLike(log()).setAddress(_key, _val);
     }
 
     /**
@@ -230,21 +238,21 @@ library DssExecLib {
         @param _version Changelog version (e.g. "1.1.2")
     */
     function setChangelogVersion(string memory _version) public {
-        ChainlogLike(LOG).setVersion(_version);
+        ChainlogLike(log()).setVersion(_version);
     }
     /**
         @dev Set IPFS hash of IPFS changelog in MCD on-chain changelog.
         @param _ipfsHash IPFS hash (e.g. "QmefQMseb3AiTapiAKKexdKHig8wroKuZbmLtPLv4u2YwW")
     */
     function setChangelogIPFS(string memory _ipfsHash) public {
-        ChainlogLike(LOG).setIPFS(_ipfsHash);
+        ChainlogLike(log()).setIPFS(_ipfsHash);
     }
     /**
         @dev Set SHA256 hash in MCD on-chain changelog.
         @param _SHA256Sum SHA256 hash (e.g. "e42dc9d043a57705f3f097099e6b2de4230bca9a020c797508da079f9079e35b")
     */
     function setChangelogSHA256(string memory _SHA256Sum) public {
-        ChainlogLike(LOG).setSha256sum(_SHA256Sum);
+        ChainlogLike(log()).setSha256sum(_SHA256Sum);
     }
 
 
@@ -426,7 +434,7 @@ library DssExecLib {
     function increaseGlobalDebtCeiling(uint256 _amount) public {
         require(_amount < WAD);  // "LibDssExec/incorrect-Line-increase-precision"
         address _vat = vat();
-        setValue(_vat, "Line", add(DssVat(_vat).Line(), _amount * RAD));
+        setValue(_vat, "Line", _add(DssVat(_vat).Line(), _amount * RAD));
     }
     /**
         @dev Decrease the global debt ceiling by a specific amount. Amount will be converted to the correct internal precision.
@@ -435,7 +443,7 @@ library DssExecLib {
     function decreaseGlobalDebtCeiling(uint256 _amount) public {
         require(_amount < WAD);  // "LibDssExec/incorrect-Line-decrease-precision"
         address _vat = vat();
-        setValue(_vat, "Line", sub(DssVat(_vat).Line(), _amount * RAD));
+        setValue(_vat, "Line", _sub(DssVat(_vat).Line(), _amount * RAD));
     }
     /**
         @dev Set the Dai Savings Rate. See: docs/rates.txt
@@ -470,7 +478,7 @@ library DssExecLib {
     */
     function setMinSurplusAuctionBidIncrease(uint256 _pct_bps) public {
         require(_pct_bps < BPS_ONE_HUNDRED_PCT);  // "LibDssExec/incorrect-flap-beg-precision"
-        setValue(flap(), "beg", add(WAD, wdiv(_pct_bps, BPS_ONE_HUNDRED_PCT)));
+        setValue(flap(), "beg", _add(WAD, wdiv(_pct_bps, BPS_ONE_HUNDRED_PCT)));
     }
     /**
         @dev Set bid duration for surplus auctions.
@@ -516,7 +524,7 @@ library DssExecLib {
     */
     function setMinDebtAuctionBidIncrease(uint256 _pct_bps) public {
         require(_pct_bps < BPS_ONE_HUNDRED_PCT);  // "LibDssExec/incorrect-flap-beg-precision"
-        setValue(flop(), "beg", add(WAD, wdiv(_pct_bps, BPS_ONE_HUNDRED_PCT)));
+        setValue(flop(), "beg", _add(WAD, wdiv(_pct_bps, BPS_ONE_HUNDRED_PCT)));
     }
     /**
         @dev Set bid duration for debt auctions.
@@ -539,7 +547,7 @@ library DssExecLib {
         @param _pct_bps    The pct, in basis points, to set in integer form (x100). (ex. 5% = 5 * 100 = 500)
     */
     function setDebtAuctionMKRIncreaseRate(uint256 _pct_bps) public {
-        setValue(flop(), "pad", add(WAD, wdiv(_pct_bps, BPS_ONE_HUNDRED_PCT)));
+        setValue(flop(), "pad", _add(WAD, wdiv(_pct_bps, BPS_ONE_HUNDRED_PCT)));
     }
     /**
         @dev Set the maximum total DAI amount that can be out for liquidation in the system at any point. Amount will be converted to the correct internal precision.
@@ -612,7 +620,7 @@ library DssExecLib {
         require(_amount < WAD);  // "LibDssExec/incorrect-ilk-line-precision"
         address _vat = vat();
         (,,,uint256 line_,) = DssVat(_vat).ilks(_ilk);
-        setValue(_vat, _ilk, "line", add(line_, _amount * RAD));
+        setValue(_vat, _ilk, "line", _add(line_, _amount * RAD));
         if (_global) { increaseGlobalDebtCeiling(_amount); }
     }
     /**
@@ -625,7 +633,7 @@ library DssExecLib {
         require(_amount < WAD);  // "LibDssExec/incorrect-ilk-line-precision"
         address _vat = vat();
         (,,,uint256 line_,) = DssVat(_vat).ilks(_ilk);
-        setValue(_vat, _ilk, "line", sub(line_, _amount * RAD));
+        setValue(_vat, _ilk, "line", _sub(line_, _amount * RAD));
         if (_global) { decreaseGlobalDebtCeiling(_amount); }
     }
     /**
@@ -676,7 +684,7 @@ library DssExecLib {
     */
     function setIlkLiquidationPenalty(bytes32 _ilk, uint256 _pct_bps) public {
         require(_pct_bps < BPS_ONE_HUNDRED_PCT);  // "LibDssExec/incorrect-ilk-chop-precision"
-        setValue(dog(), _ilk, "chop", add(WAD, wdiv(_pct_bps, BPS_ONE_HUNDRED_PCT)));
+        setValue(dog(), _ilk, "chop", _add(WAD, wdiv(_pct_bps, BPS_ONE_HUNDRED_PCT)));
         (bool ok,) = clip(_ilk).call(abi.encodeWithSignature("upchost()")); ok;
     }
     /**
