@@ -131,9 +131,14 @@ function escapeHTML(message) {
 const telegramBotApiKey = process.env['TELEGRAM_BOT_API_KEY'] || '';
 const telegramBotChatId = process.env['TELEGRAM_BOT_CHAT_ID'] || '';
 
-let lastTelegramMessage = {};
+let lastTelegramMessage;
 
 async function sendTelegramMessage(message, key = '') {
+  const filename = '/tmp/bridgebot-telegram-messages.json';
+  if (lastTelegramMessage === undefined) {
+    lastTelegramMessage = {};
+    try { lastTelegramMessage = JSON.parse(fs.readFileSync(filename)); } catch { }
+  }
   if (message !== lastTelegramMessage[key]) {
     console.log(new Date().toISOString());
     console.log(message);
@@ -145,6 +150,7 @@ async function sendTelegramMessage(message, key = '') {
       console.error('FAILURE', e.message);
     }
   }
+  try { fs.writeFileSync(filename, JSON.stringify(lastTelegramMessage, undefined, 2)); } catch { }
 }
 
 // lib
