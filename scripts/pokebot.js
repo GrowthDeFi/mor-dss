@@ -63,6 +63,12 @@ function units(coins, decimals) {
 
 const privateKey = process.env['PRIVATE_KEY'] || '';
 
+const ankrProjectId = process.env['ANKR_PROJECT_ID'] || '';
+const ankrApikeyBscmain = process.env['ANKR_APIKEY_BSCMAIN'] || '';
+const ankrApikeyBscmain2 = process.env['ANKR_APIKEY_BSCMAIN2'] || '';
+const ankrApikeyAvaxmain = process.env['ANKR_APIKEY_AVAXMAIN'] || '';
+const moralisProjectId = process.env['MORALIS_PROJECT_ID'] || '';
+
 const ADDRESS_URL_PREFIX = {
   'bscmain': 'https://bscscan.com/address/',
   'avaxmain': 'https://snowtrace.io/address/',
@@ -93,9 +99,15 @@ const HTTP_PROVIDER_URLS = {
     'https://bsc-dataseed2.binance.org/',
     'https://bsc-dataseed3.binance.org/',
     'https://bsc-dataseed4.binance.org/',
+    'https://speedy-nodes-nyc.moralis.io/' + moralisProjectId + '/bsc/mainnet',
+    'https://speedy-nodes-nyc.moralis.io/' + moralisProjectId + '/bsc/mainnet/archive',
+    'https://apis.ankr.com/' + ankrApikeyBscmain + '/' + ankrProjectId + '/binance/full/main',
+    'https://apis-sj.ankr.com/' + ankrApikeyBscmain2 + '/' + ankrProjectId + '/binance/full/main',
   ],
   'avaxmain': [
     'https://api.avax.network/ext/bc/C/rpc',
+    'https://speedy-nodes-nyc.moralis.io/' + moralisProjectId + '/avalanche/mainnet',
+    'https://apis.ankr.com/' + ankrApikeyAvaxmain + '/' + ankrProjectId + '/avax/archive/main',
   ],
 };
 
