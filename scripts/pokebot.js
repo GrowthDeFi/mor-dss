@@ -99,15 +99,15 @@ const HTTP_PROVIDER_URLS = {
     'https://bsc-dataseed2.binance.org/',
     'https://bsc-dataseed3.binance.org/',
     'https://bsc-dataseed4.binance.org/',
-    'https://speedy-nodes-nyc.moralis.io/' + moralisProjectId + '/bsc/mainnet',
-    'https://speedy-nodes-nyc.moralis.io/' + moralisProjectId + '/bsc/mainnet/archive',
-    'https://apis.ankr.com/' + ankrApikeyBscmain + '/' + ankrProjectId + '/binance/full/main',
-    'https://apis-sj.ankr.com/' + ankrApikeyBscmain2 + '/' + ankrProjectId + '/binance/full/main',
+    // 'https://speedy-nodes-nyc.moralis.io/' + moralisProjectId + '/bsc/mainnet',
+    // 'https://speedy-nodes-nyc.moralis.io/' + moralisProjectId + '/bsc/mainnet/archive',
+    // 'https://apis.ankr.com/' + ankrApikeyBscmain + '/' + ankrProjectId + '/binance/full/main',
+    // 'https://apis-sj.ankr.com/' + ankrApikeyBscmain2 + '/' + ankrProjectId + '/binance/full/main',
   ],
   'avaxmain': [
     'https://api.avax.network/ext/bc/C/rpc',
-    'https://speedy-nodes-nyc.moralis.io/' + moralisProjectId + '/avalanche/mainnet',
-    'https://apis.ankr.com/' + ankrApikeyAvaxmain + '/' + ankrProjectId + '/avax/archive/main',
+    // 'https://speedy-nodes-nyc.moralis.io/' + moralisProjectId + '/avalanche/mainnet',
+    // 'https://apis.ankr.com/' + ankrApikeyAvaxmain + '/' + ankrProjectId + '/avax/archive/main',
   ],
 };
 
