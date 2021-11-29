@@ -65,7 +65,9 @@ contract DssSpellAction_bscmain_2021_11_22 is DssAction
 
 		// ----- SURPLUS WITHDRAWAL OF 50,000 MOR -----
 
+		DssExecLib.delegateVat(DssExecLib.daiJoin());
 		DssExecLib.sendPaymentFromSurplusBuffer(MULTISIG, 50000); // 50k MOR
+		DssExecLib.undelegateVat(DssExecLib.daiJoin());
 
 		// ----- ADDS A 24-HOUR PAUSE DELAY FOR SPELLS -----
 
