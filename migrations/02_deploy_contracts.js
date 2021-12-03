@@ -1973,6 +1973,7 @@ module.exports = async (deployer, network, [account]) => {
 
   // TRANSFER DEPLOYER ADMIN RIGHTS TO MULTISIG
 
+  console.log('Transfering Admin Rights to Multisig...');
   await dsRoles.setRootUser(MULTISIG, true);
   await dsRoles.setRootUser(DEPLOYER, false);
   await dsRoles.setOwner(MULTISIG);
