@@ -542,8 +542,9 @@ async function pokeAll(network, lines = [], urgent = false) {
   }
 }
 
-async function reportError(e, type, detail, prefix = '') {
+async function reportError(e, type, detail) {
   const message = typeof e === 'object' && e !== null && 'message' in e ? e.message : String(e);
+  if (message.includes('SERVER_ERROR')) return;
   if (message.includes('502 Bad Gateway')) return;
   if (message.includes('Unknown Error')) return;
   if (message.includes('ETIMEDOUT')) return;
@@ -553,7 +554,7 @@ async function reportError(e, type, detail, prefix = '') {
   if (message.includes('Too Many Requests')) return;
   if (message.includes('Could not find block')) return;
   if (message.includes('cannot query unfinalized data')) return;
-  await sendTelegramMessage(prefix + '<i>PokeBot (' + escapeHTML(detail) + ') ' + escapeHTML(type) + ' (' + escapeHTML(message) + ')</i>');
+  await sendTelegramMessage('<i>PokeBot (' + escapeHTML(detail) + ') ' + escapeHTML(type) + ' (' + escapeHTML(message) + ')</i>');
 }
 
 const TIMEFRAME = {
@@ -601,7 +602,8 @@ async function main(args) {
       await pokeAll(network, lines, now >= tolerance);
       await sendTelegramMessage(lines.join('\n'));
     } catch (e) {
-      await reportError(e, 'Failure', network, lines.join('\n') + '\n');
+      if (lines.length > 2) await sendTelegramMessage(lines.join('\n'));
+      await reportError(e, 'Failure', network);
       continue;
     }
 
