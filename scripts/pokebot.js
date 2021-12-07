@@ -547,6 +547,7 @@ async function reportError(e, type, detail) {
   if (message.includes('nonce too low')) return;
   if (message.includes('replacement transaction underpriced')) return;
   if (message.includes('SERVER_ERROR')) return;
+  if (message.includes('Gateway timeout')) return;
   if (message.includes('502 Bad Gateway')) return;
   if (message.includes('internal error')) return;
   if (message.includes('Unknown Error')) return;
