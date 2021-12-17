@@ -265,36 +265,35 @@ const PIP_LIST = {
 
 const ILK_LIST = {
   'bscmain': [
-    'STKCAKE-A',
-    'STKBANANA-A',
-    'STKPCSBNBCAKE-A',
-    'STKPCSBNBBUSD-A',
-    'STKPCSBNBETH-A',
-    'STKPCSBNBBTCB-A',
-    'STKPCSBUSDUSDC-A',
-    'STKPCSBUSDBTCB-A',
-    'STKPCSBUSDCAKE-A',
-    'STKPCSETHBTCB-A',
-    'STKPCSETHUSDC-A',
-    'STKAPEMORBUSD-A',
+    { name: 'STKCAKE-A', threshold: 0.03 },
+    { name: 'STKBANANA-A', threshold: 0.03 },
+    { name: 'STKPCSBNBCAKE-A', threshold: 0.03 },
+    { name: 'STKPCSBNBBUSD-A', threshold: 0.03 },
+    { name: 'STKPCSBNBETH-A', threshold: 0.03 },
+    { name: 'STKPCSBNBBTCB-A', threshold: 0.03 },
+    { name: 'STKPCSBUSDUSDC-A', threshold: 0.03 },
+    { name: 'STKPCSBUSDBTCB-A', threshold: 0.03 },
+    { name: 'STKPCSBUSDCAKE-A', threshold: 0.03 },
+    { name: 'STKPCSETHBTCB-A', threshold: 0.03 },
+    { name: 'STKPCSETHUSDC-A', threshold: 0.03 },
+    { name: 'STKAPEMORBUSD-A', threshold: 0.001 },
   ],
-
   'avaxmain': [
-    'STKXJOE-A',
-    'STKJAVAX-A',
-    'STKJWETH-A',
-    'STKJWBTC-A',
-    'STKJLINK-A',
-    'STKTDJAVAXJOE-A',
-    'STKTDJAVAXWETH-A',
-    'STKTDJAVAXWBTC-A',
-    'STKTDJAVAXDAI-A',
-    'STKTDJAVAXUSDC-A',
-    'STKTDJAVAXUSDT-A',
-    'STKTDJAVAXLINK-A',
-    'STKTDJAVAXMIM-A',
-    'STKTDJUSDCJOE-A',
-    'STKTDJUSDTJOE-A',
+    { name: 'STKXJOE-A', threshold: 0.03 },
+    { name: 'STKJAVAX-A', threshold: 0.03 },
+    { name: 'STKJWETH-A', threshold: 0.03 },
+    { name: 'STKJWBTC-A', threshold: 0.03 },
+    { name: 'STKJLINK-A', threshold: 0.03 },
+    { name: 'STKTDJAVAXJOE-A', threshold: 0.03 },
+    { name: 'STKTDJAVAXWETH-A', threshold: 0.03 },
+    { name: 'STKTDJAVAXWBTC-A', threshold: 0.03 },
+    { name: 'STKTDJAVAXDAI-A', threshold: 0.03 },
+    { name: 'STKTDJAVAXUSDC-A', threshold: 0.03 },
+    { name: 'STKTDJAVAXUSDT-A', threshold: 0.03 },
+    { name: 'STKTDJAVAXLINK-A', threshold: 0.03 },
+    { name: 'STKTDJAVAXMIM-A', threshold: 0.03 },
+    { name: 'STKTDJUSDCJOE-A', threshold: 0.03 },
+    { name: 'STKTDJUSDTJOE-A', threshold: 0.03 },
   ],
 };
 
@@ -522,7 +521,7 @@ async function pokeAll(network, lines = [], urgent = false) {
   }
 
   // poke spotter ILKs
-  for (const name of ILK_LIST[network]) {
+  for (const { name, threshold } of ILK_LIST[network]) {
     const [token, ilk] = name.split('-');
     const { value } = pips[token];
     if (value !== undefined) {
@@ -531,7 +530,7 @@ async function pokeAll(network, lines = [], urgent = false) {
       const calcSpot = (100 * Number(value) / Number(mat)).toFixed(27);
       const deviation = Math.abs((Number(calcSpot) - Number(spot)) / Number(calcSpot)).toFixed(6);
       console.log({ name, value, mat, spot, calcSpot, deviation });
-      if (Number(deviation) >= 0.03) { // 3%
+      if (Number(deviation) >= threshold) {
         const nonce = await getNonce(privateKey, network);
         console.log('Poking ' + name + ' at nonce ' + nonce + '...');
         const tx = await spot_poke(privateKey, network, name, nonce, urgent);
