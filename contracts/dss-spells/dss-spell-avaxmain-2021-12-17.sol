@@ -94,18 +94,18 @@ contract DssSpellAction_avaxmain_2021_12_17 is DssAction
 			co.isLiquidatable = true;
 			co.isOSM = false;
 			co.whitelistOSM = false;
-			co.liquidationRatio = 10000;
-			co.ilkDebtCeiling = 100000000;
-			co.minVaultAmount = 0;
-			co.ilkStabilityFee = 1e27;
-			co.liquidationPenalty = 1300;
-			co.maxLiquidationAmount = 0;
-			co.kprPctReward = 10;
-			co.kprFlatReward = 300;
-			co.startingPriceFactor = 10500;
-			co.auctionDuration = 13200;
-			co.permittedDrop = 9000;
-			co.breakerTolerance = 9500;
+			co.liquidationRatio = 10000; // mat
+			co.ilkDebtCeiling = 100000000; // line
+			co.minVaultAmount = 0; // dust
+			co.ilkStabilityFee = 1e27; // duty
+			co.liquidationPenalty = 1300; // chop
+			co.maxLiquidationAmount = 0; // hole
+			co.kprPctReward = 10; // chip
+			co.kprFlatReward = 300; // tip
+			co.startingPriceFactor = 10500; // buf
+			co.auctionDuration = 13200; // tail
+			co.permittedDrop = 9000; // cusp
+			co.breakerTolerance = 9500; // cm_tolerance
 			DssExecLib.addNewCollateral(co);
 
 			// configures the psm
