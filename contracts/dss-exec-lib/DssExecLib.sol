@@ -976,7 +976,6 @@ library DssExecLib {
     }
 
     // Complete collateral onboarding logic.
-    /*
     function addNewCollateral(CollateralOpts memory co) public {
         // Add the collateral to the system.
         addCollateralBase(co.ilk, co.gem, co.join, co.clip, co.calc, co.pip);
@@ -991,6 +990,8 @@ library DssExecLib {
         }
 
         if(co.isOSM) { // If pip == OSM
+            require(false, "unsupported");
+/*
             // Allow OsmMom to access to the TOKEN OSM
             authorize(co.pip, osmMom());
             if (co.whitelistOSM) { // If median is src in OSM
@@ -1007,6 +1008,7 @@ library DssExecLib {
             addReaderToWhitelist(co.pip, end());
             // Set TOKEN OSM in the OsmMom for new ilk
             allowOSMFreeze(co.pip, co.ilk);
+*/
         }
         // Increase the global debt ceiling by the ilk ceiling
         increaseGlobalDebtCeiling(co.ilkDebtCeiling);
@@ -1046,7 +1048,6 @@ library DssExecLib {
         // Update ilk spot value in Vat
         updateCollateralPrice(co.ilk);
     }
-    */
 
     /***************/
     /*** Payment ***/

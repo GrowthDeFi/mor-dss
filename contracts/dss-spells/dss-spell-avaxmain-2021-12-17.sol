@@ -1,14 +1,15 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 pragma solidity ^0.6.12;
+pragma experimental ABIEncoderV2;
 
 import { DssAction } from "../dss-exec-lib/DssAction.sol";
 import { DssExec } from "../dss-exec-lib/DssExec.sol";
-import { DssExecLib, RegistryLike } from "../dss-exec-lib/DssExecLib.sol";
+import { DssExecLib } from "../dss-exec-lib/DssExecLib.sol";
+import { CollateralOpts } from "../dss-exec-lib/CollateralOpts.sol";
 
-import { DssDeploy } from "../DssDeploy.sol";
-import { Clipper } from "../dss/clip.sol";
 import { DSValue } from "../ds-value/value.sol";
 import { AuthGemJoin } from "../dss-gem-joins/join-auth.sol";
+import { Clipper } from "../dss/clip.sol";
 import { StairstepExponentialDecrease } from "../dss/abaci.sol";
 import { DssPsm } from "../dss-psm/psm.sol";
 
@@ -17,6 +18,21 @@ library LibDssSpell_avaxmain_2021_12_17
 	function newDSValue() public returns (address _dsValue)
 	{
 		return address(new DSValue());
+	}
+
+	function newStairstepExponentialDecrease() public returns (address _calc)
+	{
+		return address(new StairstepExponentialDecrease());
+	}
+
+	function newAuthGemJoin(address _vat, bytes32 _ilk, address _gem) public returns (address _authGemJoin)
+	{
+		return address(new AuthGemJoin(_vat, _ilk, _gem));
+	}
+
+	function newDssPsm(address _gemJoin, address _daiJoin, address _vow) public returns (address _dssPsm)
+	{
+		return address(new DssPsm(_gemJoin, _daiJoin, _vow));
 	}
 }
 
@@ -43,7 +59,73 @@ contract DssSpellAction_avaxmain_2021_12_17 is DssAction
 
 		// ----- ADDS A NEW COLLATERAL AND PSM STKUSDLP -----
 
-		deployNewPSM();
+		{
+			bytes32 _ilk = "PSM-STKUSDLP-A";
+			address T_PSM_STKUSDLP = 0x88Cc23286f1356EB0163Ad5bdbFa639416e4168d;
+			address INJECTOR_PSM_STKUSDLP = 0x4EcD4082C1E809D89901cD3A802409c8d2Ae6EC4;
+
+			address MCD_VAT = DssExecLib.vat();
+			address MCD_JOIN_DAI = DssExecLib.daiJoin();
+			address MCD_VOW = DssExecLib.vow();
+			address MCD_SPOT = DssExecLib.spotter();
+			address MCD_DOG = DssExecLib.dog();
+
+			// deploys components
+			address PIP_PSM_STKUSDLP = LibDssSpell_avaxmain_2021_12_17.newDSValue();
+			address MCD_CLIP_CALC_PSM_STKUSDLP_A = LibDssSpell_avaxmain_2021_12_17.newStairstepExponentialDecrease();
+			address MCD_CLIP_PSM_STKUSDLP_A = address(new Clipper(MCD_VAT, MCD_SPOT, MCD_DOG, _ilk));
+			address MCD_JOIN_PSM_STKUSDLP_A = LibDssSpell_avaxmain_2021_12_17.newAuthGemJoin(MCD_VAT, _ilk, T_PSM_STKUSDLP);
+			address MCD_PSM_STKUSDLP_A = LibDssSpell_avaxmain_2021_12_17.newDssPsm(MCD_JOIN_PSM_STKUSDLP_A, MCD_JOIN_DAI, MCD_VOW);
+
+			// update oracle price
+			DSValue(PIP_PSM_STKUSDLP).poke(bytes32(uint256(1e18)));
+
+			// configures the calc
+			DssExecLib.setStairstepExponentialDecrease(MCD_CLIP_CALC_PSM_STKUSDLP_A, 120, 9900); 
+
+			// wires and configure the new collateral
+			CollateralOpts memory co;
+			co.ilk = _ilk;
+			co.gem = T_PSM_STKUSDLP;
+			co.join = MCD_JOIN_PSM_STKUSDLP_A;
+			co.clip = MCD_CLIP_PSM_STKUSDLP_A;
+			co.calc = MCD_CLIP_CALC_PSM_STKUSDLP_A;
+			co.pip = PIP_PSM_STKUSDLP;
+			co.isLiquidatable = true;
+			co.isOSM = false;
+			co.whitelistOSM = false;
+			co.liquidationRatio = 10000;
+			co.ilkDebtCeiling = 100000000;
+			co.minVaultAmount = 0;
+			co.ilkStabilityFee = 1e27;
+			co.liquidationPenalty = 1300;
+			co.maxLiquidationAmount = 0;
+			co.kprPctReward = 10;
+			co.kprFlatReward = 300;
+			co.startingPriceFactor = 10500;
+			co.auctionDuration = 13200;
+			co.permittedDrop = 9000;
+			co.breakerTolerance = 9500;
+			DssExecLib.addNewCollateral(co);
+
+			// configures the psm
+			DssPsm _dssPsm = DssPsm(MCD_PSM_STKUSDLP_A);
+			_dssPsm.file("tin", 1e15); // 0.001%
+			_dssPsm.file("tout", 0); // 0%
+			_dssPsm.donor(T_PSM_STKUSDLP, true);
+			_dssPsm.donor(INJECTOR_PSM_STKUSDLP, true);
+
+			// authorizes the psm
+			DssExecLib.authorize(MCD_JOIN_PSM_STKUSDLP_A, MCD_PSM_STKUSDLP_A);
+
+			// updates change log
+			DssExecLib.setChangelogAddress("PSM-STKUSDLP", T_PSM_STKUSDLP);
+			DssExecLib.setChangelogAddress("PIP_PSM_STKUSDLP", PIP_PSM_STKUSDLP);
+			DssExecLib.setChangelogAddress("MCD_JOIN_PSM_STKUSDLP_A", MCD_JOIN_PSM_STKUSDLP_A);
+			DssExecLib.setChangelogAddress("MCD_CLIP_PSM_STKUSDLP_A", MCD_CLIP_PSM_STKUSDLP_A);
+			DssExecLib.setChangelogAddress("MCD_CLIP_CALC_PSM_STKUSDLP_A", MCD_CLIP_CALC_PSM_STKUSDLP_A);
+			DssExecLib.setChangelogAddress("MCD_PSM_STKUSDLP_A", MCD_PSM_STKUSDLP_A);
+		}
 
 		// ----- SURPLUS WITHDRAWAL OF 142,491 MOR -----
 
@@ -53,95 +135,6 @@ contract DssSpellAction_avaxmain_2021_12_17 is DssAction
 			DssExecLib.sendPaymentFromSurplusBuffer(MULTISIG, 142491); // 142,491 MOR
 			DssExecLib.undelegateVat(MCD_JOIN_DAI);
 		}
-	}
-
-	function deployNewPSM() internal
-	{
-		bytes32 _ilk = "PSM-STKUSDLP-A";
-		address T_PSM_STKUSDLP = 0x88Cc23286f1356EB0163Ad5bdbFa639416e4168d;
-		address PSM_STKUSDLP_INJECTOR = 0x4EcD4082C1E809D89901cD3A802409c8d2Ae6EC4;
-
-		address MCD_VAT = DssExecLib.vat();
-		address MCD_VOW = DssExecLib.vow();
-		address MCD_JOIN_DAI = DssExecLib.daiJoin();
-		address CLIPPER_MOM = DssExecLib.clipperMom();
-		address ILK_REGISTRY = DssExecLib.reg();
-
-		// deploys components
-		address PIP_PSM_STKUSDLP = LibDssSpell_avaxmain_2021_12_17.newDSValue();
-		address MCD_JOIN_PSM_STKUSDLP_A = address(new AuthGemJoin(MCD_VAT, _ilk, T_PSM_STKUSDLP));
-		address MCD_CLIP_CALC_PSM_STKUSDLP_A = address(new StairstepExponentialDecrease());
-		address MCD_CLIP_PSM_STKUSDLP_A = deployNewClipper(_ilk, MCD_JOIN_PSM_STKUSDLP_A, PIP_PSM_STKUSDLP, MCD_CLIP_CALC_PSM_STKUSDLP_A);
-		address MCD_PSM_STKUSDLP_A = address(new DssPsm(MCD_JOIN_PSM_STKUSDLP_A, MCD_JOIN_DAI, MCD_VOW));
-
-		// authorization
-		DssExecLib.authorize(MCD_CLIP_PSM_STKUSDLP_A, CLIPPER_MOM);
-		DssExecLib.authorize(MCD_JOIN_PSM_STKUSDLP_A, MCD_PSM_STKUSDLP_A);
-
-		// update price
-		DSValue(PIP_PSM_STKUSDLP).poke(bytes32(uint256(1e18)));
-		DssExecLib.updateCollateralPrice(_ilk);
-
-		// configure parameters
-		DssExecLib.setIlkLiquidationRatio(_ilk, 10000);
-		DssExecLib.setIlkDebtCeiling(_ilk, 100000000);
-		DssExecLib.setIlkMinVaultAmount(_ilk, 0);
-		DssExecLib.setIlkStabilityFee(_ilk, 1e27, true);
-		{
-			DssPsm _dssPsm = DssPsm(MCD_PSM_STKUSDLP_A);
-			_dssPsm.file("tin", 1e15); // 0.001%
-			_dssPsm.file("tout", 0); // 0%
-			_dssPsm.donor(T_PSM_STKUSDLP, true);
-			_dssPsm.donor(PSM_STKUSDLP_INJECTOR, true);
-		}
-		DssExecLib.setIlkLiquidationPenalty(_ilk, 1300);
-		DssExecLib.setIlkMaxLiquidationAmount(_ilk, 0);
-		DssExecLib.setKeeperIncentivePercent(_ilk, 10);
-		DssExecLib.setKeeperIncentiveFlatRate(_ilk, 300);
-		DssExecLib.setStartingPriceMultiplicativeFactor(_ilk, 10500);
-		DssExecLib.setAuctionTimeBeforeReset(_ilk, 13200);
-		DssExecLib.setAuctionPermittedDrop(_ilk, 9000);
-		DssExecLib.setStairstepExponentialDecrease(MCD_CLIP_CALC_PSM_STKUSDLP_A, 120, 9900); 
-		DssExecLib.setLiquidationBreakerPriceTolerance(MCD_CLIP_PSM_STKUSDLP_A, 9500);
-
-		// registers ilk
-		RegistryLike(ILK_REGISTRY).add(MCD_JOIN_PSM_STKUSDLP_A);
-
-		// updates change log
-		DssExecLib.setChangelogAddress("PSM-STKUSDLP", T_PSM_STKUSDLP);
-		DssExecLib.setChangelogAddress("PIP_PSM_STKUSDLP", PIP_PSM_STKUSDLP);
-		DssExecLib.setChangelogAddress("MCD_JOIN_PSM_STKUSDLP_A", MCD_JOIN_PSM_STKUSDLP_A);
-		DssExecLib.setChangelogAddress("MCD_CLIP_PSM_STKUSDLP_A", MCD_CLIP_PSM_STKUSDLP_A);
-		DssExecLib.setChangelogAddress("MCD_CLIP_CALC_PSM_STKUSDLP_A", MCD_CLIP_CALC_PSM_STKUSDLP_A);
-		DssExecLib.setChangelogAddress("MCD_PSM_STKUSDLP_A", MCD_PSM_STKUSDLP_A);
-	}
-
-	function deployNewClipper(bytes32 _ilk, address _gemJoin, address _pip, address _calc) internal returns (address _clipper)
-	{
-		address MCD_VAT = DssExecLib.vat();
-		address MCD_DOG = DssExecLib.dog();
-		address MCD_JUG = DssExecLib.jug();
-		address MCD_SPOT = DssExecLib.spotter();
-		address MCD_DEPLOY = DssExecLib.getChangelogAddress("MCD_DEPLOY");
-
-		DssExecLib.authorize(MCD_VAT, MCD_DEPLOY);
-		DssExecLib.authorize(MCD_DOG, MCD_DEPLOY);
-		DssExecLib.authorize(MCD_JUG, MCD_DEPLOY);
-		DssExecLib.authorize(MCD_SPOT, MCD_DEPLOY);
-
-		DssDeploy _dssDeploy = DssDeploy(MCD_DEPLOY);
-		_dssDeploy.deployCollateralClip(_ilk, _gemJoin, _pip, _calc);
-		(, Clipper _clip,) = _dssDeploy.ilks(_ilk);
-		_clipper = address(_clip);
-
-		_dssDeploy.releaseAuthClip(_ilk);
-
-		DssExecLib.deauthorize(MCD_VAT, MCD_DEPLOY);
-		DssExecLib.deauthorize(MCD_DOG, MCD_DEPLOY);
-		DssExecLib.deauthorize(MCD_JUG, MCD_DEPLOY);
-		DssExecLib.deauthorize(MCD_SPOT, MCD_DEPLOY);
-
-		return _clipper;
 	}
 }
 
