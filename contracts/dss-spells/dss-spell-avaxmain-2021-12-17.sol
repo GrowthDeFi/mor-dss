@@ -49,7 +49,7 @@ contract DssSpellAction_avaxmain_2021_12_17 is DssAction
 		// Bumps changelog version
 		DssExecLib.setChangelogVersion("1.0.1");
 
-		// ----- ZEROS TOUT FOR OLD PSM -----
+		// ----- INCREASES TIN AND ZEROS TOUT FOR OLD PSM -----
 
 		{
 			address MCD_PSM_STKUSDC_A = DssExecLib.getChangelogAddress("MCD_PSM_STKUSDC_A");
