@@ -54,6 +54,7 @@ contract DssSpellAction_avaxmain_2021_12_17 is DssAction
 		{
 			address MCD_PSM_STKUSDC_A = DssExecLib.getChangelogAddress("MCD_PSM_STKUSDC_A");
 			DssPsm _dssPsm = DssPsm(MCD_PSM_STKUSDC_A);
+			_dssPsm.file("tin", 3e15); // 0.3%
 			_dssPsm.file("tout", 0); // 0%
 		}
 
@@ -110,7 +111,7 @@ contract DssSpellAction_avaxmain_2021_12_17 is DssAction
 
 			// configures the psm
 			DssPsm _dssPsm = DssPsm(MCD_PSM_STKUSDLP_A);
-			_dssPsm.file("tin", 1e15); // 0.001%
+			_dssPsm.file("tin", 1e15); // 0.1%
 			_dssPsm.file("tout", 0); // 0%
 			_dssPsm.donor(T_PSM_STKUSDLP, true);
 			_dssPsm.donor(INJECTOR_PSM_STKUSDLP, true);
