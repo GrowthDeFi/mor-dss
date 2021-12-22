@@ -128,6 +128,12 @@ contract DssSpellAction_avaxmain_2021_12_17 is DssAction
 			DssExecLib.setChangelogAddress("MCD_PSM_STKUSDLP_A", MCD_PSM_STKUSDLP_A);
 		}
 
+		// ----- SETS STKTDJAVAXDAI-A STABILITY FEE TO 5% -----
+
+		{
+			DssExecLib.setIlkStabilityFee("STKTDJAVAXDAI-A", 1000000001547125871859122981, true); // duty 5%
+		}
+
 		// ----- SURPLUS WITHDRAWAL OF 142,491 MOR -----
 
 		{
