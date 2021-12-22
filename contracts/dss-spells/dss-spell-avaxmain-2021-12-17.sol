@@ -82,7 +82,7 @@ contract DssSpellAction_avaxmain_2021_12_17 is DssAction
 			DSValue(PIP_PSM_STKUSDLP).poke(bytes32(uint256(1e18)));
 
 			// configures the calc
-			DssExecLib.setStairstepExponentialDecrease(MCD_CLIP_CALC_PSM_STKUSDLP_A, 120, 9900); 
+			DssExecLib.setStairstepExponentialDecrease(MCD_CLIP_CALC_PSM_STKUSDLP_A, 120, 9900);
 
 			// wires and configure the new collateral
 			CollateralOpts memory co;
