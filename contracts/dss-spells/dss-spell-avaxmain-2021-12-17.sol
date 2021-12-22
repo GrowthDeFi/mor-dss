@@ -40,7 +40,7 @@ contract DssSpellAction_avaxmain_2021_12_17 is DssAction
 {
 	// Hash: seth keccak -- "$(wget https://raw.githubusercontent.com/GrowthDeFi/community/master/governance/votes/Executive%20vote%20-%20December%2017%2C%202021.md -q -O - 2>/dev/null)"
 	string public constant override description =
-		"2021-12-17 GrowthDeFi Executive Spell | Hash: 0x0000000000000000000000000000000000000000000000000000000000000000";
+		"2021-12-17 GrowthDeFi Executive Spell | Hash: 0xbf0e1ca82b8a6d90936134ace94287a0c9160e1a7f9c28934f32bff7f177d305";
 
 	address constant MULTISIG = 0x6F926fFBe338218b06D2FC26eC59b52Fd5b125cE; // GrowthDeFi multisig on Avalanche
 
