@@ -96,7 +96,7 @@ contract DssSpellAction_avaxmain_2021_12_17 is DssAction
 			co.isOSM = false;
 			co.whitelistOSM = false;
 			co.liquidationRatio = 10000; // mat
-			co.ilkDebtCeiling = 100000000; // line
+			co.ilkDebtCeiling = 10000; // line (will go to 100M afterwards)
 			co.minVaultAmount = 0; // dust
 			co.ilkStabilityFee = 1e27; // duty
 			co.liquidationPenalty = 1300; // chop
