@@ -16,10 +16,10 @@ contract DssSpellAction_avaxmain_2022_01_08 is DssAction
 		// Bumps changelog version
 		DssExecLib.setChangelogVersion("1.0.2");
 
-		// ----- SETS PSM-STKUSDLP-A DEBT CEILING TO 10M -----
+		// ----- SETS PSM-STKUSDLP-A DEBT CEILING TO 1M -----
 
 		{
-			DssExecLib.setIlkDebtCeiling("PSM-STKUSDLP-A", 1000000); // line 10m
+			DssExecLib.setIlkDebtCeiling("PSM-STKUSDLP-A", 1000000); // line 1m
 		}
 	}
 }
