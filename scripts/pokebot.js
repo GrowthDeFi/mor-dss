@@ -563,7 +563,7 @@ async function reportError(e, type, detail) {
 
 const TIMEFRAME = {
   'bscmain': 4 * 60 * 60 * 1000, // 4 hours
-  'avaxmain': 1 * 60 * 60 * 1000, // 1 hour
+  'avaxmain': 4 * 60 * 60 * 1000, // 4 hours
 };
 
 const MAXIMUM_TIMEFRAME = {
