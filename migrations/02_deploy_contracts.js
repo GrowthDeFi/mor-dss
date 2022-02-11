@@ -26,6 +26,8 @@ const CONFIG = {
   '80001': 'testnet', // matictest
   '43114': 'avaxmain',// avaxmain
   '43113': 'testnet', // avaxtest
+  '250': 'ftmmain',   // ftmmain
+  '4002': 'testnet',  // ftmtest
 };
 
 const MULTISIG_CONFIG = {
@@ -40,6 +42,8 @@ const MULTISIG_CONFIG = {
   '80001': '0x2F80922CF7350e06F4924766Cb7EEEC783c1C8ce', // matictest
   '43114': '0x1d64CeAF2cDBC9b6d41eB0f2f7CDA8F04c47d1Ac', // avaxmain
   '43113': '0x2F80922CF7350e06F4924766Cb7EEEC783c1C8ce', // avaxtest
+  '250': '0x934BF5461795B4a2aC5673c1fb3859E8fA48d9bb',   // ftmmain
+  '4002': '0x2F80922CF7350e06F4924766Cb7EEEC783c1C8ce',  // ftmtest
 };
 
 module.exports = async (deployer, network, [account]) => {

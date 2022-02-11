@@ -94,6 +94,19 @@ module.exports = {
       provider: () => new HDWalletProvider(privateKey, 'https://api.avax-test.network/ext/bc/C/rpc'),
       skipDryRun: true,
     },
+    ftmmain: {
+      network_id: 250,
+      gasPrice,
+      networkCheckTimeout: 10000, // fixes truffle bug
+      provider: () => new HDWalletProvider(privateKey, 'https://rpc.ftm.tools/'),
+      skipDryRun: false,
+    },
+    ftmtest: {
+      network_id: 4002,
+      networkCheckTimeout: 10000, // fixes truffle bug
+      provider: () => new HDWalletProvider(privateKey, 'https://rpc.testnet.fantom.network/'),
+      skipDryRun: true,
+    },
     development: {
       network_id: '*',
       gas: gasLimit,

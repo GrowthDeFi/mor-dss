@@ -20,3 +20,9 @@ services:
     command: node /repo/scripts/pokebot.js avaxmain
     environment:
       PRIVATE_KEY: ${POKEBOT_PRIVATE_KEY}
+  pokebot-ftmmain:
+    <<: *pokebot
+    container_name: pokebot-ftmmain
+    command: node /repo/scripts/pokebot.js ftmmain
+    environment:
+      PRIVATE_KEY: ${POKEBOT_PRIVATE_KEY}
