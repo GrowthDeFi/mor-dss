@@ -46,8 +46,8 @@
     "test:matictest": "GAS_LIMIT=20000000 truffle test",
     "test:avaxmain": "GAS_LIMIT=8000000 truffle test",
     "test:avaxtest": "GAS_LIMIT=8000000 truffle test",
-    "test:ftmmain": "GAS_LIMIT=200000000000000 truffle test",
-    "test:ftmtest": "GAS_LIMIT=200000000000000 truffle test"
+    "test:ftmmain": "GAS_LIMIT=8000000 truffle test",
+    "test:ftmtest": "GAS_LIMIT=8000000 truffle test"
   },
   "repository": {
     "type": "git",
