@@ -153,32 +153,6 @@
         "cap": "0"
       }
     },
-    "DEI": {
-      "import": {
-        "gem": "0xDE12c7959E1a72bbe8a5f7A1dc8f8EeF9Ab011B3"
-      },
-      "pipDeploy": {
-        "osmDelay": "0",
-        "type": "twap",
-        "stwap": "0x2e5a83cE42F9887E222813371c5cA2bA1e827700",
-        "ltwap": "0x292b138C6785BB7a6e7EE2acB3Cea792aD9f7F2E",
-        "src": "0x????????????????????????????????????????",
-        "cap": "0"
-      }
-    },
-    "DEUS": {
-      "import": {
-        "gem": "0xDE5ed76E7c05eC5e4572CfC88d1ACEA165109E44"
-      },
-      "pipDeploy": {
-        "osmDelay": "0",
-        "type": "twap",
-        "stwap": "0x2e5a83cE42F9887E222813371c5cA2bA1e827700",
-        "ltwap": "0x292b138C6785BB7a6e7EE2acB3Cea792aD9f7F2E",
-        "src": "0x????????????????????????????????????????",
-        "cap": "0"
-      }
-    },
     "MAI": {
       "import": {
         "gem": "0xfB98B335551a418cD0737375a2ea0ded62Ea213b"
@@ -311,30 +285,6 @@
         "type": "univ2lp",
         "token0": "FTM",
         "token1": "FRAX",
-        "hop": "3600"
-      }
-    },
-    "SPIUSDCDEI": {
-      "import": {
-        "gem": "0x8eFD36aA4Afa9F4E157bec759F1744A7FeBaEA0e"
-      },
-      "pipDeploy": {
-        "osmDelay": "0",
-        "type": "univ2lp",
-        "token0": "USDC",
-        "token1": "DEI",
-        "hop": "3600"
-      }
-    },
-    "SPIFTMDEUS": {
-      "import": {
-        "gem": "0x2599Eba5fD1e49F294C76D034557948034d6C96E"
-      },
-      "pipDeploy": {
-        "osmDelay": "0",
-        "type": "univ2lp",
-        "token0": "FTM",
-        "token1": "DEUS",
         "hop": "3600"
       }
     },
@@ -798,86 +748,6 @@
         "osmDelay": "0",
         "type": "vault",
         "reserve": "SPIFTMFRAX"
-      },
-      "ilks": {
-        "A": {
-          "mat": "150",
-          "line": "0",
-          "autoLine": "50000000",
-          "autoLineGap": "10000000",
-          "autoLineTtl": "43200",
-          "dust": "100",
-          "duty": "-20",
-          "clipDeploy": {
-            "chop": "15",
-            "hole": "100000000",
-            "chip": "0",
-            "tip": "5",
-            "buf": "130",
-            "tail": "16800",
-            "cusp": "40",
-            "calc": {
-              "type": "StairstepExponentialDecrease",
-              "step": "180",
-              "cut": "99"
-            },
-            "cm_tolerance": "50"
-          }
-        }
-      }
-    },
-    "STKSPIUSDCDEI": {
-      "import": {
-        "gem": "0xf7496D9D3ca97DfA927A12Ab385E0d05a279f4F8"
-      },
-      "joinDeploy": {
-        "src": "GemJoin",
-        "extraParams": []
-      },
-      "pipDeploy": {
-        "osmDelay": "0",
-        "type": "vault",
-        "reserve": "SPIUSDCDEI"
-      },
-      "ilks": {
-        "A": {
-          "mat": "150",
-          "line": "0",
-          "autoLine": "50000000",
-          "autoLineGap": "10000000",
-          "autoLineTtl": "43200",
-          "dust": "100",
-          "duty": "-20",
-          "clipDeploy": {
-            "chop": "15",
-            "hole": "100000000",
-            "chip": "0",
-            "tip": "5",
-            "buf": "130",
-            "tail": "16800",
-            "cusp": "40",
-            "calc": {
-              "type": "StairstepExponentialDecrease",
-              "step": "180",
-              "cut": "99"
-            },
-            "cm_tolerance": "50"
-          }
-        }
-      }
-    },
-    "STKSPIFTMDEUS": {
-      "import": {
-        "gem": "0x6e593Aaf53891d7BbABd251FD55c6075e32960AD"
-      },
-      "joinDeploy": {
-        "src": "GemJoin",
-        "extraParams": []
-      },
-      "pipDeploy": {
-        "osmDelay": "0",
-        "type": "vault",
-        "reserve": "SPIFTMDEUS"
       },
       "ilks": {
         "A": {
