@@ -776,6 +776,7 @@
         }
       }
     },
+    "STKSPIFTMMAI": {
       "import": {
         "gem": "0x4cea7726Eea4a0B342f8422D003Df735eAfDB195"
       },
