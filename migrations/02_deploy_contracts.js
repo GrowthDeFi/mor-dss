@@ -1984,5 +1984,6 @@ module.exports = async (deployer, network, [account]) => {
   await proxyDeployer.setOwner(MULTISIG);
 
   const finalBalance = await web3.eth.getBalance(DEPLOYER);
-  console.log('TOTAL COST:', BigInt(initialBalance) - BigInt(finalBalance));
+  const gasPrice = await web3.eth.getGasPrice();
+  console.log('TOTAL COST:', BigInt(initialBalance) - BigInt(finalBalance), 'GAS:', BigInt(gasPrice));
 };
