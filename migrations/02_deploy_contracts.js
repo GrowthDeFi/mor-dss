@@ -536,7 +536,22 @@ module.exports = async (deployer, network, [account]) => {
         const dec = Number(await token.decimals());
         const cap = units(token_pipDeploy.cap, dec);
         console.log('@pip.cap', token_pipDeploy.cap, cap);
-        const univ2twapOracle = await artifact_deploy(UniV2TwapOracle, stwap, ltwap, src, token.address, cap, ZERO_ADDRESS);
+        const orb = token_pipDeploy.quote !== undefined ? VAL_[token_pipDeploy.quote] : ZERO_ADDRESS;
+        const pair = await artifact_at(UniswapV2PairLike, src);
+        const token0 = await pair.token0();
+        const token1 = await pair.token1();
+        if (token0 !== T_[token_name] && token1 !== T_[token_name]) {
+          throw new Error('Configuration Inconsistency')
+        }
+        if (token_pipDeploy.quote !== undefined) {
+          if (T_[token_name] === T_[token_pipDeploy.quote]) {
+            throw new Error('Configuration Inconsistency')
+          }
+          if (token0 !== T_[token_pipDeploy.quote] && token1 !== T_[token_pipDeploy.quote]) {
+            throw new Error('Configuration Inconsistency')
+          }
+        }
+        const univ2twapOracle = await artifact_deploy(UniV2TwapOracle, stwap, ltwap, src, token.address, cap, orb);
         VAL_[token_name] = univ2twapOracle.address;
         console.log('VAL_' + token_name.replace('-', '_') + '=' + VAL_[token_name]);
       }
@@ -1274,6 +1289,12 @@ module.exports = async (deployer, network, [account]) => {
           if (ilk_config.clipDeploy !== undefined) {
             await osm.methods['kiss(address)'](MCD_CLIP_[token_name][ilk]);
             await osm.methods['kiss(address)'](CLIPPER_MOM);
+          }
+        }
+        if (token_pipDeploy.type === 'twap') {
+          if (token_pipDeploy.quote !== undefined) {
+            const osmReserve = await artifact_at(OSM, VAL_[token_pipDeploy.quote]);
+            await osmReserve.methods['kiss(address)'](PIP_[token_name]);
           }
         }
         if (token_pipDeploy.type === 'vault') {

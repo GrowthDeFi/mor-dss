@@ -136,8 +136,9 @@
         "type": "twap",
         "stwap": "0x2e5a83cE42F9887E222813371c5cA2bA1e827700",
         "ltwap": "0x292b138C6785BB7a6e7EE2acB3Cea792aD9f7F2E",
-        "src": "0xfD46199622239aB4BCc5f3dDAC91c8eA745B43D2",
-        "cap": "0"
+        "src": "0x4Fe6f19031239F105F753D1DF8A0d24857D0cAA2",
+        "cap": "0",
+        "quote": "FTM"
       }
     },
     "SPIRIT": {
@@ -149,8 +150,9 @@
         "type": "twap",
         "stwap": "0x2e5a83cE42F9887E222813371c5cA2bA1e827700",
         "ltwap": "0x292b138C6785BB7a6e7EE2acB3Cea792aD9f7F2E",
-        "src": "0xD687dD4b2dca486AB4AaFed87990ecEf4B28c5A1",
-        "cap": "0"
+        "src": "0x30748322B6E34545DBe0788C421886AEB5297789",
+        "cap": "0",
+        "quote": "FTM"
       }
     },
     "MAI": {
@@ -162,8 +164,9 @@
         "type": "twap",
         "stwap": "0x2e5a83cE42F9887E222813371c5cA2bA1e827700",
         "ltwap": "0x292b138C6785BB7a6e7EE2acB3Cea792aD9f7F2E",
-        "src": "0x4dE9f0ED95de2461B6dB1660f908348c42893b1A",
-        "cap": "0"
+        "src": "0x51Eb93ECfEFFbB2f6fE6106c4491B5a0B944E8bd",
+        "cap": "0",
+        "quote": "FTM"
       }
     },
     "BOO": {
@@ -175,8 +178,9 @@
         "type": "twap",
         "stwap": "0x2e5a83cE42F9887E222813371c5cA2bA1e827700",
         "ltwap": "0x292b138C6785BB7a6e7EE2acB3Cea792aD9f7F2E",
-        "src": "0xf8Cb2980120469d79958151daa45Eb937c6E1eD6",
-        "cap": "0"
+        "src": "0xEc7178F4C41f346b2721907F5cF7628E388A7a58",
+        "cap": "0",
+        "quote": "FTM"
       }
     },
     "SCREAM": {
@@ -188,8 +192,9 @@
         "type": "twap",
         "stwap": "0x2e5a83cE42F9887E222813371c5cA2bA1e827700",
         "ltwap": "0x292b138C6785BB7a6e7EE2acB3Cea792aD9f7F2E",
-        "src": "0xC88dF785FD13f44edDC7d5C6D6069Ab82f4Deb11",
-        "cap": "0"
+        "src": "0x30872e4fc4edbFD7a352bFC2463eb4fAe9C09086",
+        "cap": "0",
+        "quote": "FTM"
       }
     },
     "SPIFTMLQDR": {
