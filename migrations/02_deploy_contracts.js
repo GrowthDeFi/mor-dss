@@ -536,7 +536,7 @@ module.exports = async (deployer, network, [account]) => {
         const dec = Number(await token.decimals());
         const cap = units(token_pipDeploy.cap, dec);
         console.log('@pip.cap', token_pipDeploy.cap, cap);
-        const univ2twapOracle = await artifact_deploy(UniV2TwapOracle, stwap, ltwap, src, token.address, cap);
+        const univ2twapOracle = await artifact_deploy(UniV2TwapOracle, stwap, ltwap, src, token.address, cap, ZERO_ADDRESS);
         VAL_[token_name] = univ2twapOracle.address;
         console.log('VAL_' + token_name.replace('-', '_') + '=' + VAL_[token_name]);
       }
