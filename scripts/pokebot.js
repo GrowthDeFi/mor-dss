@@ -72,16 +72,19 @@ const moralisProjectId = process.env['MORALIS_PROJECT_ID'] || '';
 const ADDRESS_URL_PREFIX = {
   'bscmain': 'https://bscscan.com/address/',
   'avaxmain': 'https://snowtrace.io/address/',
+  'ftmmain': 'https://ftmscan.com/address/',
 };
 
 const TX_URL_PREFIX = {
   'bscmain': 'https://bscscan.com/tx/',
   'avaxmain': 'https://snowtrace.io/tx/',
+  'ftmmain': 'https://ftmscan.com/tx/',
 };
 
 const NATIVE_SYMBOL = {
   'bscmain': 'BNB',
   'avaxmain': 'AVAX',
+  'ftmmain': 'FTM',
 };
 
 const HTTP_PROVIDER_URLS = {
@@ -109,11 +112,15 @@ const HTTP_PROVIDER_URLS = {
     // 'https://speedy-nodes-nyc.moralis.io/' + moralisProjectId + '/avalanche/mainnet',
     // 'https://apis.ankr.com/' + ankrApikeyAvaxmain + '/' + ankrProjectId + '/avax/archive/main',
   ],
+  'ftmmain': [
+    'https://rpc.ftm.tools/',
+  ],
 };
 
 const LIMIT_GASPRICE = {
   'bscmain': '5000000000',
   'avaxmain': '100000000000',
+  'ftmmain': '800000000000',
 };
 
 const web3Cache = {};
@@ -261,6 +268,63 @@ const PIP_LIST = {
     'STKTDJUSDCJOE': { address: '0x7253bC2Ca443807391451a54cAF1bC1915A8b584', type: 'vault' },
     'STKTDJUSDTJOE': { address: '0xed219cD2aF00625e0c1aD21b7cC7aa0f77601860', type: 'vault' },
   },
+  'ftmmain': {
+    'PSM_STKUSDLP': { address: '0xd312EC88F0CE9512804db1e08b1EB6901c278d0f', type: 'value' },
+
+    'FTM': { address: '0x326Db2b9640e51077fD9B70767855f5c2128e91A', type: 'chainlink' },
+    'WETH': { address: '0x1B87083Af792cB8355C4c954c491255482992E79', type: 'chainlink' },
+    'WBTC': { address: '0x1a06452B84456728Ee4054AE6157d3feDF56C295', type: 'chainlink' },
+    'DAI': { address: '0xF49390eE384C5df2e82ac99909a6236051a4E82B', type: 'chainlink' },
+    'USDC': { address: '0x8BBcd7E4da4395E391Fbfc2A11775debe3ca0D58', type: 'chainlink' },
+    'FUSDT': { address: '0xAB47baC3C131eD3ac9d8F993fD2D902cad460c0f', type: 'chainlink' },
+    'LINK': { address: '0xcf55226EE56F174B3cB3F75a5182d2300e788e91', type: 'chainlink' },
+    'MIM': { address: '0xB31fF116f5fEC1C0Aee2Aa86d5E78e3105CC4274', type: 'chainlink' },
+    'FRAX': { address: '0xC5065b47A133071fe8cD94f46950fCfBA53864C6', type: 'chainlink' },
+    'SUSHI': { address: '0xa4a4d1B5fA2203F4a4e4Fb24FeCD056F25777f25', type: 'chainlink' },
+    'LQDR': { address: '0x3d4604395595Bb30A8B7754b5dDBF0B3F680564b', type: 'twap' },
+    'SPIRIT': { address: '0x5F6025D6514C6396D4Ba640d6F93966AF5b139B0', type: 'twap' },
+    'MAI': { address: '0x1e1ee1AcD4B7ad405A0D701884F093d54DF7fba4', type: 'twap' },
+    'BOO': { address: '0x44B0234Eb02443E7B7d1f0EFd9a30eB269E1C859', type: 'twap' },
+    'SCREAM': { address: '0x58849cE72b4E4338C00f0760Ca6AfCe11b5ee370', type: 'twap' },
+
+    'SPIFTMLQDR': { address: '0xBe79a142188C2D91CBdB5Ec1af08a16610979F8D', type: 'univ2lp' },
+    'SPIFTMFUSDT': { address: '0xeE991787C4ffE1de8c8c7c45e3EF14bFc47A2735', type: 'univ2lp' },
+    'SPIFTMWBTC': { address: '0x5Df1B3212EB26f506af448cE25cd4E315BEdf630', type: 'univ2lp' },
+    'SPIFTMUSDC': { address: '0x0Ca167778392473E0868503522a11f1e749bbF82', type: 'univ2lp' },
+    'SPIFTMWETH': { address: '0x7bA715959A52ef046BE76c4E32f1de1d161E2888', type: 'univ2lp' },
+    'SPIFTMMIM': { address: '0xeBcb52E5696A2a90D684C76cDf7095534F265370', type: 'univ2lp' },
+    'SPIFTMSPIRIT': { address: '0x68697fF7Ec17F528E3E4862A1dbE6d7D9cBBd5C6', type: 'univ2lp' },
+    'SPIFTMFRAX': { address: '0xeeF286Af1d7601EA5E40473741D79e55770498d8', type: 'univ2lp' },
+    'SPIFTMMAI': { address: '0x5ef900FD5aACd6CFe994b2E13c3d4aBDD9fFea2b', type: 'univ2lp' },
+    'SPOFTMBOO': { address: '0xca70528209917F4D0443Dd3e90C863b19584CCAF', type: 'univ2lp' },
+    'SPOFTMUSDC': { address: '0x260e6061233A3F05213a54103A9F0460857f9E9c', type: 'univ2lp' },
+    'SPOFTMDAI': { address: '0x2117C852417B008d18E292D18ab196f49AA896cf', type: 'univ2lp' },
+    'SPOFTMSUSHI': { address: '0x4A1dB63A8240A030C7E8678c594711D139a1c39f', type: 'univ2lp' },
+    'SPOFTMLINK': { address: '0x7253bC2Ca443807391451a54cAF1bC1915A8b584', type: 'univ2lp' },
+    'SPOFTMWETH': { address: '0x65764167EC4B38D611F961515B51a40628614018', type: 'univ2lp' },
+    'SPOFTMFUSDT': { address: '0x3D954788e928FfB9Fc76823018a9A7Bd7A22Fa5D', type: 'univ2lp' },
+    'SPOFTMMIM': { address: '0x7ae7E7D2efCBB0289E451Fc167DF91b996390d7C', type: 'univ2lp' },
+    'SPOFTMSCREAM': { address: '0xbC60e5B3E667f0EE15647c31bE0a7b27D306aC44', type: 'univ2lp' },
+
+    'STKSPIFTMLQDR': { address: '0x6ef32c6cF03B83Ab3A0DcA92f03E67A40CC45f7D', type: 'vault' },
+    'STKSPIFTMFUSDT': { address: '0x0c88e124AF319af1A1a6BD4C3d1CB70070Fd421f', type: 'vault' },
+    'STKSPIFTMWBTC': { address: '0x554F427Bda6Cf8f972E518389da3e1c492fe75D4', type: 'vault' },
+    'STKSPIFTMUSDC': { address: '0x6ADeB113EbD9a6a9B7CaB380Ba0A204DC08456b5', type: 'vault' },
+    'STKSPIFTMWETH': { address: '0xDD8E350052537bE8A621c8431117969E9B96343d', type: 'vault' },
+    'STKSPIFTMMIM': { address: '0x42C88b53a20840FA74A9411C259c58bDA2389Dd6', type: 'vault' },
+    'STKSPIFTMSPIRIT': { address: '0x7a96803F857D854878A95fa07F290B34Ab2981a7', type: 'vault' },
+    'STKSPIFTMFRAX': { address: '0x77a5E69955E1837B0c3f50159577ccb7468d6a4d', type: 'vault' },
+    'STKSPIFTMMAI': { address: '0xD9241689BBcaa6BF11854Af5f9c18AA642a98C23', type: 'vault' },
+    'STKSPOFTMBOO': { address: '0x446Ac4f621E6578D05d8F299b3911f34E4b1260A', type: 'vault' },
+    'STKSPOFTMUSDC': { address: '0xA02c4eafe7f20B767F97eeeafb0d699dD69B3AD2', type: 'vault' },
+    'STKSPOFTMDAI': { address: '0x781E44923fb912b1d0aa892BBf62dD1b4dfC9cd5', type: 'vault' },
+    'STKSPOFTMSUSHI': { address: '0xd6e80B0ae1f84A37AB145084a80893854c27ecc0', type: 'vault' },
+    'STKSPOFTMLINK': { address: '0x2651a6A6D12C7DC684406139c8aA3a20DEDF088f', type: 'vault' },
+    'STKSPOFTMWETH': { address: '0x754B2f8704A3D453151eE69875ECde4C610F2BEa', type: 'vault' },
+    'STKSPOFTMFUSDT': { address: '0x972F78558B4F8D677d84c8d1d4A73836c8DE4900', type: 'vault' },
+    'STKSPOFTMMIM': { address: '0xE63cb5BD18e0cDD534f62328af4Ba055BdD09A6F', type: 'vault' },
+    'STKSPOFTMSCREAM': { address: '0xF33b8A3fe8c6cE09F2670c28EE2bc4F7ddd2551e', type: 'vault' },
+  },
 };
 
 const ILK_LIST = {
@@ -294,6 +358,26 @@ const ILK_LIST = {
     { name: 'STKTDJAVAXMIM-A', threshold: 0.03 },
     { name: 'STKTDJUSDCJOE-A', threshold: 0.03 },
     { name: 'STKTDJUSDTJOE-A', threshold: 0.03 },
+  ],
+  'ftmmain': [
+    { name: 'STKSPIFTMLQDR-A', threshold: 0.03 },
+    { name: 'STKSPIFTMFUSDT-A', threshold: 0.03 },
+    { name: 'STKSPIFTMWBTC-A', threshold: 0.03 },
+    { name: 'STKSPIFTMUSDC-A', threshold: 0.03 },
+    { name: 'STKSPIFTMWETH-A', threshold: 0.03 },
+    { name: 'STKSPIFTMMIM-A', threshold: 0.03 },
+    { name: 'STKSPIFTMSPIRIT-A', threshold: 0.03 },
+    { name: 'STKSPIFTMFRAX-A', threshold: 0.03 },
+    { name: 'STKSPIFTMMAI-A', threshold: 0.03 },
+    { name: 'STKSPOFTMBOO-A', threshold: 0.03 },
+    { name: 'STKSPOFTMUSDC-A', threshold: 0.03 },
+    { name: 'STKSPOFTMDAI-A', threshold: 0.03 },
+    { name: 'STKSPOFTMSUSHI-A', threshold: 0.03 },
+    { name: 'STKSPOFTMLINK-A', threshold: 0.03 },
+    { name: 'STKSPOFTMWETH-A', threshold: 0.03 },
+    { name: 'STKSPOFTMFUSDT-A', threshold: 0.03 },
+    { name: 'STKSPOFTMMIM-A', threshold: 0.03 },
+    { name: 'STKSPOFTMSCREAM-A', threshold: 0.03 },
   ],
 };
 
@@ -499,6 +583,51 @@ async function pokeAll(network, lines = [], urgent = false) {
           do { await sleep(3 * 1000); } while (await getNonce(privateKey, network) <= nonce);
           log(name, 'twap', address, tx);
         }
+        if (name === 'SPIFTMLQDR') {
+          const name = 'LQDR';
+          const address = pips[name].address;
+          const nonce = await getNonce(privateKey, network);
+          console.log('Poking ' + name + ' at nonce ' + nonce + '...');
+          const tx = await poke(privateKey, network, address, nonce, urgent);
+          do { await sleep(3 * 1000); } while (await getNonce(privateKey, network) <= nonce);
+          log(name, 'twap', address, tx);
+        }
+        if (name === 'SPIFTMSPIRIT') {
+          const name = 'SPIRIT';
+          const address = pips[name].address;
+          const nonce = await getNonce(privateKey, network);
+          console.log('Poking ' + name + ' at nonce ' + nonce + '...');
+          const tx = await poke(privateKey, network, address, nonce, urgent);
+          do { await sleep(3 * 1000); } while (await getNonce(privateKey, network) <= nonce);
+          log(name, 'twap', address, tx);
+        }
+        if (name === 'SPIFTMMAI') {
+          const name = 'MAI';
+          const address = pips[name].address;
+          const nonce = await getNonce(privateKey, network);
+          console.log('Poking ' + name + ' at nonce ' + nonce + '...');
+          const tx = await poke(privateKey, network, address, nonce, urgent);
+          do { await sleep(3 * 1000); } while (await getNonce(privateKey, network) <= nonce);
+          log(name, 'twap', address, tx);
+        }
+        if (name === 'SPOFTMBOO') {
+          const name = 'BOO';
+          const address = pips[name].address;
+          const nonce = await getNonce(privateKey, network);
+          console.log('Poking ' + name + ' at nonce ' + nonce + '...');
+          const tx = await poke(privateKey, network, address, nonce, urgent);
+          do { await sleep(3 * 1000); } while (await getNonce(privateKey, network) <= nonce);
+          log(name, 'twap', address, tx);
+        }
+        if (name === 'SPOFTMSCREAM') {
+          const name = 'SCREAM';
+          const address = pips[name].address;
+          const nonce = await getNonce(privateKey, network);
+          console.log('Poking ' + name + ' at nonce ' + nonce + '...');
+          const tx = await poke(privateKey, network, address, nonce, urgent);
+          do { await sleep(3 * 1000); } while (await getNonce(privateKey, network) <= nonce);
+          log(name, 'twap', address, tx);
+        }
         const nonce = await getNonce(privateKey, network);
         console.log('Poking ' + name + ' at nonce ' + nonce + '...');
         const tx = await poke(privateKey, network, address, nonce, urgent);
@@ -564,11 +693,13 @@ async function reportError(e, type, detail) {
 const TIMEFRAME = {
   'bscmain': 4 * 60 * 60 * 1000, // 4 hours
   'avaxmain': 4 * 60 * 60 * 1000, // 4 hours
+  'ftmmain': 4 * 60 * 60 * 1000, // 4 hours
 };
 
 const MAXIMUM_TIMEFRAME = {
   'bscmain': 4 * 60 * 60 * 1000, // 4 hours
   'avaxmain': 4 * 60 * 60 * 1000, // 4 hours
+  'ftmmain': 4 * 60 * 60 * 1000, // 4 hours
 };
 
 async function main(args) {

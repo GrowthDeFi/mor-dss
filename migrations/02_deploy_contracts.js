@@ -26,6 +26,8 @@ const CONFIG = {
   '80001': 'testnet', // matictest
   '43114': 'avaxmain',// avaxmain
   '43113': 'testnet', // avaxtest
+  '250': 'ftmmain',   // ftmmain
+  '4002': 'testnet',  // ftmtest
 };
 
 const MULTISIG_CONFIG = {
@@ -40,6 +42,8 @@ const MULTISIG_CONFIG = {
   '80001': '0x2F80922CF7350e06F4924766Cb7EEEC783c1C8ce', // matictest
   '43114': '0x1d64CeAF2cDBC9b6d41eB0f2f7CDA8F04c47d1Ac', // avaxmain
   '43113': '0x2F80922CF7350e06F4924766Cb7EEEC783c1C8ce', // avaxtest
+  '250': '0x934BF5461795B4a2aC5673c1fb3859E8fA48d9bb',   // ftmmain
+  '4002': '0x2F80922CF7350e06F4924766Cb7EEEC783c1C8ce',  // ftmtest
 };
 
 module.exports = async (deployer, network, [account]) => {
@@ -532,7 +536,22 @@ module.exports = async (deployer, network, [account]) => {
         const dec = Number(await token.decimals());
         const cap = units(token_pipDeploy.cap, dec);
         console.log('@pip.cap', token_pipDeploy.cap, cap);
-        const univ2twapOracle = await artifact_deploy(UniV2TwapOracle, stwap, ltwap, src, token.address, cap);
+        const orb = token_pipDeploy.quote !== undefined ? VAL_[token_pipDeploy.quote] : ZERO_ADDRESS;
+        const pair = await artifact_at(UniswapV2PairLike, src);
+        const token0 = await pair.token0();
+        const token1 = await pair.token1();
+        if (token0 !== T_[token_name] && token1 !== T_[token_name]) {
+          throw new Error('Configuration Inconsistency')
+        }
+        if (token_pipDeploy.quote !== undefined) {
+          if (T_[token_name] === T_[token_pipDeploy.quote]) {
+            throw new Error('Configuration Inconsistency')
+          }
+          if (token0 !== T_[token_pipDeploy.quote] && token1 !== T_[token_pipDeploy.quote]) {
+            throw new Error('Configuration Inconsistency')
+          }
+        }
+        const univ2twapOracle = await artifact_deploy(UniV2TwapOracle, stwap, ltwap, src, token.address, cap, orb);
         VAL_[token_name] = univ2twapOracle.address;
         console.log('VAL_' + token_name.replace('-', '_') + '=' + VAL_[token_name]);
       }
@@ -1272,6 +1291,12 @@ module.exports = async (deployer, network, [account]) => {
             await osm.methods['kiss(address)'](CLIPPER_MOM);
           }
         }
+        if (token_pipDeploy.type === 'twap') {
+          if (token_pipDeploy.quote !== undefined) {
+            const osmReserve = await artifact_at(OSM, VAL_[token_pipDeploy.quote]);
+            await osmReserve.methods['kiss(address)'](PIP_[token_name]);
+          }
+        }
         if (token_pipDeploy.type === 'vault') {
           const osmReserve = await artifact_at(OSM, VAL_[token_pipDeploy.reserve]);
           await osmReserve.methods['kiss(address)'](PIP_[token_name]);
@@ -1967,7 +1992,7 @@ module.exports = async (deployer, network, [account]) => {
   // SET PAUSE AUTH DELAY
 
   console.log('Configuring Authority & Delay...');
-  if (Number(config.pauseDelay) >= 0) {
+  if (Number(config.pauseDelay) > 0) {
     await setAuthorityAndDelay(MCD_ADM, units(config.pauseDelay, 0));
   }
 
@@ -1980,5 +2005,6 @@ module.exports = async (deployer, network, [account]) => {
   await proxyDeployer.setOwner(MULTISIG);
 
   const finalBalance = await web3.eth.getBalance(DEPLOYER);
-  console.log('TOTAL COST:', BigInt(initialBalance) - BigInt(finalBalance));
+  const gasPrice = await web3.eth.getGasPrice();
+  console.log('TOTAL COST:', BigInt(initialBalance) - BigInt(finalBalance), 'GAS:', BigInt(gasPrice));
 };

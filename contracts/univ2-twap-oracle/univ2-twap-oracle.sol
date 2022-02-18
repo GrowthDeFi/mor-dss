@@ -38,11 +38,13 @@ contract UniV2TwapOracle is DSNote, PipLike {
     address public stwap;             // Short window TWAP implementation
     address public ltwap;             // Large window TWAP implementation
 
+    address public orb;               // Optional oracle for the other token
+
     // --- Whitelisting ---
     mapping (address => uint256) public bud;
     modifier toll { require(bud[msg.sender] == 1, "UniV2TwapOracle/contract-not-whitelisted"); _; }
 
-    constructor (address _stwap, address _ltwap, address _src, address _token, uint256 _cap) public {
+    constructor (address _stwap, address _ltwap, address _src, address _token, uint256 _cap, address _orb) public {
         require(_stwap != address(0), "UniV2TwapOracle/invalid-short-twap-address");
         require(_ltwap != address(0), "UniV2TwapOracle/invalid-long-twap-address");
         require(_src   != address(0), "UniV2TwapOracle/invalid-src-address");
@@ -63,14 +65,17 @@ contract UniV2TwapOracle is DSNote, PipLike {
         cap = _cap > 0 ? _cap : uint256(-1);
         unit = 10 ** uint256(_dec);
         factor = 10 ** (18 - uint256(_odec));
+        orb = _orb;
     }
 
-    function link(uint256 _id, address _twap) external note auth {
-        require(_twap != address(0), "UniV2TwapOracle/no-contract");
+    function link(uint256 _id, address _twapOrOrb) external note auth {
+        require(_twapOrOrb != address(0), "UniV2TwapOracle/no-contract");
         if(_id == 0) {
-            stwap = _twap;
+            stwap = _twapOrOrb;
         } else if (_id == 1) {
-            ltwap = _twap;
+            ltwap = _twapOrOrb;
+        } else if (_id == 2) {
+            orb = _twapOrOrb;
         } else {
             revert("UniV2TwapOracle/invalid-id");
         }
@@ -87,7 +92,13 @@ contract UniV2TwapOracle is DSNote, PipLike {
         uint256 price = sprice < lprice ? sprice : lprice;
         if (price > cap) price = cap;
         require(price > 0, "UniV2TwapOracle/invalid-price-feed");
-        return bytes32(mul(price, factor));
+        uint256 fprice = mul(price, factor);
+        if (orb != address(0)) {
+          uint256 oprice = uint256(PipLike(orb).read());
+          require(oprice > 0, "UniV2TwapOracle/invalid-oracle-price");
+          fprice = mul(fprice, oprice) / 1e18;
+        }
+        return bytes32(fprice);
     }
 
     function peek() external view override toll returns (bytes32,bool) {
@@ -95,7 +106,13 @@ contract UniV2TwapOracle is DSNote, PipLike {
         uint256 lprice = OracleLike(ltwap).consultAveragePrice(src, token, unit);
         uint256 price = sprice < lprice ? sprice : lprice;
         if (price > cap) price = cap;
-        return (bytes32(mul(price, factor)), price > 0);
+        uint256 fprice = mul(price, factor);
+        if (orb != address(0)) {
+          (bytes32 _oprice, bool valid) = PipLike(orb).peek();
+          uint256 oprice = valid ? uint256(_oprice) : 0;
+          fprice = mul(fprice, oprice) / 1e18;
+        }
+        return (bytes32(fprice), fprice > 0);
     }
 
     function kiss(address a) external note auth {

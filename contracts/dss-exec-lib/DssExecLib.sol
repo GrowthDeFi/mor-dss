@@ -135,6 +135,7 @@ library DssExecLib {
     /*****************/
     address constant public LOG_BSCMAIN = 0xc1E1d478296F3b0F2CA9Cc88F620de0b791aBf27; // bscmain
     address constant public LOG_AVAXMAIN = 0xd1a85349D73BaA4fFA6737474fdce9347B887cB2; // avaxmain
+    address constant public LOG_FTMMAIN = 0x0041DA86f4865ecFCc388c81BEF2DBf9A76fAAD8; // ftmmain
 
     uint256 constant internal WAD      = 10 ** 18;
     uint256 constant internal RAY      = 10 ** 27;
@@ -218,6 +219,7 @@ library DssExecLib {
       assembly { _chainId := chainid() }
       if (_chainId == 56) return LOG_BSCMAIN;
       if (_chainId == 43114) return LOG_AVAXMAIN;
+      if (_chainId == 250) return LOG_FTMMAIN;
       require(false, "unsupported network");
     }
 
