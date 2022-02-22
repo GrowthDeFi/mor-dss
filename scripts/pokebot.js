@@ -174,8 +174,16 @@ async function sendTelegramMessage(message, key = '') {
 
 // lib
 
-const MCD_VAT = '0x713C28b2Ef6F89750BDf97f7Bbf307f6F949b3fF';
-const MCD_SPOT = '0x7C4925D62d24A826F8d945130E620fdC510d0f68';
+const MCD_VAT = {
+  'bscmain': '0x713C28b2Ef6F89750BDf97f7Bbf307f6F949b3fF',
+  'avaxmain': '0x713C28b2Ef6F89750BDf97f7Bbf307f6F949b3fF',
+  'ftmmain': '0xb2d474EAAB89DD0134B8A98a9AB38aC41a537c6C',
+};
+const MCD_SPOT = {
+  'bscmain': '0x7C4925D62d24A826F8d945130E620fdC510d0f68',
+  'avaxmain': '0x7C4925D62d24A826F8d945130E620fdC510d0f68',
+  'ftmmain': '0x6e22DA49b28dc5aB70aC7527CC0cc04bD35eB615',
+};
 
 const VAT_ABI = require('../build/contracts/Vat.json').abi;
 const SPOTTER_ABI = require('../build/contracts/Spotter.json').abi;
@@ -268,6 +276,7 @@ const PIP_LIST = {
     'STKTDJUSDCJOE': { address: '0x7253bC2Ca443807391451a54cAF1bC1915A8b584', type: 'vault' },
     'STKTDJUSDTJOE': { address: '0xed219cD2aF00625e0c1aD21b7cC7aa0f77601860', type: 'vault' },
   },
+
   'ftmmain': {
     'PSM_STKUSDLP': { address: '0xd312EC88F0CE9512804db1e08b1EB6901c278d0f', type: 'value' },
 
@@ -411,7 +420,7 @@ async function getNativeBalance(privateKey, network, account = null) {
 async function vat_ilk(privateKey, network, name) {
   const web3 = getWeb3(privateKey, network);
   const abi = VAT_ABI;
-  const address = MCD_VAT;
+  const address = MCD_VAT[network];
   const contract = new web3.eth.Contract(abi, address);
   const [from] = web3.currentProvider.getAddresses();
   try {
@@ -425,7 +434,7 @@ async function vat_ilk(privateKey, network, name) {
 async function spot_ilk(privateKey, network, name) {
   const web3 = getWeb3(privateKey, network);
   const abi = SPOTTER_ABI;
-  const address = MCD_SPOT;
+  const address = MCD_SPOT[network];
   const contract = new web3.eth.Contract(abi, address);
   const [from] = web3.currentProvider.getAddresses();
   try {
@@ -481,7 +490,7 @@ async function zph(privateKey, network, address) {
 async function spot_poke(privateKey, network, name, nonce, urgent = false) {
   const web3 = getWeb3(privateKey, network);
   const abi = SPOTTER_ABI;
-  const address = MCD_SPOT;
+  const address = MCD_SPOT[network];
   const contract = new web3.eth.Contract(abi, address);
   const [from] = web3.currentProvider.getAddresses();
   let txId = null;
@@ -664,7 +673,7 @@ async function pokeAll(network, lines = [], urgent = false) {
         console.log('Poking ' + name + ' at nonce ' + nonce + '...');
         const tx = await spot_poke(privateKey, network, name, nonce, urgent);
         do { await sleep(3 * 1000); } while (await getNonce(privateKey, network) <= nonce);
-        log(name, 'spot', MCD_SPOT, tx);
+        log(name, 'spot', MCD_SPOT[network], tx);
       }
     }
   }
