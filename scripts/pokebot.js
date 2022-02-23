@@ -120,7 +120,7 @@ const HTTP_PROVIDER_URLS = {
 const LIMIT_GASPRICE = {
   'bscmain': '5000000000',
   'avaxmain': '100000000000',
-  'ftmmain': '800000000000',
+  'ftmmain': '1000000000000',
 };
 
 const web3Cache = {};
@@ -708,7 +708,7 @@ const TIMEFRAME = {
 const MAXIMUM_TIMEFRAME = {
   'bscmain': 4 * 60 * 60 * 1000, // 4 hours
   'avaxmain': 4 * 60 * 60 * 1000, // 4 hours
-  'ftmmain': 4 * 60 * 60 * 1000, // 4 hours
+  'ftmmain': 8 * 60 * 60 * 1000, // 4 hours
 };
 
 async function main(args) {
