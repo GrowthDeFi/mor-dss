@@ -29,8 +29,11 @@ contract DssSpellAction_avaxmain_2022_03_07 is DssAction
 			address MCD_VOW = DssExecLib.vow();
 			address _surplusPayer = address(new SurplusPayer(MCD_JOIN_DAI, MCD_VOW, REWARD_DISTRIBUTOR, MULTISIG));
 			DssExecLib.authorize(MCD_VAT, _surplusPayer);
+			emit NewSurplusPayer(_surplusPayer);
 		}
 	}
+
+	event NewSurplusPayer(address _surplusPayer);
 }
 
 // valid for 30 days
