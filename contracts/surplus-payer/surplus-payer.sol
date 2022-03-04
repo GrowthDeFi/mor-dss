@@ -17,9 +17,10 @@ contract SurplusPayer {
     Vat immutable public vat;
     DaiJoin immutable public daiJoin;
     address immutable public vow;
+    address immutable public recipient;
 
     uint256 constant PAYMENT_INTERVAL = 1 weeks;
-    uint256 constant PAYMENT_LIMIT = 10_000e18; // 10k
+    uint256 constant PAYMENT_LIMIT = 10_000 * WAD; // 10k
 
     uint256 public lastPaymentTime;
 
@@ -29,26 +30,28 @@ contract SurplusPayer {
     event SendPayment(address indexed recipient, uint256 amount);
 
     // --- Init ---
-    constructor(address _daiJoin, address _vow, address _usr) public {
+    constructor(address _daiJoin, address _vow, address _recipient, address _usr) public {
         wards[_usr] = 1;
         emit Rely(_usr);
         Vat _vat = vat = Vat(DaiJoin(_daiJoin).vat());
         daiJoin = DaiJoin(_daiJoin);
         vow = _vow;
+        recipient = _recipient;
         Vat(_vat).hope(_daiJoin);
     }
 
     // --- Math ---
+    uint256 constant WAD = 10 ** 18;
     uint256 constant RAY = 10 ** 27;
 
     // --- Primary Functions ---
-    function sendPayment(address _recipient, uint256 _amount) external auth {
+    function sendPayment(uint256 _amount) external auth {
         require(_amount <= PAYMENT_LIMIT, "SurplusPayer/limit-exceeded");
         require(lastPaymentTime / PAYMENT_INTERVAL < block.timestamp / PAYMENT_INTERVAL, "SurplusPayer/grace-period");
         vat.suck(vow, address(this), _amount * RAY);
-        daiJoin.exit(_recipient, _amount);
+        daiJoin.exit(recipient, _amount);
         lastPaymentTime = block.timestamp;
-        emit SendPayment(_recipient, _amount);
+        emit SendPayment(recipient, _amount);
     }
 
 }
