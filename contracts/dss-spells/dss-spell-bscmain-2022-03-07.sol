@@ -31,6 +31,15 @@ contract DssSpellAction_bscmain_2022_03_07 is DssAction
 			DssExecLib.authorize(MCD_VAT, _surplusPayer);
 			emit NewSurplusPayer(_surplusPayer);
 		}
+
+		// ----- SURPLUS WITHDRAWAL OF 100,000 MOR -----
+
+		{
+			address MCD_JOIN_DAI = DssExecLib.daiJoin();
+			DssExecLib.delegateVat(MCD_JOIN_DAI);
+			DssExecLib.sendPaymentFromSurplusBuffer(MULTISIG, 100000); // 100,000 MOR
+			DssExecLib.undelegateVat(MCD_JOIN_DAI);
+		}
 	}
 
 	event NewSurplusPayer(address _surplusPayer);

@@ -31,6 +31,21 @@ contract DssSpellAction_avaxmain_2022_03_07 is DssAction
 			DssExecLib.authorize(MCD_VAT, _surplusPayer);
 			emit NewSurplusPayer(_surplusPayer);
 		}
+
+		// ----- SURPLUS WITHDRAWAL OF 100,000 MOR -----
+
+		{
+			address MCD_JOIN_DAI = DssExecLib.daiJoin();
+			DssExecLib.delegateVat(MCD_JOIN_DAI);
+			DssExecLib.sendPaymentFromSurplusBuffer(MULTISIG, 100000); // 100,000 MOR
+			DssExecLib.undelegateVat(MCD_JOIN_DAI);
+		}
+
+		// ----- UPDATES STKXJOE-A STABILITY FEE TO 5% -----
+
+		{
+			DssExecLib.setIlkStabilityFee("STKXJOE-A", 1000000001547125957863212449, true); // duty 5%
+		}
 	}
 
 	event NewSurplusPayer(address _surplusPayer);
