@@ -11,7 +11,7 @@ contract DssSpellAction_bscmain_2022_03_07 is DssAction
 {
 	// Hash: seth keccak -- "$(wget https://raw.githubusercontent.com/GrowthDeFi/community/master/governance/votes/Executive%20vote%20-%20March%207%2C%202022.md -q -O - 2>/dev/null)"
 	string public constant override description =
-		"2022-03-07 GrowthDeFi Executive Spell | Hash: 0x0000000000000000000000000000000000000000000000000000000000000000";
+		"2022-03-07 GrowthDeFi Executive Spell | Hash: 0x8dcaf1c520f1ceb9770ffa02aa60704cd7c2958b3be488dea886a9159e13a942";
 
 	address constant MULTISIG = 0x392681Eaf8AD9BC65e74BE37Afe7503D92802b7d; // GrowthDeFi multisig on BSC
 	address constant REWARD_DISTRIBUTOR = 0x9E83396CD47c82197fDD5D7a5E486cB8da522cA2; // veGRO-MOR reward distributor on BSC
