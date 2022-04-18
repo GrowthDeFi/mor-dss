@@ -700,15 +700,15 @@ async function reportError(e, type, detail) {
 }
 
 const TIMEFRAME = {
-  'bscmain': 4 * 60 * 60 * 1000, // 4 hours
-  'avaxmain': 4 * 60 * 60 * 1000, // 4 hours
-  'ftmmain': 4 * 60 * 60 * 1000, // 4 hours
+  'bscmain': 8 * 60 * 60 * 1000, // 8 hours
+  'avaxmain': 8 * 60 * 60 * 1000, // 8 hours
+  'ftmmain': 8 * 60 * 60 * 1000, // 8 hours
 };
 
 const MAXIMUM_TIMEFRAME = {
-  'bscmain': 4 * 60 * 60 * 1000, // 4 hours
-  'avaxmain': 4 * 60 * 60 * 1000, // 4 hours
-  'ftmmain': 8 * 60 * 60 * 1000, // 4 hours
+  'bscmain': 12 * 60 * 60 * 1000, // 12 hours
+  'avaxmain': 12 * 60 * 60 * 1000, // 12 hours
+  'ftmmain': 12 * 60 * 60 * 1000, // 12 hours
 };
 
 async function main(args) {
