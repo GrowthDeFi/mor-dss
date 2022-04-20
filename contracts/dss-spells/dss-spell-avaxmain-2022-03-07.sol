@@ -7,11 +7,11 @@ import { DssExecLib } from "../dss-exec-lib/DssExecLib.sol";
 
 import { SurplusPayer } from "../surplus-payer/surplus-payer.sol";
 
-contract DssSpellAction_avaxmain_2022_03_04 is DssAction
+contract DssSpellAction_avaxmain_2022_03_07 is DssAction
 {
-	// Hash: seth keccak -- "$(wget https://raw.githubusercontent.com/GrowthDeFi/community/master/governance/votes/Executive%20vote%20-%20March%204%2C%202022.md -q -O - 2>/dev/null)"
+	// Hash: seth keccak -- "$(wget https://raw.githubusercontent.com/GrowthDeFi/community/master/governance/votes/Executive%20vote%20-%20March%207%2C%202022.md -q -O - 2>/dev/null)"
 	string public constant override description =
-		"2022-03-04 GrowthDeFi Executive Spell | Hash: 0x0000000000000000000000000000000000000000000000000000000000000000";
+		"2022-03-07 GrowthDeFi Executive Spell | Hash: 0x0000000000000000000000000000000000000000000000000000000000000000";
 
 	address constant MULTISIG = 0x6F926fFBe338218b06D2FC26eC59b52Fd5b125cE; // GrowthDeFi multisig on Avalanche
 	address constant REWARD_DISTRIBUTOR = 0x09d46be693608dB03A9f29EdbaD09C0A557f8690; // veGRO-MOR reward distributor on Avalanche
@@ -52,6 +52,6 @@ contract DssSpellAction_avaxmain_2022_03_04 is DssAction
 }
 
 // valid for 30 days
-contract DssSpell_avaxmain_2022_03_04 is DssExec(block.timestamp + 30 days, address(new DssSpellAction_avaxmain_2022_03_04()))
+contract DssSpell_avaxmain_2022_03_07 is DssExec(block.timestamp + 30 days, address(new DssSpellAction_avaxmain_2022_03_07()))
 {
 }

@@ -1088,6 +1088,17 @@ module.exports = async (deployer, network, [account]) => {
   await dssFlash.rely(MCD_PAUSE_PROXY);
   await dssFlash.deny(DEPLOYER);
 
+  // AMO
+
+  console.log('Publishing Amo...');
+  const DssAmo = artifacts.require('DssAmo');
+  const dssAmo = await artifact_deploy(DssAmo, MCD_JOIN_DAI);
+  const MCD_AMO = dssAmo.address;
+  console.log('MCD_AMO=' + MCD_AMO);
+  await rely(MCD_VAT, MCD_AMO);
+  await dssAmo.rely(MCD_PAUSE_PROXY);
+  await dssAmo.deny(DEPLOYER);
+
   // CHAIN LOG
 
   console.log('Publishing Chain Log...');
@@ -1964,6 +1975,7 @@ module.exports = async (deployer, network, [account]) => {
   await chainLog.setAddress(web3.utils.asciiToHex('MCD_ESM'), MCD_ESM);
   await chainLog.setAddress(web3.utils.asciiToHex('MCD_FLAP'), MCD_FLAP);
   await chainLog.setAddress(web3.utils.asciiToHex('MCD_FLASH'), MCD_FLASH);
+  await chainLog.setAddress(web3.utils.asciiToHex('MCD_AMO'), MCD_AMO);
   await chainLog.setAddress(web3.utils.asciiToHex('MCD_FLOP'), MCD_FLOP);
   await chainLog.setAddress(web3.utils.asciiToHex('MCD_GOV'), MCD_GOV);
   await chainLog.setAddress(web3.utils.asciiToHex('MCD_GOV_ACTIONS'), MCD_GOV_ACTIONS);
