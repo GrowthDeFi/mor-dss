@@ -6,6 +6,7 @@ import { DssExec } from "../dss-exec-lib/DssExec.sol";
 import { DssExecLib } from "../dss-exec-lib/DssExecLib.sol";
 
 import { DssAmo } from "../dss-amo/amo.sol";
+import { DssPsm } from "../dss-psm/psm.sol";
 
 contract DssSpellAction_ftmmain_2022_04_18 is DssAction
 {
@@ -74,6 +75,14 @@ contract DssSpellAction_ftmmain_2022_04_18 is DssAction
 			DssExecLib.setIlkStabilityFee("STKSPOFTMMIM-A", _5PERCENT, true);
 			DssExecLib.setIlkDebtCeiling("STKSPOFTMSCREAM-A", 0);
 			DssExecLib.setIlkStabilityFee("STKSPOFTMSCREAM-A", _5PERCENT, true);
+		}
+
+		// ----- ADJUSTS PSM TIN/TOUT
+		{
+			address MCD_PSM_STKUSDLP_A = DssExecLib.getChangelogAddress("MCD_PSM_STKUSDLP_A");
+			DssPsm _dssPsm = DssPsm(MCD_PSM_STKUSDLP_A);
+			_dssPsm.file("tin", 0); // 0%
+			_dssPsm.file("tout", 1e15); // 0.1%
 		}
 	}
 }
