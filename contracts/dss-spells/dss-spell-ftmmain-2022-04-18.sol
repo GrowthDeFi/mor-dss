@@ -14,7 +14,7 @@ contract DssSpellAction_ftmmain_2022_04_18 is DssAction
 	string public constant override description =
 		"2022-04-18 GrowthDeFi Executive Spell | Hash: 0x0000000000000000000000000000000000000000000000000000000000000000";
 
-	address constant MOR_bbyvUSD_AMO = 0x0000000000000000000000000000000000000000; // TBD
+	address constant MOR_bbyvUSD_AMO = 0x53AAF3c5FC977E2ED7E0e746306Dec3927829AE5;
 
 	function actions() public override
 	{
@@ -83,6 +83,12 @@ contract DssSpellAction_ftmmain_2022_04_18 is DssAction
 			DssPsm _dssPsm = DssPsm(MCD_PSM_STKUSDLP_A);
 			_dssPsm.file("tin", 0); // 0%
 			_dssPsm.file("tout", 1e15); // 0.1%
+		}
+
+		// ----- ADDS A 24-HOUR PAUSE DELAY FOR SPELLS -----
+		{
+			address _pause = DssExecLib.getChangelogAddress("MCD_PAUSE");
+			DSPause(_pause).setDelay(24 hours);
 		}
 	}
 }
