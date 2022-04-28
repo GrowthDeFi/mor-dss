@@ -1223,7 +1223,7 @@
       "ilks": {
         "A": {
           "mat": "111",
-          "line": "300000",
+          "line": "500000",
           "autoLine": "0",
           "autoLineGap": "0",
           "autoLineTtl": "0",
