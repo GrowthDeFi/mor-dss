@@ -197,6 +197,20 @@
         "quote": "FTM"
       }
     },
+    "DEI": {
+      "import": {
+        "gem": "0xDE12c7959E1a72bbe8a5f7A1dc8f8EeF9Ab011B3"
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "twap",
+        "stwap": "0x2e5a83cE42F9887E222813371c5cA2bA1e827700",
+        "ltwap": "0x292b138C6785BB7a6e7EE2acB3Cea792aD9f7F2E",
+        "src": "0xD343b8361Ce32A9e570C1fC8D4244d32848df88B",
+        "cap": "0",
+        "quote": "USDC"
+      }
+    },
     "SPIFTMLQDR": {
       "import": {
         "gem": "0x4Fe6f19031239F105F753D1DF8A0d24857D0cAA2"
@@ -410,6 +424,18 @@
         "type": "univ2lp",
         "token0": "FTM",
         "token1": "SCREAM",
+        "hop": "3600"
+      }
+    },
+    "SPOUSDCDEI": {
+      "import": {
+        "gem": "0xD343b8361Ce32A9e570C1fC8D4244d32848df88B"
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "univ2lp",
+        "token0": "USDC",
+        "token1": "DEI",
         "hop": "3600"
       }
     },
@@ -1171,6 +1197,48 @@
             "buf": "130",
             "tail": "16800",
             "cusp": "40",
+            "calc": {
+              "type": "StairstepExponentialDecrease",
+              "step": "180",
+              "cut": "99"
+            },
+            "cm_tolerance": "50"
+          }
+        }
+      }
+    },
+    "STKSPOUSDCDEI": {
+      "import": {
+        "gem": "0x1DE2bC09527Aa3F6a3Aa35271471966b2dd4E215"
+      },
+      "joinDeploy": {
+        "src": "GemJoin",
+        "extraParams": []
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "vault",
+        "reserve": "SPOUSDCDEI"
+      },
+      "ilks": {
+        "A": {
+          "mat": "111",
+
+          "line": "300000",
+          "autoLine": "0",
+          "autoLineGap": "0",
+          "autoLineTtl": "0",
+          "dust": "100",
+          "duty": "0",
+          "clipDeploy": {
+            "chop": "5",
+            "hole": "100000000",
+            "chip": "0",
+            "tip": "5",
+            "buf": "130",
+            "tail": "16800",
+            "cusp": "40",
+
             "calc": {
               "type": "StairstepExponentialDecrease",
               "step": "180",
