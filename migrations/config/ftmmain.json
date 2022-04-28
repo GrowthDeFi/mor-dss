@@ -1223,7 +1223,6 @@
       "ilks": {
         "A": {
           "mat": "111",
-
           "line": "300000",
           "autoLine": "0",
           "autoLineGap": "0",
@@ -1238,7 +1237,6 @@
             "buf": "130",
             "tail": "16800",
             "cusp": "40",
-
             "calc": {
               "type": "StairstepExponentialDecrease",
               "step": "180",

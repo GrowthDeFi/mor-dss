@@ -6,6 +6,7 @@ import { DssExec } from "../dss-exec-lib/DssExec.sol";
 import { DssExecLib } from "../dss-exec-lib/DssExecLib.sol";
 
 import { DssAmo } from "../dss-amo/amo.sol";
+import { DSPause } from "../ds-pause/pause.sol";
 import { DssPsm } from "../dss-psm/psm.sol";
 
 contract DssSpellAction_ftmmain_2022_04_18 is DssAction
