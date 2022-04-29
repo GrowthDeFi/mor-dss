@@ -21,7 +21,7 @@ pragma solidity >=0.6.12;
 
 import { Vat } from "./vat.sol";
 import { Vow } from "./vow.sol";
-import { Clipper } from "./clip.sol";
+import { Clipper } from "./clip.sol"; // cycle
 
 contract Dog {
     // --- Auth ---

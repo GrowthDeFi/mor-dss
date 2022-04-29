@@ -20,7 +20,7 @@
 pragma solidity >=0.5.12;
 
 import { Vat } from "./vat.sol";
-import { Vow } from "./vow.sol";
+import { Vow } from "./vow.sol"; // cycle
 import { DSToken } from "../ds-token/token.sol";
 import { DSNote } from "../ds-note/note.sol";
 
