@@ -22,11 +22,6 @@ library LibDssSpell_ftmmain_2022_04_29_A
 		return address(new Clipper(_vat, _spotter, _dog, _ilk));
 	}
 
-	function newStairstepExponentialDecrease() public returns (address _calc)
-	{
-		return address(new StairstepExponentialDecrease());
-	}
-
 	function newGemJoin(address _vat, bytes32 _ilk, address _gem) public returns (address _authGemJoin)
 	{
 		return address(new GemJoin(_vat, _ilk, _gem));
@@ -35,6 +30,11 @@ library LibDssSpell_ftmmain_2022_04_29_A
 
 library LibDssSpell_ftmmain_2022_04_29_B
 {
+	function newStairstepExponentialDecrease() public returns (address _calc)
+	{
+		return address(new StairstepExponentialDecrease());
+	}
+
 	function newUNIV2LPOracle(address _src, bytes32 _wat, address _orb0, address _orb1) public returns (address _oracle)
 	{
 		return address(new UNIV2LPOracle(_src, _wat, _orb0, _orb1));
@@ -89,7 +89,7 @@ contract DssSpellAction_ftmmain_2022_04_29 is DssAction
 			address PIP_STKSPOUSDCDEI = LibDssSpell_ftmmain_2022_04_29_C.newVaultOracle(T_STKSPOUSDCDEI, T_SPOUSDCDEI, PIP_SPOUSDCDEI);
 			address MCD_JOIN_STKSPOUSDCDEI_A = LibDssSpell_ftmmain_2022_04_29_A.newGemJoin(MCD_VAT, _ilk, T_STKSPOUSDCDEI);
 			address MCD_CLIP_STKSPOUSDCDEI_A = LibDssSpell_ftmmain_2022_04_29_A.newClipper(MCD_VAT, MCD_SPOT, MCD_DOG, _ilk);
-			address MCD_CLIP_CALC_STKSPOUSDCDEI_A = LibDssSpell_ftmmain_2022_04_29_A.newStairstepExponentialDecrease();
+			address MCD_CLIP_CALC_STKSPOUSDCDEI_A = LibDssSpell_ftmmain_2022_04_29_B.newStairstepExponentialDecrease();
 
 			// configures PIP_DEI
 			UniV2TwapOracle(PIP_DEI).kiss(POKEBOT);
