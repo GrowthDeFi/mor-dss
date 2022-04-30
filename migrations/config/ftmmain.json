@@ -1246,6 +1246,46 @@
           }
         }
       }
+    },
+    "CLQDR": {
+      "import": {
+        "gem": "0x814c66594a22404e101FEcfECac1012D8d75C156"
+      },
+      "joinDeploy": {
+        "src": "GemJoin",
+        "extraParams": []
+      },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "vault",
+        "reserve": "LQDR"
+      },
+      "ilks": {
+        "A": {
+          "mat": "111",
+          "line": "500000",
+          "autoLine": "0",
+          "autoLineGap": "0",
+          "autoLineTtl": "0",
+          "dust": "100",
+          "duty": "0",
+          "clipDeploy": {
+            "chop": "5",
+            "hole": "100000000",
+            "chip": "0",
+            "tip": "5",
+            "buf": "130",
+            "tail": "16800",
+            "cusp": "40",
+            "calc": {
+              "type": "StairstepExponentialDecrease",
+              "step": "180",
+              "cut": "99"
+            },
+            "cm_tolerance": "50"
+          }
+        }
+      }
     }
   }
 }

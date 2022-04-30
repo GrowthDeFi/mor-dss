@@ -63,6 +63,10 @@ contract DssSpellAction_ftmmain_2022_04_29 is DssAction
 	address constant T_DEI = 0xDE12c7959E1a72bbe8a5f7A1dc8f8EeF9Ab011B3;
 	address constant T_SPOUSDCDEI = 0xD343b8361Ce32A9e570C1fC8D4244d32848df88B;
 	address constant T_STKSPOUSDCDEI = 0x1DE2bC09527Aa3F6a3Aa35271471966b2dd4E215;
+
+	address constant T_LQDR = 0x10b620b2dbAC4Faa7D7FFD71Da486f5D44cd86f9;
+	address constant T_CLQDR = 0x814c66594a22404e101FEcfECac1012D8d75C156;
+
 	address constant STWAP = 0x2e5a83cE42F9887E222813371c5cA2bA1e827700;
 	address constant LTWAP = 0x292b138C6785BB7a6e7EE2acB3Cea792aD9f7F2E;
 	address constant POKEBOT = 0x0B640b3E91420B495a33d11Ee96AFb19bE2Db693;
@@ -155,6 +159,70 @@ contract DssSpellAction_ftmmain_2022_04_29 is DssAction
 			DssExecLib.setChangelogAddress("MCD_JOIN_STKSPOUSDCDEI_A", MCD_JOIN_STKSPOUSDCDEI_A);
 			DssExecLib.setChangelogAddress("MCD_CLIP_STKSPOUSDCDEI_A", MCD_CLIP_STKSPOUSDCDEI_A);
 			DssExecLib.setChangelogAddress("MCD_CLIP_CALC_STKSPOUSDCDEI_A", MCD_CLIP_CALC_STKSPOUSDCDEI_A);
+		}
+
+		// ----- ADDS A NEW COLLATERAL CLQDR -----
+
+		{
+			bytes32 _ilk = "CLQDR-A";
+
+			address MCD_VAT = DssExecLib.vat();
+			address MCD_SPOT = DssExecLib.spotter();
+			address MCD_DOG = DssExecLib.dog();
+			address MCD_END = DssExecLib.end();
+			address PIP_LQDR = DssExecLib.getChangelogAddress("PIP_LQDR");
+
+			// deploys components
+			address PIP_CLQDR = LibDssSpell_ftmmain_2022_04_29_C.newVaultOracle(T_CLQDR, T_LQDR, PIP_LQDR);
+			address MCD_JOIN_CLQDR_A = LibDssSpell_ftmmain_2022_04_29_A.newGemJoin(MCD_VAT, _ilk, T_CLQDR);
+			address MCD_CLIP_CLQDR_A = LibDssSpell_ftmmain_2022_04_29_A.newClipper(MCD_VAT, MCD_SPOT, MCD_DOG, _ilk);
+			address MCD_CLIP_CALC_CLQDR_A = LibDssSpell_ftmmain_2022_04_29_B.newStairstepExponentialDecrease();
+
+			// configures PIP_STKSPOUSDCDEI
+			VaultOracle(PIP_CLQDR).kiss(POKEBOT);
+			VaultOracle(PIP_CLQDR).kiss(MCD_SPOT);
+			VaultOracle(PIP_CLQDR).kiss(MCD_END);
+			VaultOracle(PIP_CLQDR).kiss(MCD_CLIP_CLQDR_A);
+			VaultOracle(PIP_CLQDR).kiss(DssExecLib.clipperMom());
+			UniV2TwapOracle(PIP_LQDR).kiss(PIP_CLQDR);
+
+			// configures the calc
+			DssExecLib.setStairstepExponentialDecrease(MCD_CLIP_CALC_CLQDR_A, 180 seconds, 99_00);
+
+			// updates clipper chost
+			Clipper(MCD_CLIP_CLQDR_A).upchost();
+
+			// wires and configure the new collateral
+			CollateralOpts memory co;
+			co.ilk = _ilk;
+			co.gem = T_CLQDR;
+			co.join = MCD_JOIN_CLQDR_A;
+			co.clip = MCD_CLIP_CLQDR_A;
+			co.calc = MCD_CLIP_CALC_CLQDR_A;
+			co.pip = PIP_CLQDR;
+			co.isLiquidatable = true;
+			co.isOSM = false;
+			co.whitelistOSM = false;
+			//co.liquidationRatio = 111_00; // mat
+			//co.ilkDebtCeiling = 500000; // line
+			//co.minVaultAmount = 100; // dust
+			//co.ilkStabilityFee = 1e27; // duty
+			//co.liquidationPenalty = 5_00; // chop
+			//co.maxLiquidationAmount = 100000000; // hole
+			//co.kprPctReward = 0_00; // chip
+			//co.kprFlatReward = 5; // tip
+			//co.startingPriceFactor = 130_00; // buf
+			//co.auctionDuration = 16800 seconds; // tail
+			//co.permittedDrop = 40_00; // cusp
+			//co.breakerTolerance = 50_00; // cm_tolerance
+			DssExecLib.addNewCollateral(co);
+
+			// updates change log
+			DssExecLib.setChangelogAddress("CLQDR", T_CLQDR);
+			DssExecLib.setChangelogAddress("PIP_CLQDR", PIP_CLQDR);
+			DssExecLib.setChangelogAddress("MCD_JOIN_CLQDR_A", MCD_JOIN_CLQDR_A);
+			DssExecLib.setChangelogAddress("MCD_CLIP_CLQDR_A", MCD_CLIP_CLQDR_A);
+			DssExecLib.setChangelogAddress("MCD_CLIP_CALC_CLQDR_A", MCD_CLIP_CALC_CLQDR_A);
 		}
 	}
 }
