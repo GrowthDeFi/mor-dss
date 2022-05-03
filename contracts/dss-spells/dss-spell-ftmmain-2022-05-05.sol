@@ -74,7 +74,7 @@ contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 	function actions() public override
 	{
 		// Bumps changelog version
-		DssExecLib.setChangelogVersion("1.0.2");
+		DssExecLib.setChangelogVersion("1.0.3");
 
 		// ----- ADDS A NEW COLLATERAL STKSPOUSDCDEI -----
 
