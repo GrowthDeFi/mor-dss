@@ -58,7 +58,7 @@ contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 {
 	// Hash: seth keccak -- "$(wget https://raw.githubusercontent.com/GrowthDeFi/community/master/governance/votes/Executive%20vote%20-%20May%205%2C%202022.md -q -O - 2>/dev/null)"
 	string public constant override description =
-		"2022-04-29 GrowthDeFi Executive Spell | Hash: 0x0000000000000000000000000000000000000000000000000000000000000000";
+		"2022-05-05 GrowthDeFi Executive Spell | Hash: 0x0000000000000000000000000000000000000000000000000000000000000000";
 
 	address constant T_DEI = 0xDE12c7959E1a72bbe8a5f7A1dc8f8EeF9Ab011B3;
 	address constant T_SPOUSDCDEI = 0xD343b8361Ce32A9e570C1fC8D4244d32848df88B;
