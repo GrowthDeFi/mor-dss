@@ -13,8 +13,8 @@ contract DssSpellAction_ftmmain_2022_05_01 is DssAction
 	string public constant override description =
 		"2022-05-01 GrowthDeFi Executive Spell | Hash: 0x0000000000000000000000000000000000000000000000000000000000000000";
 
-	address constant MOR_bbyvUSD_AMO_OBSOLETE = 0x53AAF3c5FC977E2ED7E0e746306Dec3927829AE5;
-	address constant MOR_bbyvUSD_AMO = 0xD9c0b7D0a62167E4aFadd8fF21761d016A3069AD;
+	address constant MOR_bbyvUSD_AMO_OLD = 0x53AAF3c5FC977E2ED7E0e746306Dec3927829AE5;
+	address constant MOR_bbyvUSD_AMO_NEW = 0xD9c0b7D0a62167E4aFadd8fF21761d016A3069AD;
 
 	function actions() public override
 	{
@@ -24,10 +24,9 @@ contract DssSpellAction_ftmmain_2022_05_01 is DssAction
 		// ----- UPDATES MOR_bbyvUSD_AMO CEILING -----
 		{
 			address MCD_AMO = DssExecLib.getChangelogAddress("MCD_AMO");
-			DssAmo(MCD_AMO).ceil(MOR_bbyvUSD_AMO_OBSOLETE, 0);
-			DssAmo(MCD_AMO).ceil(MOR_bbyvUSD_AMO, 1_000_000e18); // 1mi MOR
+			DssAmo(MCD_AMO).ceil(MOR_bbyvUSD_AMO_OLD, 0);
+			DssAmo(MCD_AMO).ceil(MOR_bbyvUSD_AMO_NEW, 10_000_000e18); // 10mi MOR
 		}
-
 	}
 }
 
