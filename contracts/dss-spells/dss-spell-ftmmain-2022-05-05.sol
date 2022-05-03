@@ -15,7 +15,7 @@ import { UniV2TwapOracle } from "../univ2-twap-oracle/univ2-twap-oracle.sol";
 import { UNIV2LPOracle } from "../univ2-lp-oracle/UNIV2LPOracle.sol";
 import { VaultOracle } from "../vault-oracle/vault-oracle.sol";
 
-library LibDssSpell_ftmmain_2022_04_29_A
+library LibDssSpell_ftmmain_2022_05_05_A
 {
 	function newClipper(address _vat, address _spotter, address _dog, bytes32 _ilk) public returns (address _clipper)
 	{
@@ -28,7 +28,7 @@ library LibDssSpell_ftmmain_2022_04_29_A
 	}
 }
 
-library LibDssSpell_ftmmain_2022_04_29_B
+library LibDssSpell_ftmmain_2022_05_05_B
 {
 	function newStairstepExponentialDecrease() public returns (address _calc)
 	{
@@ -41,7 +41,7 @@ library LibDssSpell_ftmmain_2022_04_29_B
 	}
 }
 
-library LibDssSpell_ftmmain_2022_04_29_C
+library LibDssSpell_ftmmain_2022_05_05_C
 {
 	function newUniV2TwapOracle(address _stwap, address _ltwap, address _src, address _token, uint256 _cap, address _orb) public returns (address _oracle)
 	{
@@ -54,9 +54,9 @@ library LibDssSpell_ftmmain_2022_04_29_C
 	}
 }
 
-contract DssSpellAction_ftmmain_2022_04_29 is DssAction
+contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 {
-	// Hash: seth keccak -- "$(wget https://raw.githubusercontent.com/GrowthDeFi/community/master/governance/votes/Executive%20vote%20-%20April%2029%2C%202022.md -q -O - 2>/dev/null)"
+	// Hash: seth keccak -- "$(wget https://raw.githubusercontent.com/GrowthDeFi/community/master/governance/votes/Executive%20vote%20-%20May%205%2C%202022.md -q -O - 2>/dev/null)"
 	string public constant override description =
 		"2022-04-29 GrowthDeFi Executive Spell | Hash: 0x0000000000000000000000000000000000000000000000000000000000000000";
 
@@ -88,12 +88,12 @@ contract DssSpellAction_ftmmain_2022_04_29 is DssAction
 			address PIP_USDC = DssExecLib.getChangelogAddress("PIP_USDC");
 
 			// deploys components
-			address PIP_DEI = LibDssSpell_ftmmain_2022_04_29_C.newUniV2TwapOracle(STWAP, LTWAP, T_SPOUSDCDEI, T_DEI, 1e18, PIP_USDC);
-			address PIP_SPOUSDCDEI = LibDssSpell_ftmmain_2022_04_29_B.newUNIV2LPOracle(T_SPOUSDCDEI, "SPOUSDCDEI", PIP_USDC, PIP_DEI);
-			address PIP_STKSPOUSDCDEI = LibDssSpell_ftmmain_2022_04_29_C.newVaultOracle(T_STKSPOUSDCDEI, T_SPOUSDCDEI, PIP_SPOUSDCDEI);
-			address MCD_JOIN_STKSPOUSDCDEI_A = LibDssSpell_ftmmain_2022_04_29_A.newGemJoin(MCD_VAT, _ilk, T_STKSPOUSDCDEI);
-			address MCD_CLIP_STKSPOUSDCDEI_A = LibDssSpell_ftmmain_2022_04_29_A.newClipper(MCD_VAT, MCD_SPOT, MCD_DOG, _ilk);
-			address MCD_CLIP_CALC_STKSPOUSDCDEI_A = LibDssSpell_ftmmain_2022_04_29_B.newStairstepExponentialDecrease();
+			address PIP_DEI = LibDssSpell_ftmmain_2022_05_05_C.newUniV2TwapOracle(STWAP, LTWAP, T_SPOUSDCDEI, T_DEI, 1e18, PIP_USDC);
+			address PIP_SPOUSDCDEI = LibDssSpell_ftmmain_2022_05_05_B.newUNIV2LPOracle(T_SPOUSDCDEI, "SPOUSDCDEI", PIP_USDC, PIP_DEI);
+			address PIP_STKSPOUSDCDEI = LibDssSpell_ftmmain_2022_05_05_C.newVaultOracle(T_STKSPOUSDCDEI, T_SPOUSDCDEI, PIP_SPOUSDCDEI);
+			address MCD_JOIN_STKSPOUSDCDEI_A = LibDssSpell_ftmmain_2022_05_05_A.newGemJoin(MCD_VAT, _ilk, T_STKSPOUSDCDEI);
+			address MCD_CLIP_STKSPOUSDCDEI_A = LibDssSpell_ftmmain_2022_05_05_A.newClipper(MCD_VAT, MCD_SPOT, MCD_DOG, _ilk);
+			address MCD_CLIP_CALC_STKSPOUSDCDEI_A = LibDssSpell_ftmmain_2022_05_05_B.newStairstepExponentialDecrease();
 
 			// configures PIP_DEI
 			UniV2TwapOracle(PIP_DEI).kiss(POKEBOT);
@@ -173,10 +173,10 @@ contract DssSpellAction_ftmmain_2022_04_29 is DssAction
 			address PIP_LQDR = DssExecLib.getChangelogAddress("PIP_LQDR");
 
 			// deploys components
-			address PIP_CLQDR = LibDssSpell_ftmmain_2022_04_29_C.newVaultOracle(T_CLQDR, T_LQDR, PIP_LQDR);
-			address MCD_JOIN_CLQDR_A = LibDssSpell_ftmmain_2022_04_29_A.newGemJoin(MCD_VAT, _ilk, T_CLQDR);
-			address MCD_CLIP_CLQDR_A = LibDssSpell_ftmmain_2022_04_29_A.newClipper(MCD_VAT, MCD_SPOT, MCD_DOG, _ilk);
-			address MCD_CLIP_CALC_CLQDR_A = LibDssSpell_ftmmain_2022_04_29_B.newStairstepExponentialDecrease();
+			address PIP_CLQDR = LibDssSpell_ftmmain_2022_05_05_C.newVaultOracle(T_CLQDR, T_LQDR, PIP_LQDR);
+			address MCD_JOIN_CLQDR_A = LibDssSpell_ftmmain_2022_05_05_A.newGemJoin(MCD_VAT, _ilk, T_CLQDR);
+			address MCD_CLIP_CLQDR_A = LibDssSpell_ftmmain_2022_05_05_A.newClipper(MCD_VAT, MCD_SPOT, MCD_DOG, _ilk);
+			address MCD_CLIP_CALC_CLQDR_A = LibDssSpell_ftmmain_2022_05_05_B.newStairstepExponentialDecrease();
 
 			// configures PIP_STKSPOUSDCDEI
 			VaultOracle(PIP_CLQDR).kiss(POKEBOT);
@@ -228,6 +228,6 @@ contract DssSpellAction_ftmmain_2022_04_29 is DssAction
 }
 
 // valid for 30 days
-contract DssSpell_ftmmain_2022_04_29 is DssExec(block.timestamp + 30 days, address(new DssSpellAction_ftmmain_2022_04_29()))
+contract DssSpell_ftmmain_2022_05_05 is DssExec(block.timestamp + 30 days, address(new DssSpellAction_ftmmain_2022_05_05()))
 {
 }
