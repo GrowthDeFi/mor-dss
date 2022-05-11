@@ -557,7 +557,7 @@ module.exports = async (deployer, network, [account]) => {
       }
       if (token_pipDeploy.type === 'vault') {
         console.log('Publishing Vault Oracle...');
-        const src = T_[token_name];
+        const src = token_pipDeploy.src || T_[token_name];
         const res = T_[token_pipDeploy.reserve];
         const orb = VAL_[token_pipDeploy.reserve];
         const vaultOracle = await artifact_deploy(VaultOracle, src, res, orb);
