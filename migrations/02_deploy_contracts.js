@@ -520,6 +520,7 @@ module.exports = async (deployer, network, [account]) => {
   const VaultOracle = artifacts.require('VaultOracle');
   const UniV2TwapOracle = artifacts.require('UniV2TwapOracle');
   const UniswapV2PairLike = artifacts.require('UniswapV2PairLike');
+  const RateCapOracle = artifacts.require('RateCapOracle');
   for (const token_name in config_tokens) {
     const token_config = config_tokens[token_name];
     const token_import = token_config.import || {};
@@ -600,6 +601,18 @@ module.exports = async (deployer, network, [account]) => {
         const hop = units(token_pipDeploy.hop, 0);
         console.log('@pip.hop', token_pipDeploy.hop, hop);
         await univ2lpOracle.step(hop);
+      }
+      if (token_pipDeploy.type === 'ratecap') {
+        console.log('Publishing Rate Cap Oracle...');
+        const src = token_pipDeploy.src;
+        const cap = token_pipDeploy.cap;
+        const orb = VAL_[token_pipDeploy.quote];
+        const ratecapOracle = await artifact_deploy(RateCapOracle, src, cap, orb);
+        VAL_[token_name] = ratecapOracle.address;
+        console.log('VAL_' + token_name.replace('-', '_') + '=' + VAL_[token_name]);
+        const hop = units(token_pipDeploy.hop, 0);
+        console.log('@pip.hop', token_pipDeploy.hop, hop);
+        await ratecapOracle.step(hop);
       }
       if (token_pipDeploy.type === 'chainlink') {
         console.log('Publishing LinkOracle...');
@@ -1241,6 +1254,10 @@ module.exports = async (deployer, network, [account]) => {
         const univ2lpOracle = await artifact_at(UNIV2LPOracle, VAL_[token_name]);
         await univ2lpOracle.methods['kiss(address)'](DEPLOYER);
       }
+      if (token_pipDeploy.type === 'ratecap') {
+        const ratecapOracle = await artifact_at(RateCapOracle, VAL_[token_name]);
+        await ratecapOracle.methods['kiss(address)'](DEPLOYER);
+      }
       if (token_pipDeploy.type === 'chainlink') {
         const linkOracle = await artifact_at(LinkOracle, VAL_[token_name]);
         await linkOracle.methods['kiss(address)'](DEPLOYER);
@@ -1325,6 +1342,10 @@ module.exports = async (deployer, network, [account]) => {
           await osmToken0.methods['kiss(address)'](PIP_[token_name]);
           const osmToken1 = await artifact_at(OSM, VAL_[token_pipDeploy.token1]);
           await osmToken1.methods['kiss(address)'](PIP_[token_name]);
+        }
+        if (token_pipDeploy.type === 'ratecap') {
+          const osmReserve = await artifact_at(OSM, VAL_[token_pipDeploy.quote]);
+          await osmReserve.methods['kiss(address)'](PIP_[token_name]);
         }
       }
     }
@@ -1746,6 +1767,10 @@ module.exports = async (deployer, network, [account]) => {
           const univ2lpOracle = await artifact_at(UNIV2LPOracle, VAL_[token_name]);
           await univ2lpOracle.methods['kiss(address)'](PIP_[token_name]);
         }
+        if (token_pipDeploy.type === 'ratecap') {
+          const ratecapOracle = await artifact_at(RateCapOracle, VAL_[token_name]);
+          await ratecapOracle.methods['kiss(address)'](PIP_[token_name]);
+        }
         if (token_pipDeploy.type === 'chainlink') {
           const linkOracle = await artifact_at(LinkOracle, VAL_[token_name]);
           await linkOracle.methods['kiss(address)'](PIP_[token_name]);
@@ -1873,6 +1898,11 @@ module.exports = async (deployer, network, [account]) => {
         const univ2lpOracle = await artifact_at(UNIV2LPOracle, VAL_[token_name]);
         await univ2lpOracle.rely(MCD_PAUSE_PROXY);
         await univ2lpOracle.deny(DEPLOYER);
+      }
+      if (token_pipDeploy.type === 'ratecap') {
+        const ratecapOracle = await artifact_at(RateCapOracle, VAL_[token_name]);
+        await ratecapOracle.rely(MCD_PAUSE_PROXY);
+        await ratecapOracle.deny(DEPLOYER);
       }
       if (token_pipDeploy.type === 'chainlink') {
         const linkOracle = await artifact_at(LinkOracle, VAL_[token_name]);
