@@ -161,9 +161,9 @@
       },
       "pipDeploy": {
         "osmDelay": "0",
-        "type": "rate",
-        "src": "0x30a92a4eeca857445f41e4bb836e64d66920f1c0",
-        "cap": "1",
+        "type": "ratecap",
+        "src": "0x0000000000000000000000000000000000000000", // TODO
+        "cap": "0x0000000000000000000000000000000000000000", // TODO
         "quote": "SPIRIT"
       }
     },
@@ -1465,9 +1465,16 @@
       },
       "pipDeploy": {
         "osmDelay": "0",
-        "type": "vault",
+        "type": "rate",
         "reserve": "LQDR"
       },
+      "pipDeploy": {
+        "osmDelay": "0",
+        "type": "ratecap",
+        "src": "0x0000000000000000000000000000000000000000", // TODO
+        "cap": "0x0000000000000000000000000000000000000000", // TODO
+        "quote": "LQDR"
+      }
       "ilks": {
         "A": {
           "mat": "200",
