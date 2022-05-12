@@ -9,7 +9,7 @@ contract DssSpellAction_avaxmain_2022_05_12 is DssAction
 {
 	// Hash: seth keccak -- "$(wget https://raw.githubusercontent.com/GrowthDeFi/community/master/governance/votes/Executive%20vote%20-%20May%2012%2C%202022.md -q -O - 2>/dev/null)"
 	string public constant override description =
-		"2022-05-12 GrowthDeFi Executive Spell | Hash: 0x0000000000000000000000000000000000000000000000000000000000000000";
+		"2022-05-12 GrowthDeFi Executive Spell | Hash: 0x8228358a6ed2b8cf5ada66f702f9d7c8bcff46357d59e7804fed12010da84fe8";
 
 	function actions() public override
 	{
