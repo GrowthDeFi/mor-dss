@@ -202,7 +202,7 @@
       "pipDeploy": {
         "osmDelay": "0",
         "type": "vault",
-        "src": "0x0000000000000000000000000000000000000000", // TODO
+        "src": "0xC34A9A80CfFCe827c3bD234922782c51e7af9C8C",
         "reserve": "BOO"
       },
     },
@@ -1295,10 +1295,9 @@
         }
       }
     },
-
     "STKXBOO": {
       "import": {
-        "gem": "0x0000000000000000000000000000000000000000" // TODO
+        "gem": "0xB8b6676Ac3aFa8676dF5aBC7882396Ccb69eE933"
       },
       "joinDeploy": {
         "src": "GemJoin",
@@ -1507,7 +1506,7 @@
       "pipDeploy": {
         "osmDelay": "0",
         "type": "vault",
-        "src": "0x0000000000000000000000000000000000000000", // TODO
+        "src": "0x1Fb01F02E1141F10c3E679bD9B6f87cE737Ff223",
         "reserve": "LINSPIRIT"
       },
       "ilks": {

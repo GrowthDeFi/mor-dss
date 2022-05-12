@@ -7,6 +7,7 @@ import { DSToken } from "../ds-token/token.sol";
 import { PipLike } from "../dss/spot.sol";
 
 interface VaultLike {
+    function decimals() external view returns (uint8 _decimals);
     function totalSupply() external view returns (uint256 _totalSupply);
     function totalReserve() external view returns (uint256 _totalReserve);
 }
@@ -39,7 +40,7 @@ contract VaultOracle is DSNote, PipLike {
         require(_vault   != address(0), "VaultOracle/invalid-vault-address");
         require(_reserve != address(0), "VaultOracle/invalid-reserve-address");
         require(_orb     != address(0), "VaultOracle/invalid-oracle-address");
-        require(DSToken(_vault).decimals() == DSToken(_reserve).decimals(), "VaultOracle/token-dec-mismatch");
+        require(VaultLike(_vault).decimals() == DSToken(_reserve).decimals(), "VaultOracle/token-dec-mismatch");
         wards[msg.sender] = 1;
         vault = _vault;
         orb = _orb;
