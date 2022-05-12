@@ -1465,11 +1465,6 @@
       },
       "pipDeploy": {
         "osmDelay": "0",
-        "type": "rate",
-        "reserve": "LQDR"
-      },
-      "pipDeploy": {
-        "osmDelay": "0",
         "type": "ratecap",
         "src": "0x0000000000000000000000000000000000000000", // TODO
         "cap": "0x0000000000000000000000000000000000000000", // TODO

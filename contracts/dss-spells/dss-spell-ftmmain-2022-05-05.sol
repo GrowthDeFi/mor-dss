@@ -14,6 +14,7 @@ import { LinkOracle } from "../link-oracle/link-oracle.sol";
 import { UniV2TwapOracle } from "../univ2-twap-oracle/univ2-twap-oracle.sol";
 import { UNIV2LPOracle } from "../univ2-lp-oracle/UNIV2LPOracle.sol";
 import { VaultOracle } from "../vault-oracle/vault-oracle.sol";
+import { RateCapOracle } from "../ratecap-oracle/ratecap-oracle.sol";
 
 library LibDssSpell_ftmmain_2022_05_05_A
 {
@@ -54,6 +55,14 @@ library LibDssSpell_ftmmain_2022_05_05_C
 	}
 }
 
+library LibDssSpell_ftmmain_2022_05_05_D
+{
+	function newRateCapOracle(address _src, address _cap, address _orb) public returns (address _oracle)
+	{
+		return address(new RateCapOracle(_src, _cap, _orb));
+	}
+}
+
 contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 {
 	// Hash: seth keccak -- "$(wget https://raw.githubusercontent.com/GrowthDeFi/community/master/governance/votes/Executive%20vote%20-%20May%205%2C%202022.md -q -O - 2>/dev/null)"
@@ -76,11 +85,15 @@ contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 
 	address constant T_LQDR = 0x10b620b2dbAC4Faa7D7FFD71Da486f5D44cd86f9;
 	address constant T_CLQDR = 0x814c66594a22404e101FEcfECac1012D8d75C156;
+	address constant RATE_CLQDR_LQDR = 0x0000000000000000000000000000000000000000; // TODO
+	address constant RATE_CLQDR_PERP = 0x0000000000000000000000000000000000000000; // TODO
 
 	address constant T_SPIRIT = 0x5Cc61A78F164885776AA610fb0FE1257df78E59B;
 	address constant T_LINSPIRIT = 0xc5713B6a0F26bf0fdC1c52B90cd184D950be515C;
 	address constant T_SLINSPIRIT = 0x3F569724ccE63F7F24C5F921D5ddcFe125Add96b;
 	address constant T_SLINSPIRIT_SRC = 0x1Fb01F02E1141F10c3E679bD9B6f87cE737Ff223;
+	address constant RATE_LINSPIRIT_SPIRIT = 0x0000000000000000000000000000000000000000; // TODO
+	address constant RATE_UNIT = 0x0000000000000000000000000000000000000000; // TODO
 
 	address constant STWAP = 0x2e5a83cE42F9887E222813371c5cA2bA1e827700;
 	address constant LTWAP = 0x292b138C6785BB7a6e7EE2acB3Cea792aD9f7F2E;
@@ -89,6 +102,15 @@ contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 	function _deployVaultComponents(bytes32 _ilk, address _token, address _tokenr, address _pipr) internal returns (address _pip, address _join, address _clip, address _calc)
 	{
 		_pip = LibDssSpell_ftmmain_2022_05_05_C.newVaultOracle(_token, _tokenr, _pipr);
+		_join = LibDssSpell_ftmmain_2022_05_05_A.newGemJoin(DssExecLib.vat(), _ilk, _token);
+		_clip = LibDssSpell_ftmmain_2022_05_05_A.newClipper(DssExecLib.vat(), DssExecLib.spotter(), DssExecLib.dog(), _ilk);
+		_calc = LibDssSpell_ftmmain_2022_05_05_B.newStairstepExponentialDecrease();
+		return (_pip, _join, _clip, _calc);
+	}
+
+	function _deployCapComponents(bytes32 _ilk, address _token, address _rate, address _rate_cap, address _pipr) internal returns (address _pip, address _join, address _clip, address _calc)
+	{
+		_pip = LibDssSpell_ftmmain_2022_05_05_D.newRateCapOracle(_rate, _rate_cap, _pipr);
 		_join = LibDssSpell_ftmmain_2022_05_05_A.newGemJoin(DssExecLib.vat(), _ilk, _token);
 		_clip = LibDssSpell_ftmmain_2022_05_05_A.newClipper(DssExecLib.vat(), DssExecLib.spotter(), DssExecLib.dog(), _ilk);
 		_calc = LibDssSpell_ftmmain_2022_05_05_B.newStairstepExponentialDecrease();
@@ -110,7 +132,7 @@ contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 		UNIV2LPOracle(_pip).kiss(POKEBOT);
 		UNIV2LPOracle(_pip).kiss(DssExecLib.spotter());
 		UNIV2LPOracle(_pip).kiss(DssExecLib.end());
-		LinkOracle(UNIV2LPOracle(_pip).orb0()).kiss(_pip);
+		UniV2TwapOracle(UNIV2LPOracle(_pip).orb0()).kiss(_pip);
 		UniV2TwapOracle(UNIV2LPOracle(_pip).orb1()).kiss(_pip);
 	}
 
@@ -119,9 +141,24 @@ contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 		VaultOracle(_pip).kiss(POKEBOT);
 		VaultOracle(_pip).kiss(DssExecLib.spotter());
 		VaultOracle(_pip).kiss(DssExecLib.end());
-		VaultOracle(_pip).kiss(_clip);
-		VaultOracle(_pip).kiss(DssExecLib.clipperMom());
+		if (_clip != address(0)) {
+			VaultOracle(_pip).kiss(_clip);
+			VaultOracle(_pip).kiss(DssExecLib.clipperMom());
+		}
 		UNIV2LPOracle(UniV2TwapOracle(_pip).orb()).kiss(_pip);
+	}
+
+	function _configureCapOracle(address _pip, address _clip) internal
+	{
+		RateCapOracle(_pip).step(3600 seconds);
+		RateCapOracle(_pip).kiss(POKEBOT);
+		RateCapOracle(_pip).kiss(DssExecLib.spotter());
+		RateCapOracle(_pip).kiss(DssExecLib.end());
+		if (_clip != address(0)) {
+			RateCapOracle(_pip).kiss(_clip);
+			RateCapOracle(_pip).kiss(DssExecLib.clipperMom());
+		}
+		UniV2TwapOracle(RateCapOracle(_pip).orb()).kiss(_pip);
 	}
 
 	function actions() public override
@@ -399,10 +436,10 @@ contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 				address MCD_JOIN_CLQDR_A,
 				address MCD_CLIP_CLQDR_A,
 				address MCD_CLIP_CALC_CLQDR_A
-			) = _deployVaultComponents(_ilk, T_CLQDR, T_LQDR, PIP_LQDR);
+			) = _deployCapComponents(_ilk, T_CLQDR, RATE_CLQDR_LQDR, RATE_CLQDR_PERP, PIP_LQDR);
 
 			// configures PIP_CLQDR
-			_configureVaultOracle(PIP_CLQDR, MCD_CLIP_CLQDR_A); // TODO
+			_configureCapOracle(PIP_CLQDR, MCD_CLIP_CLQDR_A);
 
 			// configures the calc
 			DssExecLib.setStairstepExponentialDecrease(MCD_CLIP_CALC_CLQDR_A, 180 seconds, 99_00);
@@ -450,7 +487,7 @@ contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 			address PIP_SPIRIT = DssExecLib.getChangelogAddress("PIP_SPIRIT");
 
 			// deploys components
-			address PIP_LINSPIRIT = address(0); // TODO
+			address PIP_LINSPIRIT = LibDssSpell_ftmmain_2022_05_05_D.newRateCapOracle(RATE_LINSPIRIT_SPIRIT, RATE_UNIT, PIP_SPIRIT);
 
 			(
 				address PIP_SLINSPIRIT,
@@ -460,8 +497,7 @@ contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 			) = _deployVaultComponents(_ilk, T_SLINSPIRIT_SRC, T_LINSPIRIT, PIP_LINSPIRIT);
 
 			// configures PIP_LINSPIRIT
-			// TODO
-			UniV2TwapOracle(PIP_SPIRIT).kiss(PIP_LINSPIRIT);
+			_configureCapOracle(PIP_LINSPIRIT, address(0));
 
 			// configures PIP_SLINSPIRIT
 			_configureVaultOracle(PIP_SLINSPIRIT, MCD_CLIP_SLINSPIRIT_A);
