@@ -135,7 +135,7 @@ contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 
 	address constant T_XBOO = 0xa48d959AE2E88f1dAA7D5F611E01908106dE7598;
 	address constant T_XBOO_SRC = 0xC34A9A80CfFCe827c3bD234922782c51e7af9C8C;
-	address constant T_STKXBOO = 0xB8b6676Ac3aFa8676dF5aBC7882396Ccb69eE933;
+	address constant T_STKXBOO = 0x30463d33735677B4E70f956e3dd61c6e94D70DFe;
 
 	address constant T_STKSPOFTMBOOV2 = 0xaebd31E9FFcB222feE947f22369257cEcf1F96CA;
 

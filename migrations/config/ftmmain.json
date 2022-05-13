@@ -1259,7 +1259,7 @@
     },
     "STKXBOO": {
       "import": {
-        "gem": "0xB8b6676Ac3aFa8676dF5aBC7882396Ccb69eE933"
+        "gem": "0x30463d33735677B4E70f956e3dd61c6e94D70DFe"
       },
       "joinDeploy": {
         "src": "GemJoin",
