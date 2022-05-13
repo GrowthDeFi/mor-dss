@@ -57,9 +57,73 @@ library LibDssSpell_ftmmain_2022_05_05_C
 
 library LibDssSpell_ftmmain_2022_05_05_D
 {
+	address constant POKEBOT = 0x0B640b3E91420B495a33d11Ee96AFb19bE2Db693;
+
 	function newRateCapOracle(address _src, address _cap, address _orb) public returns (address _oracle)
 	{
 		return address(new RateCapOracle(_src, _cap, _orb));
+	}
+
+	function _deployVaultComponents(bytes32 _ilk, address _token, address _tokenr, address _pipr) public returns (address _pip, address _join, address _clip, address _calc)
+	{
+		_pip = LibDssSpell_ftmmain_2022_05_05_C.newVaultOracle(_token, _tokenr, _pipr);
+		_join = LibDssSpell_ftmmain_2022_05_05_A.newGemJoin(DssExecLib.vat(), _ilk, _token);
+		_clip = LibDssSpell_ftmmain_2022_05_05_A.newClipper(DssExecLib.vat(), DssExecLib.spotter(), DssExecLib.dog(), _ilk);
+		_calc = LibDssSpell_ftmmain_2022_05_05_B.newStairstepExponentialDecrease();
+		return (_pip, _join, _clip, _calc);
+	}
+
+	function _deployCapComponents(bytes32 _ilk, address _token, address _rate, address _rate_cap, address _pipr) public returns (address _pip, address _join, address _clip, address _calc)
+	{
+		_pip = newRateCapOracle(_rate, _rate_cap, _pipr);
+		_join = LibDssSpell_ftmmain_2022_05_05_A.newGemJoin(DssExecLib.vat(), _ilk, _token);
+		_clip = LibDssSpell_ftmmain_2022_05_05_A.newClipper(DssExecLib.vat(), DssExecLib.spotter(), DssExecLib.dog(), _ilk);
+		_calc = LibDssSpell_ftmmain_2022_05_05_B.newStairstepExponentialDecrease();
+		return (_pip, _join, _clip, _calc);
+	}
+
+	function _configureTwapOracle(address _pip) public
+	{
+		UniV2TwapOracle(_pip).kiss(POKEBOT);
+		UniV2TwapOracle(_pip).poke();
+		UniV2TwapOracle(_pip).kiss(DssExecLib.spotter());
+		UniV2TwapOracle(_pip).kiss(DssExecLib.end());
+		LinkOracle(UniV2TwapOracle(_pip).orb()).kiss(_pip);
+	}
+
+	function _configurePoolOracle(address _pip) public
+	{
+		UNIV2LPOracle(_pip).step(3600 seconds);
+		UNIV2LPOracle(_pip).kiss(POKEBOT);
+		UNIV2LPOracle(_pip).kiss(DssExecLib.spotter());
+		UNIV2LPOracle(_pip).kiss(DssExecLib.end());
+		UniV2TwapOracle(UNIV2LPOracle(_pip).orb0()).kiss(_pip);
+		UniV2TwapOracle(UNIV2LPOracle(_pip).orb1()).kiss(_pip);
+	}
+
+	function _configureVaultOracle(address _pip, address _clip) public
+	{
+		VaultOracle(_pip).kiss(POKEBOT);
+		VaultOracle(_pip).kiss(DssExecLib.spotter());
+		VaultOracle(_pip).kiss(DssExecLib.end());
+		if (_clip != address(0)) {
+			VaultOracle(_pip).kiss(_clip);
+			VaultOracle(_pip).kiss(DssExecLib.clipperMom());
+		}
+		UNIV2LPOracle(UniV2TwapOracle(_pip).orb()).kiss(_pip);
+	}
+
+	function _configureCapOracle(address _pip, address _clip) public
+	{
+		RateCapOracle(_pip).step(3600 seconds);
+		RateCapOracle(_pip).kiss(POKEBOT);
+		RateCapOracle(_pip).kiss(DssExecLib.spotter());
+		RateCapOracle(_pip).kiss(DssExecLib.end());
+		if (_clip != address(0)) {
+			RateCapOracle(_pip).kiss(_clip);
+			RateCapOracle(_pip).kiss(DssExecLib.clipperMom());
+		}
+		UniV2TwapOracle(RateCapOracle(_pip).orb()).kiss(_pip);
 	}
 }
 
@@ -97,69 +161,6 @@ contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 
 	address constant STWAP = 0x2e5a83cE42F9887E222813371c5cA2bA1e827700;
 	address constant LTWAP = 0x292b138C6785BB7a6e7EE2acB3Cea792aD9f7F2E;
-	address constant POKEBOT = 0x0B640b3E91420B495a33d11Ee96AFb19bE2Db693;
-
-	function _deployVaultComponents(bytes32 _ilk, address _token, address _tokenr, address _pipr) internal returns (address _pip, address _join, address _clip, address _calc)
-	{
-		_pip = LibDssSpell_ftmmain_2022_05_05_C.newVaultOracle(_token, _tokenr, _pipr);
-		_join = LibDssSpell_ftmmain_2022_05_05_A.newGemJoin(DssExecLib.vat(), _ilk, _token);
-		_clip = LibDssSpell_ftmmain_2022_05_05_A.newClipper(DssExecLib.vat(), DssExecLib.spotter(), DssExecLib.dog(), _ilk);
-		_calc = LibDssSpell_ftmmain_2022_05_05_B.newStairstepExponentialDecrease();
-		return (_pip, _join, _clip, _calc);
-	}
-
-	function _deployCapComponents(bytes32 _ilk, address _token, address _rate, address _rate_cap, address _pipr) internal returns (address _pip, address _join, address _clip, address _calc)
-	{
-		_pip = LibDssSpell_ftmmain_2022_05_05_D.newRateCapOracle(_rate, _rate_cap, _pipr);
-		_join = LibDssSpell_ftmmain_2022_05_05_A.newGemJoin(DssExecLib.vat(), _ilk, _token);
-		_clip = LibDssSpell_ftmmain_2022_05_05_A.newClipper(DssExecLib.vat(), DssExecLib.spotter(), DssExecLib.dog(), _ilk);
-		_calc = LibDssSpell_ftmmain_2022_05_05_B.newStairstepExponentialDecrease();
-		return (_pip, _join, _clip, _calc);
-	}
-
-	function _configureTwapOracle(address _pip) internal
-	{
-		UniV2TwapOracle(_pip).kiss(POKEBOT);
-		UniV2TwapOracle(_pip).poke();
-		UniV2TwapOracle(_pip).kiss(DssExecLib.spotter());
-		UniV2TwapOracle(_pip).kiss(DssExecLib.end());
-		LinkOracle(UniV2TwapOracle(_pip).orb()).kiss(_pip);
-	}
-
-	function _configurePoolOracle(address _pip) internal
-	{
-		UNIV2LPOracle(_pip).step(3600 seconds);
-		UNIV2LPOracle(_pip).kiss(POKEBOT);
-		UNIV2LPOracle(_pip).kiss(DssExecLib.spotter());
-		UNIV2LPOracle(_pip).kiss(DssExecLib.end());
-		UniV2TwapOracle(UNIV2LPOracle(_pip).orb0()).kiss(_pip);
-		UniV2TwapOracle(UNIV2LPOracle(_pip).orb1()).kiss(_pip);
-	}
-
-	function _configureVaultOracle(address _pip, address _clip) internal
-	{
-		VaultOracle(_pip).kiss(POKEBOT);
-		VaultOracle(_pip).kiss(DssExecLib.spotter());
-		VaultOracle(_pip).kiss(DssExecLib.end());
-		if (_clip != address(0)) {
-			VaultOracle(_pip).kiss(_clip);
-			VaultOracle(_pip).kiss(DssExecLib.clipperMom());
-		}
-		UNIV2LPOracle(UniV2TwapOracle(_pip).orb()).kiss(_pip);
-	}
-
-	function _configureCapOracle(address _pip, address _clip) internal
-	{
-		RateCapOracle(_pip).step(3600 seconds);
-		RateCapOracle(_pip).kiss(POKEBOT);
-		RateCapOracle(_pip).kiss(DssExecLib.spotter());
-		RateCapOracle(_pip).kiss(DssExecLib.end());
-		if (_clip != address(0)) {
-			RateCapOracle(_pip).kiss(_clip);
-			RateCapOracle(_pip).kiss(DssExecLib.clipperMom());
-		}
-		UniV2TwapOracle(RateCapOracle(_pip).orb()).kiss(_pip);
-	}
 
 	function actions() public override
 	{
@@ -180,10 +181,10 @@ contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 				address MCD_JOIN_STKXBOO_A,
 				address MCD_CLIP_STKXBOO_A,
 				address MCD_CLIP_CALC_STKXBOO_A
-			) = _deployVaultComponents(_ilk, T_STKXBOO, T_XBOO, PIP_XBOO);
+			) = LibDssSpell_ftmmain_2022_05_05_D._deployVaultComponents(_ilk, T_STKXBOO, T_XBOO, PIP_XBOO);
 
 			// configures PIP_STKXBOO
-			_configureVaultOracle(PIP_STKXBOO, MCD_CLIP_STKXBOO_A);
+			LibDssSpell_ftmmain_2022_05_05_D._configureVaultOracle(PIP_STKXBOO, MCD_CLIP_STKXBOO_A);
 
 			// configures the calc
 			DssExecLib.setStairstepExponentialDecrease(MCD_CLIP_CALC_STKXBOO_A, 180 seconds, 99_00);
@@ -240,10 +241,10 @@ contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 				address MCD_JOIN_STKSPOFTMBOOV2_A,
 				address MCD_CLIP_STKSPOFTMBOOV2_A,
 				address MCD_CLIP_CALC_STKSPOFTMBOOV2_A
-			) = _deployVaultComponents(_ilk, T_STKSPOFTMBOOV2, T_SPOFTMBOO, PIP_SPOFTMBOO);
+			) = LibDssSpell_ftmmain_2022_05_05_D._deployVaultComponents(_ilk, T_STKSPOFTMBOOV2, T_SPOFTMBOO, PIP_SPOFTMBOO);
 
 			// configures PIP_STKSPOFTMBOOV2
-			_configureVaultOracle(PIP_STKSPOFTMBOOV2, MCD_CLIP_STKSPOFTMBOOV2_A);
+			LibDssSpell_ftmmain_2022_05_05_D._configureVaultOracle(PIP_STKSPOFTMBOOV2, MCD_CLIP_STKSPOFTMBOOV2_A);
 
 			// configures the calc
 			DssExecLib.setStairstepExponentialDecrease(MCD_CLIP_CALC_STKSPOFTMBOOV2_A, 180 seconds, 99_00);
@@ -298,16 +299,16 @@ contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 				address MCD_JOIN_STKSPOUSDCDEI_A,
 				address MCD_CLIP_STKSPOUSDCDEI_A,
 				address MCD_CLIP_CALC_STKSPOUSDCDEI_A
-			) = _deployVaultComponents(_ilk, T_STKSPOUSDCDEI, T_SPOUSDCDEI, PIP_SPOUSDCDEI);
+			) = LibDssSpell_ftmmain_2022_05_05_D._deployVaultComponents(_ilk, T_STKSPOUSDCDEI, T_SPOUSDCDEI, PIP_SPOUSDCDEI);
 
 			// configures PIP_DEI
-			_configureTwapOracle(PIP_DEI);
+			LibDssSpell_ftmmain_2022_05_05_D._configureTwapOracle(PIP_DEI);
 
 			// configures PIP_SPOUSDCDEI
-			 _configurePoolOracle(PIP_SPOUSDCDEI);
+			LibDssSpell_ftmmain_2022_05_05_D._configurePoolOracle(PIP_SPOUSDCDEI);
 
 			// configures PIP_STKSPOUSDCDEI
-			_configureVaultOracle(PIP_STKSPOUSDCDEI, MCD_CLIP_STKSPOUSDCDEI_A);
+			LibDssSpell_ftmmain_2022_05_05_D._configureVaultOracle(PIP_STKSPOUSDCDEI, MCD_CLIP_STKSPOUSDCDEI_A);
 
 			// configures the calc
 			DssExecLib.setStairstepExponentialDecrease(MCD_CLIP_CALC_STKSPOUSDCDEI_A, 180 seconds, 99_00);
@@ -368,16 +369,16 @@ contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 				address MCD_JOIN_STKSPOFTMDEUS_A,
 				address MCD_CLIP_STKSPOFTMDEUS_A,
 				address MCD_CLIP_CALC_STKSPOFTMDEUS_A
-			) = _deployVaultComponents(_ilk, T_STKSPOFTMDEUS, T_SPOFTMDEUS, PIP_SPOFTMDEUS);
+			) = LibDssSpell_ftmmain_2022_05_05_D._deployVaultComponents(_ilk, T_STKSPOFTMDEUS, T_SPOFTMDEUS, PIP_SPOFTMDEUS);
 
 			// configures PIP_DEUS
-			_configureTwapOracle(PIP_DEUS);
+			LibDssSpell_ftmmain_2022_05_05_D._configureTwapOracle(PIP_DEUS);
 
 			// configures PIP_SPOFTMDEUS
-			 _configurePoolOracle(PIP_SPOFTMDEUS);
+			LibDssSpell_ftmmain_2022_05_05_D._configurePoolOracle(PIP_SPOFTMDEUS);
 
 			// configures PIP_STKSPOFTMDEUS
-			_configureVaultOracle(PIP_STKSPOFTMDEUS, MCD_CLIP_STKSPOFTMDEUS_A);
+			LibDssSpell_ftmmain_2022_05_05_D._configureVaultOracle(PIP_STKSPOFTMDEUS, MCD_CLIP_STKSPOFTMDEUS_A);
 
 			// configures the calc
 			DssExecLib.setStairstepExponentialDecrease(MCD_CLIP_CALC_STKSPOFTMDEUS_A, 180 seconds, 99_00);
@@ -436,10 +437,10 @@ contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 				address MCD_JOIN_CLQDR_A,
 				address MCD_CLIP_CLQDR_A,
 				address MCD_CLIP_CALC_CLQDR_A
-			) = _deployCapComponents(_ilk, T_CLQDR, RATE_CLQDR_LQDR, RATE_CLQDR_PERP, PIP_LQDR);
+			) = LibDssSpell_ftmmain_2022_05_05_D._deployCapComponents(_ilk, T_CLQDR, RATE_CLQDR_LQDR, RATE_CLQDR_PERP, PIP_LQDR);
 
 			// configures PIP_CLQDR
-			_configureCapOracle(PIP_CLQDR, MCD_CLIP_CLQDR_A);
+			LibDssSpell_ftmmain_2022_05_05_D._configureCapOracle(PIP_CLQDR, MCD_CLIP_CLQDR_A);
 
 			// configures the calc
 			DssExecLib.setStairstepExponentialDecrease(MCD_CLIP_CALC_CLQDR_A, 180 seconds, 99_00);
@@ -494,13 +495,13 @@ contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 				address MCD_JOIN_SLINSPIRIT_A,
 				address MCD_CLIP_SLINSPIRIT_A,
 				address MCD_CLIP_CALC_SLINSPIRIT_A
-			) = _deployVaultComponents(_ilk, T_SLINSPIRIT_SRC, T_LINSPIRIT, PIP_LINSPIRIT);
+			) = LibDssSpell_ftmmain_2022_05_05_D._deployVaultComponents(_ilk, T_SLINSPIRIT_SRC, T_LINSPIRIT, PIP_LINSPIRIT);
 
 			// configures PIP_LINSPIRIT
-			_configureCapOracle(PIP_LINSPIRIT, address(0));
+			LibDssSpell_ftmmain_2022_05_05_D._configureCapOracle(PIP_LINSPIRIT, address(0));
 
 			// configures PIP_SLINSPIRIT
-			_configureVaultOracle(PIP_SLINSPIRIT, MCD_CLIP_SLINSPIRIT_A);
+			LibDssSpell_ftmmain_2022_05_05_D._configureVaultOracle(PIP_SLINSPIRIT, MCD_CLIP_SLINSPIRIT_A);
 
 			// configures the calc
 			DssExecLib.setStairstepExponentialDecrease(MCD_CLIP_CALC_SLINSPIRIT_A, 180 seconds, 99_00);
