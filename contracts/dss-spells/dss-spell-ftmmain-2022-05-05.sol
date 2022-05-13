@@ -183,6 +183,9 @@ contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 				address MCD_CLIP_CALC_STKXBOO_A
 			) = LibDssSpell_ftmmain_2022_05_05_D._deployVaultComponents(_ilk, T_STKXBOO, T_XBOO, PIP_XBOO);
 
+			// configures PIP_XBOO
+			LibDssSpell_ftmmain_2022_05_05_D._configureVaultOracle(PIP_XBOO, address(0));
+
 			// configures PIP_STKXBOO
 			LibDssSpell_ftmmain_2022_05_05_D._configureVaultOracle(PIP_STKXBOO, MCD_CLIP_STKXBOO_A);
 
@@ -489,7 +492,6 @@ contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 
 			// deploys components
 			address PIP_LINSPIRIT = LibDssSpell_ftmmain_2022_05_05_D.newRateCapOracle(RATE_LINSPIRIT_SPIRIT, RATE_UNIT, PIP_SPIRIT);
-
 			(
 				address PIP_SLINSPIRIT,
 				address MCD_JOIN_SLINSPIRIT_A,
