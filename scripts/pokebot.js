@@ -120,7 +120,7 @@ const HTTP_PROVIDER_URLS = {
 const LIMIT_GASPRICE = {
   'bscmain': '5000000000',
   'avaxmain': '100000000000',
-  'ftmmain': '1000000000000',
+  'ftmmain': '3000000000000',
 };
 
 const web3Cache = {};
