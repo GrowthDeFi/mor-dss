@@ -700,13 +700,13 @@ async function reportError(e, type, detail) {
 }
 
 const TIMEFRAME = {
-  'bscmain': 24 * 60 * 60 * 1000, // 12 hours
+  'bscmain': 12 * 60 * 60 * 1000, // 12 hours
   'avaxmain': 24 * 60 * 60 * 1000, // 24 hours
   'ftmmain': 8 * 60 * 60 * 1000, // 8 hours
 };
 
 const MAXIMUM_TIMEFRAME = {
-  'bscmain': 24 * 60 * 60 * 1000, // 12 hours
+  'bscmain': 12 * 60 * 60 * 1000, // 12 hours
   'avaxmain': 24 * 60 * 60 * 1000, // 24 hours
   'ftmmain': 12 * 60 * 60 * 1000, // 12 hours
 };
