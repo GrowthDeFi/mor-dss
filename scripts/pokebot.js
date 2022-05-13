@@ -290,10 +290,10 @@ const PIP_LIST = {
     'MIM': { address: '0xB31fF116f5fEC1C0Aee2Aa86d5E78e3105CC4274', type: 'chainlink' },
     'FRAX': { address: '0xC5065b47A133071fe8cD94f46950fCfBA53864C6', type: 'chainlink' },
     'SUSHI': { address: '0xa4a4d1B5fA2203F4a4e4Fb24FeCD056F25777f25', type: 'chainlink' },
-    //'LQDR': { address: '0x3d4604395595Bb30A8B7754b5dDBF0B3F680564b', type: 'twap' },
-    //'SPIRIT': { address: '0x5F6025D6514C6396D4Ba640d6F93966AF5b139B0', type: 'twap' },
+    'LQDR': { address: '0x3d4604395595Bb30A8B7754b5dDBF0B3F680564b', type: 'twap' },
+    'SPIRIT': { address: '0x5F6025D6514C6396D4Ba640d6F93966AF5b139B0', type: 'twap' },
     //'MAI': { address: '0x1e1ee1AcD4B7ad405A0D701884F093d54DF7fba4', type: 'twap' },
-    //'BOO': { address: '0x44B0234Eb02443E7B7d1f0EFd9a30eB269E1C859', type: 'twap' },
+    'BOO': { address: '0x44B0234Eb02443E7B7d1f0EFd9a30eB269E1C859', type: 'twap' },
     //'SCREAM': { address: '0x58849cE72b4E4338C00f0760Ca6AfCe11b5ee370', type: 'twap' },
 
     //'SPIFTMLQDR': { address: '0xBe79a142188C2D91CBdB5Ec1af08a16610979F8D', type: 'univ2lp' },
@@ -700,14 +700,14 @@ async function reportError(e, type, detail) {
 }
 
 const TIMEFRAME = {
-  'bscmain': 8 * 60 * 60 * 1000, // 8 hours
-  'avaxmain': 8 * 60 * 60 * 1000, // 8 hours
+  'bscmain': 24 * 60 * 60 * 1000, // 12 hours
+  'avaxmain': 24 * 60 * 60 * 1000, // 24 hours
   'ftmmain': 8 * 60 * 60 * 1000, // 8 hours
 };
 
 const MAXIMUM_TIMEFRAME = {
-  'bscmain': 12 * 60 * 60 * 1000, // 12 hours
-  'avaxmain': 12 * 60 * 60 * 1000, // 12 hours
+  'bscmain': 24 * 60 * 60 * 1000, // 12 hours
+  'avaxmain': 24 * 60 * 60 * 1000, // 24 hours
   'ftmmain': 12 * 60 * 60 * 1000, // 12 hours
 };
 
