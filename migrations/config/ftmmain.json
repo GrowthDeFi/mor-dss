@@ -1272,7 +1272,7 @@
       },
       "ilks": {
         "A": {
-          "mat": "125",
+          "mat": "167",
           "line": "500000",
           "autoLine": "0",
           "autoLineGap": "0",
@@ -1280,7 +1280,7 @@
           "dust": "100",
           "duty": "0",
           "clipDeploy": {
-            "chop": "5",
+            "chop": "15",
             "hole": "100000000",
             "chip": "0",
             "tip": "5",
@@ -1313,7 +1313,7 @@
       "ilks": {
         "A": {
           "mat": "167",
-          "line": "1000000",
+          "line": "500000",
           "autoLine": "0",
           "autoLineGap": "0",
           "autoLineTtl": "0",
@@ -1360,7 +1360,7 @@
           "dust": "100",
           "duty": "0",
           "clipDeploy": {
-            "chop": "5",
+            "chop": "10",
             "hole": "100000000",
             "chip": "0",
             "tip": "5",
@@ -1392,15 +1392,15 @@
       },
       "ilks": {
         "A": {
-          "mat": "167",
-          "line": "500000",
+          "mat": "200",
+          "line": "300000",
           "autoLine": "0",
           "autoLineGap": "0",
           "autoLineTtl": "0",
           "dust": "100",
           "duty": "0",
           "clipDeploy": {
-            "chop": "5",
+            "chop": "15",
             "hole": "100000000",
             "chip": "0",
             "tip": "5",
@@ -1436,7 +1436,7 @@
       "ilks": {
         "A": {
           "mat": "200",
-          "line": "400000",
+          "line": "80000",
           "autoLine": "0",
           "autoLineGap": "0",
           "autoLineTtl": "0",
@@ -1477,7 +1477,7 @@
       "ilks": {
         "A": {
           "mat": "167",
-          "line": "500000",
+          "line": "200000",
           "autoLine": "0",
           "autoLineGap": "0",
           "autoLineTtl": "0",
