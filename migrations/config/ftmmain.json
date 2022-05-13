@@ -245,6 +245,7 @@
         "stwap": "0x2e5a83cE42F9887E222813371c5cA2bA1e827700",
         "ltwap": "0x292b138C6785BB7a6e7EE2acB3Cea792aD9f7F2E",
         "src": "0xaF918eF5b9f33231764A5557881E6D3e5277d456",
+        "cap": "0",
         "quote": "FTM"
       }
     },

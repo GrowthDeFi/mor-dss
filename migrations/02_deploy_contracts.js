@@ -535,7 +535,7 @@ module.exports = async (deployer, network, [account]) => {
         const src = token_pipDeploy.src;
         const token = await artifact_at(DSToken, T_[token_name]);
         const dec = Number(await token.decimals());
-        const cap = units(token_pipDeploy.cap, dec);
+        const cap = units(token_pipDeploy.cap || '0', dec);
         console.log('@pip.cap', token_pipDeploy.cap, cap);
         const orb = token_pipDeploy.quote !== undefined ? VAL_[token_pipDeploy.quote] : ZERO_ADDRESS;
         const pair = await artifact_at(UniswapV2PairLike, src);
