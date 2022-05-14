@@ -192,9 +192,6 @@ contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 			// configures the calc
 			DssExecLib.setStairstepExponentialDecrease(MCD_CLIP_CALC_STKXBOO_A, 180 seconds, 99_00);
 
-			// updates clipper chost
-			Clipper(MCD_CLIP_STKXBOO_A).upchost();
-
 			// wires and configure the new collateral
 			CollateralOpts memory co;
 			co.ilk = _ilk;
@@ -219,6 +216,12 @@ contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 			co.permittedDrop = 40_00; // cusp
 			co.breakerTolerance = 50_00; // cm_tolerance
 			DssExecLib.addNewCollateral(co);
+
+			// pokes spotter
+			DssExecLib.updateCollateralPrice(_ilk);
+
+			// updates clipper chost
+			Clipper(MCD_CLIP_STKXBOO_A).upchost();
 
 			// updates change log
 			DssExecLib.setChangelogAddress("XBOO", T_XBOO);
@@ -252,9 +255,6 @@ contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 			// configures the calc
 			DssExecLib.setStairstepExponentialDecrease(MCD_CLIP_CALC_STKSPOFTMBOOV2_A, 180 seconds, 99_00);
 
-			// updates clipper chost
-			Clipper(MCD_CLIP_STKSPOFTMBOOV2_A).upchost();
-
 			// wires and configure the new collateral
 			CollateralOpts memory co;
 			co.ilk = _ilk;
@@ -279,6 +279,12 @@ contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 			co.permittedDrop = 40_00; // cusp
 			co.breakerTolerance = 50_00; // cm_tolerance
 			DssExecLib.addNewCollateral(co);
+
+			// pokes spotter
+			DssExecLib.updateCollateralPrice(_ilk);
+
+			// updates clipper chost
+			Clipper(MCD_CLIP_STKSPOFTMBOOV2_A).upchost();
 
 			// updates change log
 			DssExecLib.setChangelogAddress("STKSPOFTMBOOV2", T_STKSPOFTMBOOV2);
@@ -316,9 +322,6 @@ contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 			// configures the calc
 			DssExecLib.setStairstepExponentialDecrease(MCD_CLIP_CALC_STKSPOUSDCDEI_A, 180 seconds, 99_00);
 
-			// updates clipper chost
-			Clipper(MCD_CLIP_STKSPOUSDCDEI_A).upchost();
-
 			// wires and configure the new collateral
 			CollateralOpts memory co;
 			co.ilk = _ilk;
@@ -343,6 +346,12 @@ contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 			co.permittedDrop = 40_00; // cusp
 			co.breakerTolerance = 50_00; // cm_tolerance
 			DssExecLib.addNewCollateral(co);
+
+			// pokes spotter
+			DssExecLib.updateCollateralPrice(_ilk);
+
+			// updates clipper chost
+			Clipper(MCD_CLIP_STKSPOUSDCDEI_A).upchost();
 
 			// updates change log
 			DssExecLib.setChangelogAddress("DEI", T_DEI);
@@ -386,9 +395,6 @@ contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 			// configures the calc
 			DssExecLib.setStairstepExponentialDecrease(MCD_CLIP_CALC_STKSPOFTMDEUS_A, 180 seconds, 99_00);
 
-			// updates clipper chost
-			Clipper(MCD_CLIP_STKSPOFTMDEUS_A).upchost();
-
 			// wires and configure the new collateral
 			CollateralOpts memory co;
 			co.ilk = _ilk;
@@ -413,6 +419,12 @@ contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 			co.permittedDrop = 40_00; // cusp
 			co.breakerTolerance = 50_00; // cm_tolerance
 			DssExecLib.addNewCollateral(co);
+
+			// pokes spotter
+			DssExecLib.updateCollateralPrice(_ilk);
+
+			// updates clipper chost
+			Clipper(MCD_CLIP_STKSPOFTMDEUS_A).upchost();
 
 			// updates change log
 			DssExecLib.setChangelogAddress("DEUS", T_DEUS);
@@ -448,9 +460,6 @@ contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 			// configures the calc
 			DssExecLib.setStairstepExponentialDecrease(MCD_CLIP_CALC_CLQDR_A, 180 seconds, 99_00);
 
-			// updates clipper chost
-			Clipper(MCD_CLIP_CLQDR_A).upchost();
-
 			// wires and configure the new collateral
 			CollateralOpts memory co;
 			co.ilk = _ilk;
@@ -475,6 +484,12 @@ contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 			co.permittedDrop = 40_00; // cusp
 			co.breakerTolerance = 50_00; // cm_tolerance
 			DssExecLib.addNewCollateral(co);
+
+			// pokes spotter
+			DssExecLib.updateCollateralPrice(_ilk);
+
+			// updates clipper chost
+			Clipper(MCD_CLIP_CLQDR_A).upchost();
 
 			// updates change log
 			DssExecLib.setChangelogAddress("CLQDR", T_CLQDR);
@@ -508,9 +523,6 @@ contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 			// configures the calc
 			DssExecLib.setStairstepExponentialDecrease(MCD_CLIP_CALC_SLINSPIRIT_A, 180 seconds, 99_00);
 
-			// updates clipper chost
-			Clipper(MCD_CLIP_SLINSPIRIT_A).upchost();
-
 			// wires and configure the new collateral
 			CollateralOpts memory co;
 			co.ilk = _ilk;
@@ -535,6 +547,12 @@ contract DssSpellAction_ftmmain_2022_05_05 is DssAction
 			co.permittedDrop = 40_00; // cusp
 			co.breakerTolerance = 50_00; // cm_tolerance
 			DssExecLib.addNewCollateral(co);
+
+			// pokes spotter
+			DssExecLib.updateCollateralPrice(_ilk);
+
+			// updates clipper chost
+			Clipper(MCD_CLIP_SLINSPIRIT_A).upchost();
 
 			// updates change log
 			DssExecLib.setChangelogAddress("LINSPIRIT", T_LINSPIRIT);
