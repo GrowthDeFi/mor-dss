@@ -305,7 +305,7 @@ const PIP_LIST = {
     //'SPIFTMSPIRIT': { address: '0x68697fF7Ec17F528E3E4862A1dbE6d7D9cBBd5C6', type: 'univ2lp' },
     //'SPIFTMFRAX': { address: '0xeeF286Af1d7601EA5E40473741D79e55770498d8', type: 'univ2lp' },
     //'SPIFTMMAI': { address: '0x5ef900FD5aACd6CFe994b2E13c3d4aBDD9fFea2b', type: 'univ2lp' },
-    //'SPOFTMBOO': { address: '0xca70528209917F4D0443Dd3e90C863b19584CCAF', type: 'univ2lp' },
+    'SPOFTMBOO': { address: '0xca70528209917F4D0443Dd3e90C863b19584CCAF', type: 'univ2lp' },
     //'SPOFTMUSDC': { address: '0x260e6061233A3F05213a54103A9F0460857f9E9c', type: 'univ2lp' },
     //'SPOFTMDAI': { address: '0x2117C852417B008d18E292D18ab196f49AA896cf', type: 'univ2lp' },
     //'SPOFTMSUSHI': { address: '0x4A1dB63A8240A030C7E8678c594711D139a1c39f', type: 'univ2lp' },
@@ -333,6 +333,13 @@ const PIP_LIST = {
     //'STKSPOFTMFUSDT': { address: '0x972F78558B4F8D677d84c8d1d4A73836c8DE4900', type: 'vault' },
     //'STKSPOFTMMIM': { address: '0xE63cb5BD18e0cDD534f62328af4Ba055BdD09A6F', type: 'vault' },
     //'STKSPOFTMSCREAM': { address: '0xF33b8A3fe8c6cE09F2670c28EE2bc4F7ddd2551e', type: 'vault' },
+
+    //'XBOO': { address: '0x0000000000000000000000000000000000000000', type: 'vault' }, // TODO
+    //'STKXBOO': { address: '0x0000000000000000000000000000000000000000', type: 'vault' }, // TODO
+    //'STKSPOFTMBOOV2': { address: '0x0000000000000000000000000000000000000000', type: 'vault' }, // TODO
+    //'CLQDR': { address: '0x0000000000000000000000000000000000000000', type: 'cap' }, // TODO
+    //'LINSPIRIT': { address: '0x0000000000000000000000000000000000000000', type: 'cap' }, // TODO
+    //'SLINSPIRIT': { address: '0x0000000000000000000000000000000000000000', type: 'vault' }, // TODO
   },
 };
 
@@ -387,6 +394,11 @@ const ILK_LIST = {
     //{ name: 'STKSPOFTMFUSDT-A', threshold: 0.03 },
     //{ name: 'STKSPOFTMMIM-A', threshold: 0.03 },
     //{ name: 'STKSPOFTMSCREAM-A', threshold: 0.03 },
+
+    { name: 'STKXBOO-A', threshold: 0.03 },
+    { name: 'STKSPOFTMBOOV2-A', threshold: 0.03 },
+    { name: 'CLQDR-A', threshold: 0.03 },
+    { name: 'SLINSPIRIT-A', threshold: 0.03 },
   ],
 };
 
@@ -560,7 +572,7 @@ async function pokeAll(network, lines = [], urgent = false) {
   for (const name in PIP_LIST[network]) {
     const { address, type } = PIP_LIST[network][name];
     const data = { name, address, type };
-    if (type === 'univ2lp') {
+    if (type === 'univ2lp' || type === 'cap') {
       const now = Math.floor(Date.now() / 1000);
       const timestamp = Number(await zph(privateKey, network, address));
       data.wait = timestamp > now ? timestamp - now : 0;
@@ -592,7 +604,7 @@ async function pokeAll(network, lines = [], urgent = false) {
           do { await sleep(3 * 1000); } while (await getNonce(privateKey, network) <= nonce);
           log(name, 'twap', address, tx);
         }
-        if (name === 'SPIFTMLQDR') {
+        if (name === 'CLQDR') {
           const name = 'LQDR';
           const address = pips[name].address;
           const nonce = await getNonce(privateKey, network);
@@ -601,7 +613,7 @@ async function pokeAll(network, lines = [], urgent = false) {
           do { await sleep(3 * 1000); } while (await getNonce(privateKey, network) <= nonce);
           log(name, 'twap', address, tx);
         }
-        if (name === 'SPIFTMSPIRIT') {
+        if (name === 'LINSPIRIT') {
           const name = 'SPIRIT';
           const address = pips[name].address;
           const nonce = await getNonce(privateKey, network);
