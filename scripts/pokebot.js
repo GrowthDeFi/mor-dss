@@ -334,12 +334,12 @@ const PIP_LIST = {
     //'STKSPOFTMMIM': { address: '0xE63cb5BD18e0cDD534f62328af4Ba055BdD09A6F', type: 'vault' },
     //'STKSPOFTMSCREAM': { address: '0xF33b8A3fe8c6cE09F2670c28EE2bc4F7ddd2551e', type: 'vault' },
 
-    //'XBOO': { address: '0x8f821768282F867C9EEeFbA8CCdA1ca1888c9F8b', type: 'vault' },
-    //'STKXBOO': { address: '0x5D6892332C3BB313d10d3a50413b4e2B79CF3269', type: 'vault' },
-    //'STKSPOFTMBOOV2': { address: '0xca70528209917F4D0443Dd3e90C863b19584CCAF', type: 'vault' },
-    //'CLQDR': { address: '0x91EF85162F18c038f0dC1e01a7a2F4191b2c6ce6', type: 'cap' },
-    //'LINSPIRIT': { address: '0x87930d19B4C98DD08B8B30793D4fB38cE9B6451d', type: 'cap' },
-    //'SLINSPIRIT': { address: '0x6296e0B0dD895a66048022131F85653B0C2C3489', type: 'vault' },
+    'XBOO': { address: '0x8f821768282F867C9EEeFbA8CCdA1ca1888c9F8b', type: 'vault' },
+    'STKXBOO': { address: '0x5D6892332C3BB313d10d3a50413b4e2B79CF3269', type: 'vault' },
+    'STKSPOFTMBOOV2': { address: '0xca70528209917F4D0443Dd3e90C863b19584CCAF', type: 'vault' },
+    'CLQDR': { address: '0x91EF85162F18c038f0dC1e01a7a2F4191b2c6ce6', type: 'cap' },
+    'LINSPIRIT': { address: '0x87930d19B4C98DD08B8B30793D4fB38cE9B6451d', type: 'cap' },
+    'SLINSPIRIT': { address: '0x6296e0B0dD895a66048022131F85653B0C2C3489', type: 'vault' },
   },
 };
 
