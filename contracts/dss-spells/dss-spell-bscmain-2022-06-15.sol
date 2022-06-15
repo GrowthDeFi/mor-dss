@@ -16,7 +16,7 @@ contract DssSpellAction_bscmain_2022_06_15 is DssAction
 		// Bumps changelog version
 		DssExecLib.setChangelogVersion("1.0.4");
 
-		// ----- SETS DEBT CEILING TO 1mi FOR STKBANANA-A
+		// ----- SETS DEBT CEILING TO 300k AND LIQUIDATION RATIO TO 200% FOR STKBANANA-A
 		{
 			DssExecLib.setIlkDebtCeiling("STKBANANA-A", 300000); // line 300k
 			DssExecLib.setIlkLiquidationRatio("STKBANANA-A", 20000); // mat 200%
