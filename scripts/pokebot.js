@@ -576,7 +576,7 @@ async function pokeAll(network, lines = [], urgent = false) {
       const timestamp = Number(await zph(privateKey, network, address));
       data.wait = timestamp > now ? timestamp - now : 0;
       if (data.wait === 0) {
-        if (name === 'PCSETHUSDC') {
+        if (name === 'APEMORBUSD') {
           const name = 'BANANA';
           const address = pips[name].address;
           const nonce = await getNonce(privateKey, network);
