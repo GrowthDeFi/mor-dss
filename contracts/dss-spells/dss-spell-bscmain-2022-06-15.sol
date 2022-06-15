@@ -14,7 +14,7 @@ contract DssSpellAction_bscmain_2022_06_15 is DssAction
 	function actions() public override
 	{
 		// Bumps changelog version
-		DssExecLib.setChangelogVersion("1.0.3");
+		DssExecLib.setChangelogVersion("1.0.4");
 
 		// ----- SETS DEBT CEILING TO 1mi FOR STKBANANA-A
 		{
