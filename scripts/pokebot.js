@@ -211,7 +211,7 @@ const PIP_LIST = {
     //'PCSBUSDBTCB': { address: '0x3d4604395595Bb30A8B7754b5dDBF0B3F680564b', type: 'univ2lp' },
     //'PCSBUSDCAKE': { address: '0x1e1ee1AcD4B7ad405A0D701884F093d54DF7fba4', type: 'univ2lp' },
     //'PCSETHBTCB': { address: '0x58849cE72b4E4338C00f0760Ca6AfCe11b5ee370', type: 'univ2lp' },
-    'PCSETHUSDC': { address: '0xc690F38430Db2057C992c3d3190D9902CD7E0294', type: 'univ2lp' },
+    //'PCSETHUSDC': { address: '0xc690F38430Db2057C992c3d3190D9902CD7E0294', type: 'univ2lp' },
     'APEMORBUSD': { address: '0x2987bC4DD60A0bC8801ADCE4EdFB1efB6781A984', type: 'univ2lp' },
 
     //'STKCAKE': { address: '0xeE991787C4ffE1de8c8c7c45e3EF14bFc47A2735', type: 'vault' },
